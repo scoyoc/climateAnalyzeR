@@ -1,16 +1,26 @@
-Package: climateanalyzer
-Title: What the Package Does (One Line, Title Case)
+Package: climateAnalyzeR
+Title: Import Data from ClimateAnalyzer.org into R
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Matthew",
+           family = "Van Scoyoc",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to
-    pick a license
+           email = "matthew_vanscoyoc@nps.org",
+           comment = c(ORCID = "0000-0001-6821-4476"))
+Description: This package imports data from ClimateAnalyzer.org into R. It is 
+    currently under development and only imports temperature and precipitation 
+    data and soil water balance data.
+Depends: 
+    R (>= 4.0),
+    tidyr (>= 1.1.2),
+    XML (>= 3.99)
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
+Imports: 
+    tibble,
+    dplyr
+Suggests: 
+    tidyverse
