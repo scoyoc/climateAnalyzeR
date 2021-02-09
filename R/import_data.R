@@ -15,32 +15,31 @@
 #'
 #' @seealso \code{\link{import_daily}}, \code{\link{import_monthly}}
 #'
-#' @examples
-#' # Import annual temperature and precipitation data and remove columns of
-#' # missing data counts.
-#' import_data("annual_wx", "arches", 1980, 2020) %>%
-#'   dplyr::select(-dplyr::contains("missing"))
-#'
-#' # Import monthly temperature and precipitation data.
-#' import_data("monthly_wx", "canyonlands_theneck", 1965, 2020)
-#' # Import June temperature and precipiation data
-#' import_data("monthly_wx", "canyonlands_theneck", 1965, 2020, month = 6)
-#'
-#'
-#' # Import monthly departures using the 1981-2010 30-year normalization period.
-#' import_data("monthly_depart", "hans_flat_rs", 1980, 2020, norm_per = "1981-2010")
-#' # Import monthly departures and set the 30-year normalization period to 1971-2010.
-#' import_data("monthly_depart", "hans_flat_rs", 1980, 2020, norm_per = "1971-2000")
-#'
-#' # Import water balance data
-#' # Using the recommended soil water capacity of 100 mm using the Hamon model.
-#' import_data("water_balance", "arches", 2015, 2020, table_type = "monthly",
-#'   soil_water = 100, pet_type = "hamon",  forgiving = "very")
-#' # Adjust the soil water capacity to 50 mm and use the Penman_Montieth model.
-#' import_data("water_balance", "arches", 2015, 2020, table_type = "monthly",
-#'            soil_water = 50, pet_type = "Penman_Montieth", forgiving = "very")
-#'
 #' @export
+#'
+#' @examples
+#' # Import annual weather data.
+#' import_data("annual_wx", "canyonlands_theneck", 1980, 2020, convert = TRUE)
+#' import_data("annual_wx", "canyonlands_theneck", 1980, 2020, remove_missing = TRUE)
+#'
+#' # Import daily weather data
+#' import_data("daily_wx", "hans_flat_rs", 2010, 2020, convert = TRUE)
+#'
+#' # Import monthly departures
+#' import_data("monthly_depart", 'natural_bridges_nm', 2000, 2010, convert = TRUE)
+#'
+#' # Import montly weather data
+#' import_data("monthly_wx", 'canyonlands_theneedle', 2000, 2010, convert = TRUE)
+#' # Import weather data for June
+#' import_data("monthly_wx", 'hovenweep_utah', 2000, 2010, month = 6)
+#'
+#' # Import water balance data with soil water capacity set to 100 and using the
+#' # Hamon model.
+#' import_data("water_balance", "arches", 2015, 2020, table_type = "monthly",
+#'             soil_water = 100, pet_type = "hamon", forgiving = "very")
+#' # Adjust the soil water capacity to 50 mm and use the Penman Montieth model.
+#' import_data("water_balance", "arches", 2015, 2020, table_type = "daily",
+#'             soil_water = 50, pet_type = "Penman_Montieth", forgiving = "very")
 import_data <- function(data_type, station, start_year, end_year, ...){
   if(data_type == 'annual_wx'){
     dat = import_annual(station, start_year, end_year, ...)
