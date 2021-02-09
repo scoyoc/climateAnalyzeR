@@ -12,6 +12,10 @@ Description: This package imports data from ClimateAnalyzer.org into R. It is
     data and soil water balance data.
 Depends: 
     R (>= 4.0),
+<<<<<<< HEAD
+=======
+    readr (>= 1.4),
+>>>>>>> master
     tidyr (>= 1.1.2),
     XML (>= 3.99)
 License: MIT + file LICENSE
@@ -20,7 +24,13 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Imports: 
+<<<<<<< HEAD
     tibble,
     dplyr
+=======
+    dplyr,
+    stringr,
+    tibble
+>>>>>>> master
 Suggests: 
     tidyverse
