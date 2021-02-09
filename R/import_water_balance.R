@@ -1,4 +1,12 @@
+<<<<<<< HEAD
 #' Import water balance data from ClimateAnalyzer.org into R.
+=======
+<<<<<<< HEAD
+#' Import water balance data from ClimateAnalyzer.org into R
+=======
+#' Import water balance data from ClimateAnalyzer.org into R.
+>>>>>>> master
+>>>>>>> 3356fcdde2e2b322660fbeba63d5f5638274d0e3
 #'
 #' @param station The character string of the station name.
 #' @param start_year The four digit number of the first year of interest.
@@ -16,6 +24,19 @@
 #' @export
 #'
 #' @examples
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+#' import_water_balance("arches", 2015, 2020, table_type = "monthly",
+#'                      soil_water = 100, pet_type = "hamon",
+#'                      forgiving = "very")
+#' # Adjust the soil water capacity to 50 mm and use the Penman_Montieth model.
+#' import_water_balance("arches", 2015, 2020, table_type = "monthly",
+#'                      soil_water = 50, pet_type = "Penman_Montieth",
+#'                      forgiving = "very")
+
+=======
+>>>>>>> 3356fcdde2e2b322660fbeba63d5f5638274d0e3
 #' # Import water balance data with soil water capacity set to 100 and using the
 #' # Hamon model.
 #' import_water_balance("arches", 2015, 2020, table_type = "monthly",
@@ -25,6 +46,10 @@
 #' import_water_balance("arches", 2015, 2020, table_type = "daily",
 #'                      soil_water = 50, pet_type = "Penman_Montieth",
 #'                      forgiving = "very")
+<<<<<<< HEAD
+=======
+>>>>>>> master
+>>>>>>> 3356fcdde2e2b322660fbeba63d5f5638274d0e3
 import_water_balance <- function(station, start_year, end_year, table_type,
                                  pet_type, soil_water, forgiving){
   my_url = paste0("http://www.climateanalyzer.science/python/wb.py?station=",
@@ -33,6 +58,13 @@ import_water_balance <- function(station, start_year, end_year, table_type,
                   "table_type=", table_type, "&forgiving=", forgiving,
                   "&year1=", start_year, "&year2=", end_year,
                   "&station_type=GHCN&csv=true")
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+  dat = pull_xml(my_url, skip = 1:2)
+  return(tibble::as_tibble(dat))
+=======
+>>>>>>> 3356fcdde2e2b322660fbeba63d5f5638274d0e3
   dat = pull_xml(my_url, skip = 1:2) %>%
     na.omit()
   dat = rename_vars(dat)
@@ -67,4 +99,8 @@ import_water_balance <- function(station, start_year, end_year, table_type,
     message("There are too little data to run a valid model.")
     return(tibble::as_tibble(dat))
     }
+<<<<<<< HEAD
+=======
+>>>>>>> master
+>>>>>>> 3356fcdde2e2b322660fbeba63d5f5638274d0e3
 }
