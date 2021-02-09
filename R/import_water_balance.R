@@ -1,4 +1,4 @@
-#' Import water balance data from ClimateAnalyzer.org into R
+#' Import water balance data from ClimateAnalyzer.org into R.
 #'
 #' @param station The character string of the station name.
 #' @param start_year The four digit number of the first year of interest.
@@ -16,14 +16,15 @@
 #' @export
 #'
 #' @examples
+#' # Import water balance data with soil water capacity set to 100 and using the
+#' # Hamon model.
 #' import_water_balance("arches", 2015, 2020, table_type = "monthly",
 #'                      soil_water = 100, pet_type = "hamon",
 #'                      forgiving = "very")
-#' # Adjust the soil water capacity to 50 mm and use the Penman_Montieth model.
-#' import_water_balance("arches", 2015, 2020, table_type = "monthly",
+#' # Adjust the soil water capacity to 50 mm and use the Penman Montieth model.
+#' import_water_balance("arches", 2015, 2020, table_type = "daily",
 #'                      soil_water = 50, pet_type = "Penman_Montieth",
 #'                      forgiving = "very")
-
 import_water_balance <- function(station, start_year, end_year, table_type,
                                  pet_type, soil_water, forgiving){
   my_url = paste0("http://www.climateanalyzer.science/python/wb.py?station=",
@@ -32,6 +33,38 @@ import_water_balance <- function(station, start_year, end_year, table_type,
                   "table_type=", table_type, "&forgiving=", forgiving,
                   "&year1=", start_year, "&year2=", end_year,
                   "&station_type=GHCN&csv=true")
-  dat = pull_xml(my_url, skip = 1:2)
-  return(tibble::as_tibble(dat))
+  dat = pull_xml(my_url, skip = 1:2) %>%
+    na.omit()
+  dat = rename_vars(dat)
+
+  if (table_type == "monthly"){
+    dat = dat %>%
+      tidyr::separate("Month", c("Month", "Year"), sep = "/") %>%
+      dplyr::mutate("Month" = as.numeric(Month),
+                    "Year" = as.numeric(Year)) %>%
+      dplyr::select("Month", "Year", "Deficit_mm", "PRCP_mm", "Rain_mm",
+                    "DailySnow_mm", "Snowpack_mm", "SnowMelt_mm",
+                    "WaterInputtoSoil_mm", "Runoff_mm", "SoilWater_mm",
+                    "TMAX_C", "TMIN_C", "TMEAN_C",
+                    "AccumulatedGrowingDegreeDays_C", "PET_mm", "AET_mm")
+    return(tibble::as_tibble(dat))
+  }
+
+  if (table_type == "daily"){
+    dat = dat %>%
+      dplyr::mutate("Date" = lubridate::ymd(
+                               lubridate::parse_date_time(Date,
+                                                          c("%m/%d/%Y")))) %>%
+      dplyr::select("Date", "Deficit_mm", "PRCP_mm", "Rain_mm", "DailySnow_mm",
+                    "Snowpack_mm", "Melt_mm", "WaterInputtoSoil_mm",
+                    "Runoff_mm", "SoilWater_mm", "TMAX_C", "TMIN_C", "TMEAN_C",
+                    "AccumulatedGrowingDegreeDays_C", "PET_mm", "AET_mm") %>%
+      dplyr::rename("SnowMelt_mm" = "Melt_mm")
+    return(tibble::as_tibble(dat))
+  }
+
+  if (ncol(dat) == 5){
+    message("There are too little data to run a valid model.")
+    return(tibble::as_tibble(dat))
+    }
 }
