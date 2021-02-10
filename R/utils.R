@@ -77,3 +77,15 @@ pull_xml <- function(my_url, skip){
   colnames(dat) = my.names[my.names != ""]
   return(tibble::as_tibble(dat))
 }
+
+#' Function to import montly data
+pull_monthly <- function(station, start_year, end_year, month, table_type,
+                           norm_per){
+  my_url = paste0("http://climateanalyzer.science/python/make_tables.py?station=",
+                  station, "&year1=", start_year, "&year2=", end_year,
+                  "&month=", month, "&title=", station,
+                  "&table_type=", table_type, "&norm_per=",
+                  norm_per, "&csv=true")
+  dat = pull_csv(my_url, skip = 2)
+  return(tibble::as_tibble(dat))
+}

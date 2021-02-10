@@ -2,14 +2,24 @@
 % Please edit documentation in R/import_data.R
 \name{import_data}
 \alias{import_data}
-\title{Read data from ClimateAnalyzer.org into R}
+\title{Read data from ClimateAnalyzer.org into R.}
 \usage{
 import_data(data_type, station, start_year, end_year, ...)
 }
 \arguments{
-\item{data_type}{a character string for the type of data to import.
-monthly_temp_prcp for monthly temperature and precipitation data.
-annual_temp_prcp for annual temperature and precipitation data.}
+\item{data_type}{A character string for the type of data to import.
+\itemize{
+\item \emph{annual_wx}: Annual temperature and precipitation data.
+See \code{\link{import_annual}} for details.
+\item \emph{daily_wx}: Daily temperature and precipitation data.
+See \code{\link{import_daily}} for details.
+\item \emph{departure}: Monthly departure data.
+See \code{\link{import_departure}} for details.
+\item \emph{monthly_wx}: Monthly temperature and precipitation data.
+See \code{\link{import_monthly}} for details.
+\item \emph{water_balance}: Water balance data.
+See \code{\link{import_water_balance}} for details.
+}}
 
 \item{station}{The character string of the station name.}
 
@@ -20,38 +30,53 @@ annual_temp_prcp for annual temperature and precipitation data.}
 \item{...}{Other arguments to pass to the child functions.}
 }
 \value{
-A \code{\link[tibble]{tibble}}.
+A \code{\link[tibble:tibble]{tibble}}.
 }
 \description{
-This is a wrapper functions that imports data from ClimateAnalyzer.org
-into R.
+This function that imports data from temperature, precipitation, departure,
+and water balance data from
+\href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R. It
+is a wrapper function for other import functions in the
+climateAnalyzeR package.
 }
 \examples{
-# Import annual temperature and precipitation data and remove columns of
-# missing data counts.
-import_data("annual_wx", "arches", 1980, 2020) \%>\%
-  dplyr::select(-dplyr::contains("missing"))
+#-- Annual data
+# Import annual temperature and precipitation data and convert values to metric
+import_data("annual_wx", "canyonlands_theneck", 1980, 2020, convert = TRUE)
+# Import annual temperature and precipitation data and remove columns of missing
+# values tally.
+import_data("annual_wx", "canyonlands_theneck", 1980, 2020, remove_missing = FALSE)
 
-# Import monthly temperature and precipitation data.
-import_data("monthly_wx", "canyonlands_theneck", 1965, 2020)
-# Import June temperature and precipiation data
-import_data("monthly_wx", "canyonlands_theneck", 1965, 2020, month = 6)
+#-- Daily data
+# Import daily temperature and precipitation data
+import_data("daily_wx", "hans_flat_rs", 2010, 2020)
+# Import daily temperature and precipitation data and convert values to metric
+import_data("daily_wx", "hans_flat_rs", 2010, 2020, convert = TRUE)
 
+#-- Monthly departures
+# Import monthly departures and convert values to metric
+import_data("departure", 'natural_bridges_nm', 2000, 2010, convert = TRUE)
+# Import departures for the month of July
+import_data("departure", 'natural_bridges_nm', 2000, 2010, month = 7)
 
-# Import monthly departures using the 1981-2010 30-year normalization period.
-import_data("monthly_depart", "hans_flat_rs", 1980, 2020, norm_per = "1981-2010")
-# Import monthly departures and set the 30-year normalization period to 1971-2010.
-import_data("monthly_depart", "hans_flat_rs", 1980, 2020, norm_per = "1971-2000")
+#-- Monthly data
+# Import monthly precipitation and temperature data and convert values to metric
+import_data("monthly_wx", 'canyonlands_theneedle', 2000, 2010, convert = TRUE)
+# Import monthly precipitation and temperature data for the month of June
+import_data("monthly_wx", 'canyonlands_theneedle', 2000, 2010, month = 6)
 
-# Import water balance data
-# Using the recommended soil water capacity of 100 mm using the Hamon model.
+#-- Water balance data
+# Import monthly water balance data using the Hamon model with soil water
+# capacity set to 100.
 import_data("water_balance", "arches", 2015, 2020, table_type = "monthly",
-  soil_water = 100, pet_type = "hamon",  forgiving = "very")
-# Adjust the soil water capacity to 50 mm and use the Penman_Montieth model.
-import_data("water_balance", "arches", 2015, 2020, table_type = "monthly",
-           soil_water = 50, pet_type = "Penman_Montieth", forgiving = "very")
-
+            soil_water = 100, pet_type = "hamon", forgiving = "very")
+# Import daily water balance data using the Hamon model with soil water
+# capacity set to 50
+import_data("water_balance", "arches", 2015, 2020, table_type = "daily",
+            soil_water = 50, pet_type = "Penman_Montieth", forgiving = "very")
 }
 \seealso{
-\code{\link{import_daily}}, \code{\link{import_monthly}}
+See \code{\link{import_annual}}, \code{\link{import_daily}},
+\code{\link{import_departure}}, \code{\link{import_monthly}}, and
+\code{\link{import_water_balance}} for details.
 }

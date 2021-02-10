@@ -3,7 +3,6 @@
 export(import_annual)
 export(import_daily)
 export(import_data)
+export(import_departure)
 export(import_monthly)
-export(import_monthly_depart)
-export(import_montly_wx)
 export(import_water_balance)

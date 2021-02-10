@@ -1,5 +1,8 @@
 #' Import water balance data from ClimateAnalyzer.org into R.
 #'
+#' This function imports daily or monthly water balance data from
+#'     \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
+#'
 #' @param station The character string of the station name.
 #' @param start_year The four digit number of the first year of interest.
 #' @param end_year The four digit number of the last year of interest.
@@ -11,17 +14,18 @@
 #' @param forgiving A string for the tolorance of the model. Options are 'no',
 #'     'mild' and 'very'.
 #'
-#' @return A \code{\link[tibble]{tibble}}.
-#'
+#' @return A \code{\link[tibble:tibble]{tibble}}.
+#' @seealso The \code{\link{import_data}} wrapper function.
 #' @export
 #'
 #' @examples
-#' # Import water balance data with soil water capacity set to 100 and using the
-#' # Hamon model.
+#' # Import monthly water balance data using the Hamon model with soil water
+#' # capacity set to 100.
 #' import_water_balance("arches", 2015, 2020, table_type = "monthly",
 #'                      soil_water = 100, pet_type = "hamon",
 #'                      forgiving = "very")
-#' # Adjust the soil water capacity to 50 mm and use the Penman Montieth model.
+#' # Import daily water balance data using the Hamon model with soil water
+#' # capacity set to 50
 #' import_water_balance("arches", 2015, 2020, table_type = "daily",
 #'                      soil_water = 50, pet_type = "Penman_Montieth",
 #'                      forgiving = "very")

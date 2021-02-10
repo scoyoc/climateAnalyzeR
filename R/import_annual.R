@@ -1,4 +1,7 @@
-#' Import annual weather data from ClimateAnalyzer.org into R
+#' Import annual temperature and precipitation data from ClimateAnalyzer.org into R.
+#'
+#' This function imports annual temperature and precipitation data from
+#'     \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 #'
 #' @param station The character string of the station name.
 #' @param start_year The four digit number of the first year of interest.
@@ -14,14 +17,15 @@
 #'     additional columns in the data frame denoted by "_mm" or "_C". Default is
 #'     FALSE.
 #'
-#' @return A \code{\link[tibble]{tibble}}.
-#'
-#' @seealso \code{\link{import_daily}}, \code{\link{import_monthly}}
-#'
+#' @return A \code{\link[tibble:tibble]{tibble}}.
+#' @seealso The \code{\link{import_data}} wrapper function.
 #' @export
 #'
 #' @examples
+#' # Import annual temperature and precipitation data and convert values to metric
 #' import_annual("canyonlands_theneck", 1980, 2020, convert = TRUE)
+#' # Import annual temperature and precipitation data and remove columns of missing
+#' # values tally.
 #' import_annual("canyonlands_theneck", 1980, 2020, remove_missing = FALSE)
 import_annual = function(station, start_year, end_year, screen_blanks = 'true',
                          remove_missing = TRUE, convert = FALSE){

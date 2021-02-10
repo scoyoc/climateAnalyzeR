@@ -2,9 +2,16 @@
 % Please edit documentation in R/import_annual.R
 \name{import_annual}
 \alias{import_annual}
-\title{Import annual weather data from ClimateAnalyzer.org into R}
+\title{Import annual temperature and precipitation data from ClimateAnalyzer.org into R.}
 \usage{
-import_annual(station, start_year, end_year, screen_blanks = "true")
+import_annual(
+  station,
+  start_year,
+  end_year,
+  screen_blanks = "true",
+  remove_missing = TRUE,
+  convert = FALSE
+)
 }
 \arguments{
 \item{station}{The character string of the station name.}
@@ -16,17 +23,30 @@ import_annual(station, start_year, end_year, screen_blanks = "true")
 \item{screen_blanks}{A character string stating if years with 15 or more
 missing values will be screened out and the data replaced with NA.
 Options are 'true' or 'false'.}
+
+\item{remove_missing}{Logical. If TRUE, columns that tally missing values are
+excluded from result. If FALSE, these columns are included in the result.
+Default is TRUE.}
+
+\item{convert}{Logical. If TRUE, data are precipitation and temperature
+values are converted to metric. These converted values are included as
+additional columns in the data frame denoted by "_mm" or "_C". Default is
+FALSE.}
 }
 \value{
-A \code{\link[tibble]{tibble}}.
+A \code{\link[tibble:tibble]{tibble}}.
 }
 \description{
-Import annual weather data from ClimateAnalyzer.org into R
+This function imports annual temperature and precipitation data from
+\href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 }
 \examples{
-import_annual("arches", 1980, 2020) \%>\%
-  dplyr::select(-dplyr::contains("missing"))
+# Import annual temperature and precipitation data and convert values to metric
+import_annual("canyonlands_theneck", 1980, 2020, convert = TRUE)
+# Import annual temperature and precipitation data and remove columns of missing
+# values tally.
+import_annual("canyonlands_theneck", 1980, 2020, remove_missing = FALSE)
 }
 \seealso{
-\code{\link{import_daily}}, \code{\link{import_monthly}}
+The \code{\link{import_data}} wrapper function.
 }

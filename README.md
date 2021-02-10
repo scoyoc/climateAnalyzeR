@@ -25,53 +25,39 @@ This is a basic example which shows you how to solve a common problem:
 ``` r
 library(climateAnalyzeR)
 # Examples of Existing Functions ----
-# Import annual weather data.
-import_annual("canyonlands_theneck", 1980, 2020) %>%
-  dplyr::select(-dplyr::contains("missing"))
+#-- Annual data
+# Import annual temperature and precipitation data and convert values to metric
+import_data("annual_wx", "canyonlands_theneck", 1980, 2020, convert = TRUE)
+# Import annual temperature and precipitation data and remove columns of missing
+# values tally.
+import_data("annual_wx", "canyonlands_theneck", 1980, 2020, remove_missing = FALSE)
 
-# Import daily weather data
-import_daily("hans_flat_rs", 2010, 2020)
-
-# Import monthly departures
-import_monthly_depart('natural_bridges_nm', 2000, 2010)
-
-# Import montly weather data
-import_montly_wx('canyonlands_theneedle', 2000, 2010)
-# Import weather data for June
-import_montly_wx('hovenweep_utah', 2000, 2010, month = 6)
-
-# Import water balance data with soil water capacity set to 100 and using the
-# Hamon model.
-import_water_balance("arches", 2015, 2020, table_type = "monthly",
-                     soil_water = 100, pet_type = "hamon",
-                     forgiving = "very")
-# Adjust the soil water capacity to 50 mm and use the Penman Montieth model.
-import_water_balance("arches", 2015, 2020, table_type = "monthly",
-                     soil_water = 50, pet_type = "Penman_Montieth",
-                     forgiving = "very")
-
-#-- import_data() wrapper function
-# Import annual weather data.
-import_data("annual_wx", "canyonlands_theneck", 1980, 2020) %>%
-  dplyr::select(-dplyr::contains("missing"))
-
-# Import daily weather data
+#-- Daily data
+# Import daily temperature and precipitation data
 import_data("daily_wx", "hans_flat_rs", 2010, 2020)
+# Import daily temperature and precipitation data and convert values to metric
+import_data("daily_wx", "hans_flat_rs", 2010, 2020, convert = TRUE)
 
-# Import monthly departures
-import_data("monthly_depart", 'natural_bridges_nm', 2000, 2010)
+#-- Monthly departures
+# Import monthly departures and convert values to metric
+import_data("departure", 'natural_bridges_nm', 2000, 2010, convert = TRUE)
+# Import departures for the month of July
+import_data("departure", 'natural_bridges_nm', 2000, 2010, month = 7)
 
-# Import montly weather data
-import_data("monthly_wx", 'canyonlands_theneedle', 2000, 2010)
-# Import weather data for June
-import_data("monthly_wx", 'hovenweep_utah', 2000, 2010, month = 6)
+#-- Monthly data
+# Import monthly precipitation and temperature data and convert values to metric
+import_data("monthly_wx", 'canyonlands_theneedle', 2000, 2010, convert = TRUE)
+# Import monthly precipitation and temperature data for the month of June
+import_data("monthly_wx", 'canyonlands_theneedle', 2000, 2010, month = 6)
 
-# Import water balance data with soil water capacity set to 100 and using the
-# Hamon model.
+#-- Water balance data
+# Import monthly water balance data using the Hamon model with soil water
+# capacity set to 100.
 import_data("water_balance", "arches", 2015, 2020, table_type = "monthly",
             soil_water = 100, pet_type = "hamon", forgiving = "very")
-# Adjust the soil water capacity to 50 mm and use the Penman Montieth model.
-import_data("water_balance", "arches", 2015, 2020, table_type = "monthly",
+# Import daily water balance data using the Hamon model with soil water
+# capacity set to 50
+import_data("water_balance", "arches", 2015, 2020, table_type = "daily",
             soil_water = 50, pet_type = "Penman_Montieth", forgiving = "very")
 ```
 

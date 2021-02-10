@@ -2,9 +2,9 @@
 % Please edit documentation in R/import_daily.R
 \name{import_daily}
 \alias{import_daily}
-\title{Read daily weather data from ClimateAnalyzer.org into R}
+\title{Import daily weather data from ClimateAnalyzer.org into R.}
 \usage{
-import_daily(station, start_year, end_year)
+import_daily(station, start_year, end_year, convert = FALSE)
 }
 \arguments{
 \item{station}{The character string of the station name.}
@@ -12,14 +12,25 @@ import_daily(station, start_year, end_year)
 \item{start_year}{The four digit number of the first year of interest.}
 
 \item{end_year}{The four digit number of the last year of interest.}
+
+\item{convert}{Logical. If TRUE, data are precipitation and temperature
+values are converted to metric. These converted values are included as
+additional columns in the data frame denoted by "_mm" or "_C". Default is
+FALSE.}
 }
 \value{
 A \code{\link[tibble:tibble]{tibble}}.
 }
 \description{
-Read daily weather data from ClimateAnalyzer.org into R
+This function imports daily temperature and precipitation data from
+\href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 }
 \examples{
-import_daily("arches", 2010, 2020)
-
+# Import daily temperature and precipitation data
+import_daily("hans_flat_rs", 2010, 2020)
+# Import daily temperature and precipitation data and convert values to metric
+import_daily("hans_flat_rs", 2010, 2020, convert = TRUE)
+}
+\seealso{
+The \code{\link{import_data}} wrapper function.
 }

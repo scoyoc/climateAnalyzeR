@@ -2,7 +2,7 @@
 % Please edit documentation in R/import_water_balance.R
 \name{import_water_balance}
 \alias{import_water_balance}
-\title{Import water balance data from ClimateAnalyzer.org into R}
+\title{Import water balance data from ClimateAnalyzer.org into R.}
 \usage{
 import_water_balance(
   station,
@@ -33,17 +33,24 @@ sure use 100.}
 'mild' and 'very'.}
 }
 \value{
-A \code{\link[tibble]{tibble}}.
+A \code{\link[tibble:tibble]{tibble}}.
 }
 \description{
-Import water balance data from ClimateAnalyzer.org into R
+This function imports daily or monthly water balance data from
+\href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 }
 \examples{
+# Import monthly water balance data using the Hamon model with soil water
+# capacity set to 100.
 import_water_balance("arches", 2015, 2020, table_type = "monthly",
                      soil_water = 100, pet_type = "hamon",
                      forgiving = "very")
-# Adjust the soil water capacity to 50 mm and use the Penman_Montieth model.
-import_water_balance("arches", 2015, 2020, table_type = "monthly",
+# Import daily water balance data using the Hamon model with soil water
+# capacity set to 50
+import_water_balance("arches", 2015, 2020, table_type = "daily",
                      soil_water = 50, pet_type = "Penman_Montieth",
                      forgiving = "very")
+}
+\seealso{
+The \code{\link{import_data}} wrapper function.
 }
