@@ -75,6 +75,11 @@ import_data("water_balance", "arches", 2015, 2020, table_type = "daily",
 
 #--- Testing ---
 
-import_monthly_depart('natural_bridges_nm', 2000, 2010)
+#-- Water balance data
+# Import monthly water balance data using the Hamon model with soil water
+# capacity set to 100.
+import_data("water_balance", "arches", 2010, 2020, table_type = "monthly",
+            soil_water = 100, pet_type = "hamon", forgiving = "very")
+
 
 

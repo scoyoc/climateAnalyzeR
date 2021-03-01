@@ -41,6 +41,12 @@ import_water_balance <- function(station, start_year, end_year, table_type,
     na.omit()
   dat = rename_vars(dat)
 
+  if (ncol(dat) == 5){
+    message("There are not enough data to produce a valid dataset.")
+    return(tibble::as_tibble(dat))
+    stop()
+  }
+
   if (table_type == "monthly"){
     dat = dat %>%
       tidyr::separate("Month", c("Month", "Year"), sep = "/") %>%
@@ -50,7 +56,8 @@ import_water_balance <- function(station, start_year, end_year, table_type,
                     "DailySnow_mm", "Snowpack_mm", "SnowMelt_mm",
                     "WaterInputtoSoil_mm", "Runoff_mm", "SoilWater_mm",
                     "TMAX_C", "TMIN_C", "TMEAN_C",
-                    "AccumulatedGrowingDegreeDays_C", "PET_mm", "AET_mm")
+                    "AccumulatedGrowingDegreeDays_C", "PET_mm", "AET_mm") %>%
+      dplyr::mutate_at(c(3:ncol(.)), as.numeric)
     return(tibble::as_tibble(dat))
   }
 
@@ -63,12 +70,8 @@ import_water_balance <- function(station, start_year, end_year, table_type,
                     "Snowpack_mm", "Melt_mm", "WaterInputtoSoil_mm",
                     "Runoff_mm", "SoilWater_mm", "TMAX_C", "TMIN_C", "TMEAN_C",
                     "AccumulatedGrowingDegreeDays_C", "PET_mm", "AET_mm") %>%
-      dplyr::rename("SnowMelt_mm" = "Melt_mm")
+      dplyr::rename("SnowMelt_mm" = "Melt_mm") %>%
+      dplyr::mutate_at(c(2:ncol(.)), as.numeric)
     return(tibble::as_tibble(dat))
   }
-
-  if (ncol(dat) == 5){
-    message("There are too little data to run a valid model.")
-    return(tibble::as_tibble(dat))
-    }
 }
