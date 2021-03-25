@@ -4,9 +4,9 @@
 <!-- badges: end -->
 
 This package imports data from ClimateAnalyzer.org into R. It is currently 
-under development and only imports annual, daily, and monthly weatehr data from 
+under development and only imports annual, daily, and monthly weather data from 
 Co-op stations and water balance data for those Co-op stations. The plan is to 
-incorporate more datasets that are available on ClimateAnalyzer.org.
+incorporate more data sets that are available on ClimateAnalyzer.org.
 
 ## Installation
 
@@ -20,7 +20,7 @@ devtools::install_github("scoyoc/climateAnalyzeR")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+Below are examples of how to import data from ClimateAnalyzer.orgin to R.
 
 ``` r
 library(climateAnalyzeR)
