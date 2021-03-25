@@ -14,8 +14,15 @@
 #' @examples
 #' # Render a report for Arches National Park for the 2020 water year.
 #' renderSummary("Arches National Park", 2020, "ARCH", report = "Water Year")
-renderSummary = function(park_name, water_yr, my_park, report="Water Year",
+renderSummary = function(park_name, year, my_park, report="Water Year",
                          my_dir = NULL) {
+  park_name = "Arches National Park"
+  year = 2020
+  my_park = "ARCH"
+  report = "Water Year"
+  my_dir = NULL
+
+
   # Report
   if (report == "Water Year"){
     my_rmd = "wySummary.Rmd"
@@ -26,16 +33,18 @@ renderSummary = function(park_name, water_yr, my_park, report="Water Year",
     my_dir <- paste(Sys.getenv("USERPROFILE"), "Desktop", sep = "\\")
   }
 
+  date_stamp = paste(stringr::str_split(lubridate::today(), "-")[[1]], collapse = "")
+
   rmarkdown::render(
-    system.file("rmd", my_rmd, package = "climateAnalyseR"),
+    system.file("rmd", my_rmd, package = "climateAnalyzeR"),
     params = list(
       park_name = park_name,
-      water_yr = water_yr,
+      water_yr = year,
       my_park = my_park
     ),
     output_file = paste(my_dir,
-                        paste0(paste(str_split(today(), "-")[[1]], collapse = ""),
-                               "_", my_park, "_WaterYearSummary_", water_yr, ".pdf"),
+                        paste0(date_stamp, "_", my_park, " ", year, " ", report,
+                               " Summary.pdf"),
                         sep = "/")
   )
 }
