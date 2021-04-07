@@ -1,4 +1,4 @@
-# Convert from imperial to metric
+#-- Convert from imperial to metric
 convert_prcp <- function(dat){
   dat = dat %>%
     dplyr::mutate(dplyr::across(dplyr::contains("PRCP"), ~(. * 25.4),
@@ -8,7 +8,7 @@ convert_prcp <- function(dat){
   return(dat)
 }
 
-# Convert from imperial to metric
+#-- Convert from imperial to metric
 convert_temp <- function(dat){
   dat = dat %>%
     dplyr::mutate(dplyr::across(dplyr::contains(c("TMAX", "TMIN")),
@@ -16,7 +16,7 @@ convert_temp <- function(dat){
   return(dat)
 }
 
-# Rename variables
+#-- Rename variables
 rename_vars <- function(dat){
   new_names = tolower(colnames(dat))
   new_names = tools::toTitleCase(new_names)
@@ -48,7 +48,7 @@ rename_vars <- function(dat){
   return(dat)
 }
 
-# Create error messages
+#-- Create error messages
 missing_arg <- function(my_arg, my_mess) {
   if(missing(my_arg)){
     message(my_mess)
@@ -56,7 +56,7 @@ missing_arg <- function(my_arg, my_mess) {
   }
 }
 
-#-- Functions to pull data from ClymateAnalyser.org
+#-- Functions to pull data from ClymateAnalyser.us
 # comma delimited data
 pull_csv <- function(my_url, skip){
   dat = suppressMessages(

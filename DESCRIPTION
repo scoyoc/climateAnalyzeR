@@ -8,8 +8,8 @@ Authors@R:
            email = "matthew_vanscoyoc@nps.org",
            comment = c(ORCID = "0000-0001-6821-4476"))
 Description: This package imports data from ClimateAnalyzer.org into R. It is 
-    currently under development and only imports temperature and precipitation 
-    data and soil water balance data.
+    currently under development and only imports temperature, precipitation, 
+    and soil water balance data.
 Depends: 
     R (>= 4.0),
     tidyr (>= 1.1.2)
@@ -21,6 +21,7 @@ RoxygenNote: 7.1.1
 Imports: 
     dplyr,
     knitr,
+    janitor,
     lubridate,
     readr,
     rmarkdown,
