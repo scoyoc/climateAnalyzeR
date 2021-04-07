@@ -1,9 +1,9 @@
 #-- Convert from imperial to metric
 convert_prcp <- function(dat){
   dat = dat %>%
-    dplyr::mutate(dplyr::across(dplyr::contains("PRCP"), ~(. * 25.4),
+    dplyr::mutate(dplyr::across(dplyr::contains("prcp"), ~(. * 25.4),
                                 .names = "{.col}_mm"),
-                  dplyr::across(dplyr::contains("Inches"), ~(. * 25.4),
+                  dplyr::across(dplyr::contains("inches"), ~(. * 25.4),
                                 .names = "{.col}_mm"))
   return(dat)
 }
@@ -11,39 +11,28 @@ convert_prcp <- function(dat){
 #-- Convert from imperial to metric
 convert_temp <- function(dat){
   dat = dat %>%
-    dplyr::mutate(dplyr::across(dplyr::contains(c("TMAX", "TMIN")),
-                                ~(. - 32 * (5/9)), .names = "{.col}_C"))
+    dplyr::mutate(dplyr::across(dplyr::contains(c("tmax", "tmin")),
+                                ~(. - 32 * (5/9)), .names = "{.col}_c"))
   return(dat)
 }
 
 #-- Rename variables
 rename_vars <- function(dat){
-  new_names = tolower(colnames(dat))
-  new_names = tools::toTitleCase(new_names)
-  new_names = gsub(" ", "", new_names, fixed = TRUE)
-  new_names = gsub("(", "_", new_names, fixed = TRUE)
-  new_names = sub("_$", "", new_names)
-  new_names = sub(")$", "", new_names)
-  new_names = gsub("Precipitation", "PRCP", new_names)
-  new_names = gsub("Tmax", "TMAX", new_names)
-  new_names = gsub("Tmin", "TMIN", new_names)
-  new_names = gsub("tmax", "TMAX", new_names)
-  new_names = gsub("tmin", "TMIN", new_names)
-  new_names = gsub("Tmean", "TMEAN", new_names)
-  new_names = gsub("precip", "PRCP", new_names)
-  new_names = gsub("p_Mm", "PRCP_mm", new_names)
-  new_names = gsub("PotentialEvapotranspiration", "PET", new_names)
-  new_names = gsub("Pet", "PET", new_names)
-  new_names = gsub("ActualEvapotranspiration", "AET", new_names)
-  new_names = gsub("Aet", "AET", new_names)
-  new_names = gsub("Days_snow", "DailySnow", new_names)
-  new_names = gsub("Accum_snowpack", "Snowpack", new_names)
-  new_names = gsub("Water_input_to_soil", "WaterInputtoSoil", new_names)
-  new_names = gsub("Soil_water", "SoilWater", new_names)
-  new_names = gsub("d_Mm", "Deficit_mm", new_names)
-  new_names = gsub("AccumGrowingDegreeDays", "AccumulatedGrowingDegreeDays", new_names)
-  new_names = gsub("Mm", "mm", new_names)
-  new_names = gsub("_c", "_C", new_names, fixed = T)
+  new_names = janitor::make_clean_names(names(dat))
+  new_names = gsub("accum_snowpack", "snowpack", new_names)
+  new_names = gsub("actual_evapotranspiration_mm", "aet_mm", new_names)
+  new_names = gsub("accum_growing_degree_days_c", "accum_growing_deg_days_c", new_names)
+  new_names = gsub("accumgrowingdegreedays", "accum_growing_deg_days_c", new_names)
+  new_names = gsub("accumulated_growing_degree_days_c", "accum_growing_deg_days_c", new_names)
+  new_names = gsub("d_mm", "deficit_mm", new_names)
+  new_names = gsub("days_snow_mm", "daily_snow_mm", new_names)
+  new_names = gsub("p_mm", "prcp_mm", new_names)
+  new_names = gsub("precipitation_in", "prcp_in", new_names)
+  new_names = gsub("precipitation_mm", "prcp_mm", new_names)
+  new_names = gsub("precip", "prcp_mm", new_names)
+  new_names = gsub("potential_evapotranspiration_mm", "pet_mm", new_names)
+  new_names = gsub("snow_depth_on_ground_inches", "snow_depth_in", new_names)
+  new_names = gsub("snowmelt_mm", "snow_melt_mm", new_names)
   colnames(dat) = new_names
   return(dat)
 }
@@ -66,6 +55,7 @@ pull_csv <- function(my_url, skip){
     )
   )
   dat = dat[, !sapply(dat, function(x) sum(is.na(x))) == nrow(dat)]
+  names(dat) = janitor::make_clean_names(names(dat))
   return(dat)
 }
 
@@ -75,6 +65,7 @@ pull_xml <- function(my_url, skip){
                            as.data.frame = TRUE, which = 1)
   my.names = as.vector(XML::readHTMLTable(my_url, which = 1)[2, ])
   colnames(dat) = my.names[my.names != ""]
+  names(dat) = janitor::make_clean_names(names(dat))
   return(tibble::as_tibble(dat))
 }
 
@@ -87,7 +78,7 @@ pull_monthly <- function(station, start_year, end_year, month, table_type,
                   "&table_type=", table_type, "&norm_per=",
                   norm_per, "&csv=true")
   dat = pull_csv(my_url, skip = 2)
+  names(dat) = janitor::make_clean_names(names(dat))
   return(tibble::as_tibble(dat))
 }
-
 

@@ -40,6 +40,7 @@ import_water_balance <- function(station, start_year, end_year, table_type,
   dat = pull_xml(my_url, skip = 1:2) %>%
     na.omit()
   dat = rename_vars(dat)
+  names(dat) = janitor::make_clean_names(names(dat))
 
   if (ncol(dat) == 5){
     message("There are not enough data to produce a valid dataset.")
@@ -49,28 +50,29 @@ import_water_balance <- function(station, start_year, end_year, table_type,
 
   if (table_type == "monthly"){
     dat = dat %>%
-      tidyr::separate("Month", c("Month", "Year"), sep = "/") %>%
-      dplyr::mutate("Month" = as.numeric(Month),
-                    "Year" = as.numeric(Year)) %>%
-      dplyr::select("Month", "Year", "Deficit_mm", "PRCP_mm", "Rain_mm",
-                    "DailySnow_mm", "Snowpack_mm", "SnowMelt_mm",
-                    "WaterInputtoSoil_mm", "Runoff_mm", "SoilWater_mm",
-                    "TMAX_C", "TMIN_C", "TMEAN_C",
-                    "AccumulatedGrowingDegreeDays_C", "PET_mm", "AET_mm") %>%
+      tidyr::separate("month", c("month", "year"), sep = "/") %>%
+      dplyr::mutate("month" = as.numeric(month),
+                    "year" = as.numeric(year)) %>%
+      dplyr::select("year", "month", "deficit_mm", "prcp_mm", "rain_mm",
+                    "daily_snow_mm", "snowpack_mm", "snow_melt_mm",
+                    "water_input_to_soil_mm", "runoff_mm", "soil_water_mm",
+                    "tmax_c", "tmin_c", "tmean_c",
+                    "accum_growing_deg_days_c", "pet_mm", "aet_mm") %>%
       dplyr::mutate_at(c(3:ncol(.)), as.numeric)
     return(tibble::as_tibble(dat))
   }
 
   if (table_type == "daily"){
     dat = dat %>%
-      dplyr::mutate("Date" = lubridate::ymd(
-                               lubridate::parse_date_time(Date,
+      dplyr::mutate("date" = lubridate::ymd(
+                               lubridate::parse_date_time(date,
                                                           c("%m/%d/%Y")))) %>%
-      dplyr::select("Date", "Deficit_mm", "PRCP_mm", "Rain_mm", "DailySnow_mm",
-                    "Snowpack_mm", "Melt_mm", "WaterInputtoSoil_mm",
-                    "Runoff_mm", "SoilWater_mm", "TMAX_C", "TMIN_C", "TMEAN_C",
-                    "AccumulatedGrowingDegreeDays_C", "PET_mm", "AET_mm") %>%
-      dplyr::rename("SnowMelt_mm" = "Melt_mm") %>%
+      dplyr::rename("snow_melt_mm" = "melt_mm") %>%
+      dplyr::select("date", "deficit_mm", "prcp_mm", "rain_mm",
+                    "daily_snow_mm", "snowpack_mm", "snow_melt_mm",
+                    "water_input_to_soil_mm", "runoff_mm", "soil_water_mm",
+                    "tmax_c", "tmin_c", "tmean_c",
+                    "accum_growing_deg_days_c", "pet_mm", "aet_mm") %>%
       dplyr::mutate_at(c(2:ncol(.)), as.numeric)
     return(tibble::as_tibble(dat))
   }

@@ -35,10 +35,11 @@ import_annual = function(station, start_year, end_year, screen_blanks = 'true',
                   "&lowerthresh=daily&upperthresh=70&station_type=GHCN&csv=true&param=temperature&time_mode=year&first_month=01&last_month=12&ann_sum=True&screen_blanks=",
                   screen_blanks)
   dat = pull_csv(my_url, skip = 4)
-  colnames(dat) = c("Year", "PRCP_cy", "PRCP_cy_missing", "PRCP_wy",
-                    "PRCP_wy_missing", "TMAX_cy", "TMAX_cy_missing", "TMAX_wy",
-                    "TMAX_wy_missing", "TMIN_cy", "TMIN_cy_missing", "TMIN_wy",
-                    "TMIN_wy_missing")
+  colnames(dat) = c("year", "prcp_cy", "prcp_cy_missing", "prcp_wy",
+                    "prcp_wy_missing", "tmax_cy", "tmax_cy_missing", "tmax_wy",
+                    "tmax_wy_missing", "tmin_cy", "tmin_cy_missing", "tmin_wy",
+                    "tmin_wy_missing")
+
   # Remove missing tally columns
   if (remove_missing == TRUE){
     dat = dplyr::select(dat, -dplyr::contains("missing"))
@@ -50,6 +51,7 @@ import_annual = function(station, start_year, end_year, screen_blanks = 'true',
     dat = convert_temp(dat)
   }
 
+  names(dat) = janitor::make_clean_names(names(dat))
   return(tibble::as_tibble(dat))
 }
 

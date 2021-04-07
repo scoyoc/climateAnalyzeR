@@ -31,22 +31,23 @@ import_departure <- function(station, start_year, end_year,
                  table_type = "30dep", norm_per = norm_per) %>%
     stats::na.omit()
   # Rename variables
-  colnames(dat) = c("Year", "Month", "PRCP_pctavg", "TMAX_depart", "TMIN_depart")
+  colnames(dat) = c("year", "month", "prcp_pctavg", "tmax_depart", "tmin_depart")
   # Munge data so all months are included with NA's if there are missing data
   dat = dat  %>%
-    dplyr::mutate("Year" = as.numeric(Year),
-                  "Month" = as.numeric(Month)) %>%
-    tidyr::gather("Var", "Value", 3:ncol(.)) %>%
-    tidyr::spread("Month", "Value", fill = NA) %>%
-    tidyr::gather("Month", "Value", 3:ncol(.), convert = TRUE) %>%
-    tidyr::spread("Var", "Value", fill = NA) %>%
-    dplyr::arrange("Year", "Month")
+    dplyr::mutate("year" = as.numeric(year),
+                  "month" = as.numeric(month)) %>%
+    tidyr::gather("var", "value", 3:ncol(.)) %>%
+    tidyr::spread("month", "value", fill = NA) %>%
+    tidyr::gather("month", "value", 3:ncol(.), convert = TRUE) %>%
+    tidyr::spread("var", "value", fill = NA) %>%
+    dplyr::arrange("year", "month")
 
   # Convert to metric
   if (convert == TRUE){
     dat = convert_temp(dat)
   }
 
+  names(dat) = janitor::make_clean_names(names(dat))
   return(tibble::as_tibble(dat))
 }
 

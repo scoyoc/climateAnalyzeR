@@ -33,6 +33,6 @@ import_daily <- function(station, start_year, end_year, convert = FALSE){
     dat = convert_temp(dat)
   }
 
-
+  names(dat) = janitor::make_clean_names(names(dat))
   return(tibble::as_tibble(dat))
 }
