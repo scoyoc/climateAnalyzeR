@@ -3,10 +3,10 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-This package imports data from ClimateAnalyzer.org into R. It is currently 
-under development and only imports annual, daily, and monthly weather data from 
-Co-op stations and water balance data for those Co-op stations. The plan is to 
-incorporate more data sets that are available on ClimateAnalyzer.org.
+This package imports data from [ClimateAnalyzer.org](http://climateanalyzer.org/) 
+into R. It is currently  under development and only imports annual, monthly, and 
+dialy weather data from Co-op stations and water balance data for those stations. 
+The plan is to incorporate more data sets available on ClimateAnalyzer.org.
 
 ## Installation
 
