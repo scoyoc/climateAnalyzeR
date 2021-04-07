@@ -4,7 +4,7 @@
 \alias{renderSummary}
 \title{Render reports}
 \usage{
-renderSummary(park_name, year, my_park, report = "Water Year", my_dir = NULL)
+renderSummary(park_name, year, my_park, report = "water year", my_dir = NULL)
 }
 \arguments{
 \item{park_name}{The full name of the park unit of interest.}
@@ -15,7 +15,7 @@ renderSummary(park_name, year, my_park, report = "Water Year", my_dir = NULL)
 
 \item{my_dir}{Direectory to save repor to. If NULL, the report is saved to the your desktop.}
 
-\item{water_yr}{The four-digit water year you want to summarize.}
+\item{The}{four-digit water year you want to summarize.}
 }
 \value{
 
