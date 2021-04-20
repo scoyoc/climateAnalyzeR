@@ -4,18 +4,24 @@
 \alias{renderSummary}
 \title{Render reports}
 \usage{
-renderSummary(park_name, year, my_park, report = "water year", my_dir = NULL)
+renderSummary(
+  station_id,
+  station_name = NULL,
+  year,
+  report = "water_year",
+  my_dir = NULL
+)
 }
 \arguments{
-\item{park_name}{The full name of the park unit of interest.}
+\item{station_id}{The station identification name for the weather station of interest.}
 
-\item{my_park}{The four-letter park code for the park of interest.}
+\item{station_name}{Optional. The name of the station to display in the report.}
 
-\item{report}{Type of report to render. Currently the only option is "Water Year".}
+\item{year}{The four-digit for the year of interest.}
 
-\item{my_dir}{Direectory to save repor to. If NULL, the report is saved to the your desktop.}
+\item{report}{Type of report to render. Currently the only option is a water year ("water_year") report.}
 
-\item{The}{four-digit water year you want to summarize.}
+\item{my_dir}{String of direectory path to save repor to. If NULL, the report is saved to the your desktop.}
 }
 \value{
 

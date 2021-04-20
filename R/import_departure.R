@@ -3,7 +3,7 @@
 #' This function imports monthly departure data from
 #'     \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 #'
-#' @param station The character string of the station name.
+#' @param station_id The character string of the station ID.
 #' @param start_year The four digit number of the first year of interest.
 #' @param end_year The four digit number of the last year of interest.
 #' @param month The month number (i.e., 1 for January through 12 for December)
@@ -23,11 +23,11 @@
 #' import_departure('natural_bridges_nm', 2000, 2010, convert = TRUE)
 #' # Import departures for the month of July
 #' import_departure('natural_bridges_nm', 2000, 2010, month = 7)
-import_departure <- function(station, start_year, end_year,
+import_departure <- function(station_id, start_year, end_year,
                                   month = 'all', norm_per = '1981-2010',
                                   convert = FALSE){
   # Pull montly data and omit NAs
-  dat = pull_monthly(station, start_year, end_year, month = month,
+  dat = pull_monthly(station_id, start_year, end_year, month = month,
                  table_type = "30dep", norm_per = norm_per) %>%
     stats::na.omit()
   # Rename variables

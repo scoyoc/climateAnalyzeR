@@ -45,7 +45,7 @@ missing_arg <- function(my_arg, my_mess) {
   }
 }
 
-#-- Functions to pull data from ClymateAnalyser.us
+#-- Functions to pull data from http://www.climateanalyzer.org/
 # comma delimited data
 pull_csv <- function(my_url, skip){
   dat = suppressMessages(
@@ -70,11 +70,11 @@ pull_xml <- function(my_url, skip){
 }
 
 #' Function to import monthly data
-pull_monthly <- function(station, start_year, end_year, month, table_type,
+pull_monthly <- function(station_id, start_year, end_year, month, table_type,
                            norm_per){
   my_url = paste0("http://climateanalyzer.science/python/make_tables.py?station=",
-                  station, "&year1=", start_year, "&year2=", end_year,
-                  "&month=", month, "&title=", station,
+                  station_id, "&year1=", start_year, "&year2=", end_year,
+                  "&month=", month, "&title=", station_id,
                   "&table_type=", table_type, "&norm_per=",
                   norm_per, "&csv=true")
   dat = pull_csv(my_url, skip = 2)

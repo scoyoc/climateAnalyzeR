@@ -5,7 +5,7 @@
 \title{Import annual temperature and precipitation data from ClimateAnalyzer.org into R.}
 \usage{
 import_annual(
-  station,
+  station_id,
   start_year,
   end_year,
   screen_blanks = "true",
@@ -14,7 +14,7 @@ import_annual(
 )
 }
 \arguments{
-\item{station}{The character string of the station name.}
+\item{station_id}{The character string of the station ID.}
 
 \item{start_year}{The four digit number of the first year of interest.}
 

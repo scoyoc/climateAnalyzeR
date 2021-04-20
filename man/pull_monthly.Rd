@@ -2,10 +2,10 @@
 % Please edit documentation in R/utils.R
 \name{pull_monthly}
 \alias{pull_monthly}
-\title{Function to import montly data}
+\title{Function to import monthly data}
 \usage{
-pull_monthly(station, start_year, end_year, month, table_type, norm_per)
+pull_monthly(station_id, start_year, end_year, month, table_type, norm_per)
 }
 \description{
-Function to import montly data
+Function to import monthly data
 }

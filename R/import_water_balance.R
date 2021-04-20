@@ -3,7 +3,7 @@
 #' This function imports daily or monthly water balance data from
 #'     \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 #'
-#' @param station The character string of the station name.
+#' @param station_id The character string of the station ID.
 #' @param start_year The four digit number of the first year of interest.
 #' @param end_year The four digit number of the last year of interest.
 #' @param table_type A character string for 'daily' or 'monthly' data.
@@ -29,10 +29,10 @@
 #' import_water_balance("arches", 2015, 2020, table_type = "daily",
 #'                      soil_water = 50, pet_type = "Penman_Montieth",
 #'                      forgiving = "very")
-import_water_balance <- function(station, start_year, end_year, table_type,
+import_water_balance <- function(station_id, start_year, end_year, table_type,
                                  pet_type, soil_water, forgiving){
   my_url = paste0("http://www.climateanalyzer.science/python/wb.py?station=",
-                  station, "&title=", station, "&pet_type=", pet_type,
+                  station_id, "&title=", station_id, "&pet_type=", pet_type,
                   "&max_soil_water=", soil_water, "&graph_table=table&",
                   "table_type=", table_type, "&forgiving=", forgiving,
                   "&year1=", start_year, "&year2=", end_year,

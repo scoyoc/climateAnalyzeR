@@ -5,7 +5,7 @@
 \title{Import water balance data from ClimateAnalyzer.org into R.}
 \usage{
 import_water_balance(
-  station,
+  station_id,
   start_year,
   end_year,
   table_type,
@@ -15,7 +15,7 @@ import_water_balance(
 )
 }
 \arguments{
-\item{station}{The character string of the station name.}
+\item{station_id}{The character string of the station ID.}
 
 \item{start_year}{The four digit number of the first year of interest.}
 

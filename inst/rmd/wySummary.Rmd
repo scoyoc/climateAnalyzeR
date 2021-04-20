@@ -1,6 +1,6 @@
 ---
 title: |
-  | `r park_name`
+  | `r station_name`
   | `r paste("Water Year", year, "Climate Summary", sep = " ")`
 author: "Matthew Van Scoyoc"
 date: "`r format(as.Date(Sys.Date(), format = '%Y-%m-%d'), '%B %d, %Y')`"

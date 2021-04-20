@@ -19,7 +19,7 @@
 #'         \item \emph{water_balance}: Water balance data.
 #'             See \code{\link{import_water_balance}} for details.
 #'     }
-#' @param station The character string of the station name.
+#' @param station_id The character string of the station ID.
 #' @param start_year The four digit number of the first year of interest.
 #' @param end_year The four digit number of the last year of interest.
 #' @param ... Other arguments to pass to the child functions.
@@ -66,21 +66,21 @@
 #' # capacity set to 50
 #' import_data("water_balance", "arches", 2015, 2020, table_type = "daily",
 #'             soil_water = 50, pet_type = "Penman_Montieth", forgiving = "very")
-import_data <- function(data_type, station, start_year, end_year, ...){
+import_data <- function(data_type, station_id, start_year, end_year, ...){
   if(data_type == 'annual_wx'){
-    dat = import_annual(station, start_year, end_year, ...)
+    dat = import_annual(station_id, start_year, end_year, ...)
 
   } else if(data_type == 'daily_wx'){
-    dat = import_daily(station, start_year, end_year)
+    dat = import_daily(station_id, start_year, end_year)
 
   } else if(data_type == "departure"){
-    dat = import_departure(station, start_year, end_year, ...)
+    dat = import_departure(station_id, start_year, end_year, ...)
 
   } else if(data_type == 'monthly_wx'){
-    dat = import_monthly(station, start_year, end_year, ...)
+    dat = import_monthly(station_id, start_year, end_year, ...)
 
   } else if(data_type == "water_balance"){
-    dat = import_water_balance(station, start_year, end_year, ...)
+    dat = import_water_balance(station_id, start_year, end_year, ...)
 
   } else(message("Data type not recognized."))
 

@@ -4,10 +4,10 @@
 \alias{import_daily}
 \title{Import daily weather data from ClimateAnalyzer.org into R.}
 \usage{
-import_daily(station, start_year, end_year, convert = FALSE)
+import_daily(station_id, start_year, end_year, convert = FALSE)
 }
 \arguments{
-\item{station}{The character string of the station name.}
+\item{station_id}{The character string of the station ID.}
 
 \item{start_year}{The four digit number of the first year of interest.}
 

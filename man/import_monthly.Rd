@@ -5,10 +5,16 @@
 \title{Import monthly temperature and precipitation data from ClimateAnalyzer.org
 into R.}
 \usage{
-import_monthly(station, start_year, end_year, month = "all", convert = FALSE)
+import_monthly(
+  station_id,
+  start_year,
+  end_year,
+  month = "all",
+  convert = FALSE
+)
 }
 \arguments{
-\item{station}{The character string of the station name.}
+\item{station_id}{The character string of the station ID.}
 
 \item{start_year}{The four digit number of the first year of interest.}
 

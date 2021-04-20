@@ -5,7 +5,7 @@
 \title{Import monthly departure data from ClimateAnalyzer.org into R.}
 \usage{
 import_departure(
-  station,
+  station_id,
   start_year,
   end_year,
   month = "all",
@@ -14,7 +14,7 @@ import_departure(
 )
 }
 \arguments{
-\item{station}{The character string of the station name.}
+\item{station_id}{The character string of the station ID.}
 
 \item{start_year}{The four digit number of the first year of interest.}
 

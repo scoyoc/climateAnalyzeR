@@ -1,12 +1,13 @@
+
 #' Import NOAA calculated normals from ClimateAnalyzer.org
 #'
 #' This function imports 30-year normals from
 #'     \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 #'
-
-#' @param ref_period string for 30-year reference period. The user can choose
+#'
+#' @param ref_period The string for 30-year reference period. The user can choose
 #'     "1971-2000" or "1981-2010" Default is "1981-2010".
-#' @param my_station Optional. A string to filter results by a station name.
+#' @param my_stations Optional. A string to filter results by a station name.
 #'     Default is NULL. If NULL, a data frame of 30-year normals for all stations
 #'     on climateAnalyzer.org will be returned.
 #'
@@ -15,10 +16,10 @@
 #'
 #' @examples
 #' # 1981-2010 normals for Arches National Park
-#' normals(my_station = "arches")
+#' normals(my_stations = "arches")
 #' # 1971-2000 normals for Arches National Park
-#' normals(ref_period = "1971-2000", my_station = "arches")
-normals <- function(ref_period = "1981-2010", my_station = NULL){
+#' normals(ref_period = "1971-2000", my_stations = "arches")
+normals <- function(ref_period = "1981-2010", my_stations = NULL){
   if (ref_period == "1971-2000"){
     my_url = "http://climateanalyzer.science/monthly/1971_2000_averages.csv"
   } else if (ref_period == "1981-2010"){
@@ -27,15 +28,28 @@ normals <- function(ref_period = "1981-2010", my_station = NULL){
 
   dat = suppressMessages(
     suppressWarnings(
-      readr::read_csv(my_url, col_names = TRUE, na = "N/A", skip_empty_rows = TRUE) %>%
-        dplyr::select(!dplyr::starts_with("X"))
+      readr::read_csv(my_url, col_names = TRUE, na = "N/A",
+                      skip_empty_rows = TRUE) %>%
+        dplyr::select(!dplyr::starts_with("X")) %>%
+        dplyr::rename("station_id" = 'Station Name',
+                      "id" = 'Station ID')
     )
   )
   names(dat) = janitor::make_clean_names(names(dat))
 
+  # Force data type conversion
+  dat = dat[, 1:2] %>%
+    dplyr::bind_cols(
+      suppressWarnings(dplyr::mutate_all(dat[, c(3:43)], as.numeric))
+    ) %>%
+    dplyr::bind_cols(dat[, 44:47]) %>%
+    dplyr::bind_cols(
+      suppressWarnings(dplyr::mutate_all(dat[, c(48:length(dat))], as.numeric))
+    )
+
   # Filter by station name
-  if (!is.null(my_station)){
-    dat = dplyr::filter(dat, station_name %in% my_station)
+  if (!is.null(my_stations)){
+    dat = dplyr::filter(dat, station_id %in% my_stations)
   }
 
   # Return dataframe

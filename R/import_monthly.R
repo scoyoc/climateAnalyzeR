@@ -4,7 +4,7 @@
 #' This function imports monthly temperature and precipitation data from
 #'     \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 #'
-#' @param station The character string of the station name.
+#' @param station_id The character string of the station ID.
 #' @param start_year The four digit number of the first year of interest.
 #' @param end_year The four digit number of the last year of interest.
 #' @param month The month number (i.e., 1 for January through 12 for December)
@@ -23,10 +23,10 @@
 #' import_monthly('canyonlands_theneedle', 2000, 2010, convert = TRUE)
 #' # Import monthly precipitation and temperature data for the month of June
 #' import_monthly('canyonlands_theneedle', 2000, 2010, month = 6)
-import_monthly <- function(station, start_year, end_year, month = 'all',
+import_monthly <- function(station_id, start_year, end_year, month = 'all',
                              convert = FALSE){
-  # Pull montly data and omit NAs
-  dat = pull_monthly(station, start_year, end_year, month,
+  # Pull monthly data and omit NAs
+  dat = pull_monthly(station_id, start_year, end_year, month,
                        table_type = "straight", norm_per = 'null') %>%
     stats::na.omit()
   # Rename variables

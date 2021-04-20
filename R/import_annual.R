@@ -3,7 +3,7 @@
 #' This function imports annual temperature and precipitation data from
 #'     \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 #'
-#' @param station The character string of the station name.
+#' @param station_id The character string of the station ID.
 #' @param start_year The four digit number of the first year of interest.
 #' @param end_year The four digit number of the last year of interest.
 #' @param screen_blanks A character string stating if years with 15 or more
@@ -27,11 +27,11 @@
 #' # Import annual temperature and precipitation data and remove columns of missing
 #' # values tally.
 #' import_annual("canyonlands_theneck", 1980, 2020, remove_missing = FALSE)
-import_annual = function(station, start_year, end_year, screen_blanks = 'true',
+import_annual = function(station_id, start_year, end_year, screen_blanks = 'true',
                          remove_missing = TRUE, convert = FALSE){
   my_url = paste0("http://climateanalyzer.science/python/u_thresh.py?station=",
-                  station, "&year1=", end_year, "&year2=", start_year,
-                  "&title=", station,
+                  station_id, "&year1=", end_year, "&year2=", start_year,
+                  "&title=", station_id,
                   "&lowerthresh=daily&upperthresh=70&station_type=GHCN&csv=true&param=temperature&time_mode=year&first_month=01&last_month=12&ann_sum=True&screen_blanks=",
                   screen_blanks)
   dat = pull_csv(my_url, skip = 4)

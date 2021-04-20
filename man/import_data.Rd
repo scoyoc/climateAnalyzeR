@@ -4,7 +4,7 @@
 \alias{import_data}
 \title{Read data from ClimateAnalyzer.org into R.}
 \usage{
-import_data(data_type, station, start_year, end_year, ...)
+import_data(data_type, station_id, start_year, end_year, ...)
 }
 \arguments{
 \item{data_type}{A character string for the type of data to import.
@@ -21,7 +21,7 @@ See \code{\link{import_monthly}} for details.
 See \code{\link{import_water_balance}} for details.
 }}
 
-\item{station}{The character string of the station name.}
+\item{station_id}{The character string of the station ID.}
 
 \item{start_year}{The four digit number of the first year of interest.}
 

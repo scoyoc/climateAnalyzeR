@@ -4,10 +4,10 @@
 \alias{stations}
 \title{Import station informaiton from ClimateAnalyzer.org}
 \usage{
-stations(station_name = NULL)
+stations(my_stations = NULL)
 }
 \arguments{
-\item{station_name}{A string of the station name. This is used as an argument
+\item{my_stations}{A string of the station name. This is used as an argument
 for dplyr::filter to reduce the data frame to the desired stations.
 Default is NULL. If NULL, a data frame of all stations is returned.}
 }
@@ -15,13 +15,14 @@ Default is NULL. If NULL, a data frame of all stations is returned.}
 A \code{\link[tibble:tibble]{tibble}}.
 }
 \description{
-Import station informaiton from ClimateAnalyzer.org
+This function imports weather station information from
+\href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 }
 \examples{
 # Import all information for all stations.
 stations()
 
 # Filter station by name
-stations(station_name = "Arches NP")
-stations(station_name = c("Canyonlands The Neck", "Canyonlands The Needle", "Hans Flat RS"))
+stations(my_stations = "arches")
+stations(my_stations = c("Canyonlands The Neck", "Canyonlands The Needle", "Hans Flat RS"))
 }
