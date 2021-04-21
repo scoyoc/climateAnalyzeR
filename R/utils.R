@@ -1,3 +1,9 @@
+# ggplot theme settings
+climateAnalyzeR_theme <- ggplot2::theme_bw() +
+  ggplot2::theme(strip.background = ggplot2::element_rect(fill = "white"),
+                 strip.text = ggplot2::element_text(hjust = 0.1),
+                 axis.title.x = ggplot2::element_blank())
+
 #-- Convert from imperial to metric
 convert_prcp <- function(dat){
   dat = dat %>%

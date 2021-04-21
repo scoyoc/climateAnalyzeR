@@ -10,6 +10,14 @@
 #' @param my_stations Optional. A string to filter results by a station name.
 #'     Default is NULL. If NULL, a data frame of 30-year normals for all stations
 #'     on climateAnalyzer.org will be returned.
+#' @param tidy Logical. Returns tidy data. Default is TRUE.
+#'     \describe{
+#'         \item{TRUE}{Returns a tidy data frame of temperature (tmax and tmin)
+#'             and precipitation data. This option dropps seasonl earlies/last
+#'             dates for temperatures and number of days above of below
+#'             temperatures.}
+#'         \item{FALSE}{Returns the raw dat from ClimateAnalyzer.org.}
+#'     }
 #'
 #' @return A \code{\link[tibble:tibble]{tibble}}.
 #' @export
@@ -19,7 +27,7 @@
 #' normals(my_stations = "arches")
 #' # 1971-2000 normals for Arches National Park
 #' normals(ref_period = "1971-2000", my_stations = "arches")
-normals <- function(ref_period = "1981-2010", my_stations = NULL){
+normals <- function(ref_period = "1981-2010", my_stations = NULL, tidy = TRUE){
   if (ref_period == "1971-2000"){
     my_url = "http://climateanalyzer.science/monthly/1971_2000_averages.csv"
   } else if (ref_period == "1981-2010"){
@@ -46,6 +54,29 @@ normals <- function(ref_period = "1981-2010", my_stations = NULL){
     dplyr::bind_cols(
       suppressWarnings(dplyr::mutate_all(dat[, c(48:length(dat))], as.numeric))
     )
+
+  if (isTRUE(tidy)) {
+    # precipitation
+    prcp = dplyr::select(dat, dplyr::contains("precip"))
+    names(prcp) = c(month.abb, "Annual")
+    prcp = dplyr::bind_cols(dplyr::select(dat, "station_id", "id"), prcp) %>%
+      dplyr::mutate(element = "PRCP")
+    # tmax
+    tmax = dplyr::select(dat, dplyr::contains("tmax"))
+    names(tmax) = c(month.abb, "Annual")
+    tmax = dplyr::bind_cols(dplyr::select(dat, "station_id", "id"), tmax) %>%
+      dplyr::mutate(element = "TMAX")
+    # tmin
+    tmin = dplyr::select(dat, dplyr::contains("tmin"), "annual")
+    names(tmin) = c(month.abb, "Annual")
+    tmin = dplyr::bind_cols(dplyr::select(dat, "station_id", "id"), tmin) %>%
+      dplyr::mutate(element = "TMIN")
+    # comgine temp and precp data sets and make tidy
+    dat = dplyr::bind_rows(prcp, tmax, tmin) %>%
+      tidyr::gather(month, value, Jan:Annual) %>%
+      dplyr::mutate(month = factor(month, levels = c(month.abb, "Annual"))) %>%
+      dplyr::arrange(element, station_id, month)
+  }
 
   # Filter by station name
   if (!is.null(my_stations)){

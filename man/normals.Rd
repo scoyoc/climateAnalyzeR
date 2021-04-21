@@ -4,7 +4,7 @@
 \alias{normals}
 \title{Import NOAA calculated normals from ClimateAnalyzer.org}
 \usage{
-normals(ref_period = "1981-2010", my_stations = NULL)
+normals(ref_period = "1981-2010", my_stations = NULL, tidy = TRUE)
 }
 \arguments{
 \item{ref_period}{The string for 30-year reference period. The user can choose
@@ -13,6 +13,15 @@ normals(ref_period = "1981-2010", my_stations = NULL)
 \item{my_stations}{Optional. A string to filter results by a station name.
 Default is NULL. If NULL, a data frame of 30-year normals for all stations
 on climateAnalyzer.org will be returned.}
+
+\item{tidy}{Logical. Returns tidy data. Default is TRUE.
+\describe{
+\item{TRUE}{Returns a tidy data frame of temperature (tmax and tmin)
+and precipitation data. This option dropps seasonl earlies/last
+dates for temperatures and number of days above of below
+temperatures.}
+\item{FALSE}{Returns the raw dat from ClimateAnalyzer.org.}
+}}
 }
 \value{
 A \code{\link[tibble:tibble]{tibble}}.

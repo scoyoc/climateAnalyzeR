@@ -7,24 +7,29 @@
 renderSummary(
   station_id,
   station_name = NULL,
-  year,
+  my_year,
   report = "water_year",
   my_dir = NULL
 )
 }
 \arguments{
-\item{station_id}{The station identification name for the weather station of interest.}
+\item{station_id}{The station identification name for the weather station of
+interest.}
 
-\item{station_name}{Optional. The name of the station to display in the report.}
+\item{station_name}{Optional. The name of the station to display in the report.
+Default is NULL. If left as NULL the station name will be pulled using the
+stations() function.}
+
+\item{report}{Type of report to render. Currently the only option is a water
+year ("water_year") report.}
+
+\item{my_dir}{String of direectory path to save repor to. If NULL, the report
+is saved to the your desktop.}
 
 \item{year}{The four-digit for the year of interest.}
-
-\item{report}{Type of report to render. Currently the only option is a water year ("water_year") report.}
-
-\item{my_dir}{String of direectory path to save repor to. If NULL, the report is saved to the your desktop.}
 }
 \value{
-
+A PDF.
 }
 \description{
 This funciton will render a PDF report from an RMarkdown (Rmd) script.

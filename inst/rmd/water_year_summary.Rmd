@@ -1,0 +1,339 @@
+---
+title: |
+  | `r station_name`
+  | `r paste("Water Year", my_year, "Climate Summary", sep = " ")`
+author: "Matthew Van Scoyoc"
+date: "`r format(as.Date(Sys.Date(), format = '%Y-%m-%d'), '%B %d, %Y')`"
+output:
+  pdf_document: 
+    fig_caption: yes
+    latex_engine: xelatex
+editor_options:
+  chunk_output_type: console
+mainfont: Arial
+urlcolor: blue
+---
+\raggedright
+```{r Setup, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
+#-- Packages
+# install.packages(c("cowplot", "devtools", "grid", "gridExtra", "knitr", 
+#                    "lubridate", "tidyverse", "shadowtext"))
+# devtools::install_github("scoyoc/climateAnalyzeR")
+library("climateAnalyzeR") # Import data from ClimateAnalyzer.org
+# library("cowplot") # Streamlining for ggplot2
+# library("grid")
+# library("gridExtra")
+# library("knitr") # Makes nice output
+# library("lubridate") # Makes dating easier
+# library("tidyverse") # Data manipulation
+# library("shadowtext") # Figure detailing
+
+#-- Functions
+# Number contraction ---
+# Prints the appropriate number contraction for a given number.
+number_contraction <- function(x) {
+  if (is.na(x)){
+    y = "[insofficient data]"
+  } else if  (x == 1) {
+    y = paste0(x, "st")
+  } else if (x == 2) {
+    y = paste0(x, "nd")
+  } else if (x == 3) {
+    y = paste0(x, "rd")
+  } else {
+    y = paste0(x, "th")
+  }
+  return(y)
+}
+
+# Visitor Center ---
+# Produces text appropriate for the visitor center.
+visitor_center <- function(my_park) {
+  if (my_park == "CANY") {
+    (y <- "Co-op weather stations at the ISKY, MAZE, and NEED visitor centers by NPS personnel")
+  } else if (my_park == "Moab") {
+    (y <- "Co-op weather station in downtown Moab")
+  } else {
+    (y <- "Co-op weather station at the visitor center by NPS personnel")
+  }
+  return(y)
+}
+
+# Create a data frame of months.
+data(month_df)
+
+#-- Session information (for text)
+info <- sessionInfo()
+r_ver <- paste(info$R.version$major, info$R.version$minor, sep=".")
+```
+
+```{r Data, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
+#-- Set desired park unit, water year, and month
+# These are parameters hashed our as they are set in renderSummaries.Rmd.
+# station_id <- "arches"
+# my_year = 2020
+
+# Station Metadata
+my_station <- stations(my_stations = station_id)
+yrs_avail <- as.numeric(stringr::str_split(my_station$years_avail, 
+                                             pattern = ";", simplify = T))
+my_station <- my_station %>%
+  dplyr::mutate("label" = paste(min(yrs_avail, na.rm = T), 
+                              max(yrs_avail, na.rm = T), sep = "-"),
+                "water_yr" = my_year)
+
+# 30-year Normals
+normals_30yr <- normals(my_stations = station_id) %>%
+  tidyr::spread("element", "value")
+annual_30yr <- normals_30yr %>%
+  dplyr::filter(month == "Annual") %>%
+  dplyr::mutate("TEMP_midpt" = ((TMAX - TMIN) / 2) + TMIN)
+month_30yr <- normals_30yr %>%
+  dplyr::filter(month %in% month.abb) %>%
+  dplyr::mutate("month" = month_df$month_name) %>%
+  dplyr::rename("month_name" = month, 
+                "prcp_30yr" = PRCP, 
+                "tmax_30yr" = TMAX, 
+                "tmin_30yr" = TMIN) %>%
+  dplyr::arrange(month_name) %>%
+  dplyr::mutate("prcp_accum_30yr" = cumsum(prcp_30yr), 
+                "temp_midpt_30yr" =((tmax_30yr - tmin_30yr) / 2) + tmin_30yr)
+
+#-- Annual Data ---- 
+annual_dat  <- import_annual(station_id = station_id, 
+                             start_year = min(yrs_avail, na.rm = T), 
+                             end_year = lubridate::year(lubridate::today()), 
+                             screen_blanks = 'true', 
+                             remove_missing = TRUE) %>%
+#  filter(year <= my_year) %>%
+  dplyr::select(year | contains("wy")) %>%
+  dplyr::mutate("temp_midpt" = ifelse(is.na(tmax_wy) | is.na(tmin_wy), NA, 
+                                      ((tmax_wy - tmin_wy) / 2) + tmin_wy), 
+                "prcp_driest" = dplyr::min_rank(prcp_wy), 
+                "temp_warmest" = dplyr::min_rank(-temp_midpt), 
+                "tmax_warmest" = dplyr::min_rank(-tmax_wy),
+                "tmin_warmest" = dplyr::min_rank(-tmin_wy), 
+                "prcp_depart" = prcp_wy - annual_30yr$PRCP,
+                "temp_depart" = temp_midpt - annual_30yr$TEMP_midpt,
+                "tmax_depart" = tmax_wy - annual_30yr$TMAX, 
+                "tmin_depart" = tmin_wy - annual_30yr$TMIN)
+
+#-- Monthly Data ----
+# Monthly weather data
+mth_dat <- import_monthly(station_id = station_id, 
+                          start_year = min(yrs_avail, na.rm = T), 
+                          end_year = lubridate::year(lubridate::today())) %>%
+  dplyr::left_join(month_df) %>%
+  dplyr::mutate("water_yr" = ifelse(month >= 10, year +1, year)) %>%
+  # filter(water_yr <= my_year) %>%
+  dplyr::arrange(water_yr, water_month) %>%
+  dplyr::group_by(water_yr) %>%
+  dplyr::mutate("prcp_accum" = cumsum(prcp)) %>%
+  dplyr::mutate("temp_midpt" = ifelse(is.na(tmax) | is.na(tmin), NA, 
+                                    ((tmax - tmin) / 2) + tmin)) %>%
+  dplyr::group_by(water_month) %>%
+  dplyr::mutate("prcp_driest" = dplyr::min_rank(prcp), 
+                "temp_warmest" = dplyr::min_rank(-temp_midpt), 
+                "tmax_warmest" = dplyr::min_rank(-tmax),
+                "tmin_warmest" = dplyr::min_rank(-tmin))
+
+# Monthly departure
+mth_depart <- import_departure(station_id = station_id,
+                               min(yrs_avail, na.rm = T), 
+                               end_year = lubridate::year(lubridate::today())) %>%
+  dplyr::left_join(month_df) %>%
+  dplyr::mutate(water_yr = ifelse(month >= 10, year + 1, year)) %>%
+  # filter(water_yr <= my_year) %>%
+  dplyr::left_join(dplyr::left_join(mth_dat, month_30yr) %>%
+                     dplyr::mutate("prcp_accum_depart" = prcp_accum - prcp_accum_30yr) %>%
+                     dplyr::ungroup() %>%
+                     dplyr::select(water_yr, month_name, prcp_accum_depart))
+
+#-- Small subsets for text
+# Filter data sets by year
+# wy_annual <- filter(annual_dat, Year == year)
+# wy_mth <- filter(mth_dat, waterYr == year)
+# wy_depart <- filter(mth_depart, waterYr == year)
+tmax_exceed <- dplyr::filter(mth_depart, water_yr == my_year & tmax_depart > 0)
+tmin_exceed <- dplyr::filter(mth_depart, water_yr == my_year & tmin_depart > 0)
+prcp_above <- dplyr::filter(mth_depart, water_yr == my_year & prcp_pctavg > 100)
+prcp_below <- dplyr::filter(mth_depart, water_yr == my_year & prcp_pctavg < 100)
+text_refs <- my_station %>%
+  dplyr::bind_cols(dplyr::filter(annual_dat, year == my_year)) %>%
+  dplyr::mutate("timespan" = max(yrs_avail, na.rm = T) - min(yrs_avail, na.rm = T))
+
+#-- Model annual trends
+prcp_lm <- summary(lm(prcp_wy ~ year, data = annual_dat))$coefficients[2, 1]
+temp_lm <- summary(lm(temp_midpt ~ year, data = annual_dat))$coefficients[2, 1]
+```
+This document summarizes current temperature and precipitation anomalies 
+relative to 30-year (1981-2010) averages for 
+`r station_name` during the 
+`r my_year` water year (October `r my_year - 1` through September `r my_year`). 
+The data used in these analyses are part of the NOAA Global Historical 
+Climatology Network (GHCN) Cooperative Observer Network (COOP) and were 
+downloaded from [ClimateAnalyzer.org](http://www.climateanalyzer.org/) 
+on `r format(as.Date(lubridate::today(), format = "%Y-%m-%d"), "%d %B, %Y")` 
+using R (ver. `r r_ver`, R Core Team, 2020) and the climateAnalyzeR package (ver. 
+`r info$otherPkgs$climateAnalyzeR$Version`, Van Scoyoc, 2021). 
+The data used for these analyses include the daily high temperature (TMAX), 
+daily low temperature (TMIN), and daily precipitation accumulation (PRCP). This 
+is an automated summary and all results are provisional.
+  
+# Temperature
+Water year `r my_year` was the 
+`r number_contraction(text_refs$temp_warmest)` warmest water year in the 
+`r text_refs$timespan`-year record for 
+`r station_name` (`r my_station$label`). 
+The average annual temperature was 
+`r round(text_refs$temp_midpt, 2)`, which is
+`r abs(round(text_refs$temp_depart, 2))`°F 
+`r ifelse(text_refs$temp_depart > 0, "above", "below")` the 30-year average 
+(`r round(annual_30yr$TEMP_midpt, 2)`°F). 
+This summary suggests that temperatures are 
+`r ifelse(temp_lm > 0, "increasing", "decreasing")` 
+`r abs(round(temp_lm*10, 2))`°F per decade (Figure 1A).
+The monthly average TMAX was 
+`r ifelse(nrow(tmax_exceed) >= 6, "above", "below")` normal most of the year and 
+exceeded the 30-year monthly average 
+`r nrow(tmax_exceed)` times (
+`r paste(paste(tmax_exceed$month_name[1:nrow(tmax_exceed)-1], collapse = ", "), tmax_exceed$month_name[nrow(tmax_exceed)], sep = ", and ")`
+; Figure 1B).
+The monthly average TMIN was 
+`r ifelse(nrow(tmin_exceed) >= 6, "above", "below")` normal most of the year and 
+exceeded the 30-year monthly average 
+`r nrow(tmin_exceed)` times 
+(`r paste(paste(tmin_exceed$month_name[1:nrow(tmin_exceed)-1], collapse = ", "), tmin_exceed$month_name[nrow(tmin_exceed)], sep = ", and ")`
+; Figure 1C).
+
+# Precipitation
+Water year `r year` was the 
+`r number_contraction(text_refs$prcp_driest)` driest on record for `r my_park`. 
+Total accumulated precipitation was
+`r text_refs$prcp_wy` inches and was 
+`r round(abs(text_refs$prcp_wy - annual_30yr$PRCP), 2)` inches 
+`r ifelse(text_refs$prcp_wy - annual_30yr$PRCP < 0, "below", "above")` 
+the 30-year average 
+(`r round(annual_30yr$PRCP, 2)` inches). This summary suggests that 
+precipitation is 
+`r ifelse(prcp_lm > 0, "increasing", "decreasing")` at a rate of 
+`r abs(round(prcp_lm * 10, 2))` inches per decade (Figure 2A).
+`r paste(paste(prcp_above$month_name[1:nrow(prcp_above)-1], collapse = ", "), prcp_above$month_name[nrow(prcp_above)], sep = ", and ")` 
+received above average precipitation (Figure 2B), but were not enough to 
+compensate for the 
+`r nrow(prcp_below)` months that were below average 
+(`r paste(paste(prcp_below$month_name[1:nrow(prcp_below)-1], collapse = ", "), prcp_below$month_name[nrow(prcp_below)], sep = ", and ")`
+; Figure 2C).
+
+\newpage
+# Figures
+```{r Fig1, echo=FALSE, fig.cap="Trends in average temperature.", fig.height=6.7, message=FALSE, warning=FALSE}
+#-- Average WY Temps
+# TODO: Stopped here.
+
+# Figure
+t1a <- annual_figure(x_var = annual_dat$year, 
+                     y_var = annual_dat$temp_midpt, 
+                     normal = annual_30yr$TEMP_midpt, 
+                     reference_period = "1981-2010", 
+                     area_color = "orange",
+                     line_color = "red3", 
+                     my_title = "A. Average Annual Temperature", 
+                     my_ylab = "Temperature (°F)")
+
+#-- Average WY TMAX/TMIN
+# Prepare data
+t_dat <- mth_depart %>%
+  dplyr::select(water_yr, month_name, tmax_depart, tmin_depart) %>%
+  dplyr::rename("tmax" = tmax_depart, "tmin" = tmin_depart) %>%
+  tidyr::gather(key = "element", value = "departure", tmax:tmin) %>%
+  dplyr::select(month_name, departure, water_yr, element)
+
+#-- TMAX
+t_tmax <- dplyr::filter(t_dat, element == "tmax")
+t1b <- monthly_figure(x_var = t_tmax$month_name, 
+                   y_var = t_tmax$departure, 
+                   year_group = t_tmax$water_yr,
+                   y_intercept = 0, 
+                   my_year = my_year, 
+                   line_color = "red3", 
+                   my_title = "B. Average Monthly TMAX", 
+                   my_ylab = "Departure (°F)") +
+  ggplot2::theme(axis.text.x = ggplot2::element_blank())
+
+#-- TMIN
+t_tmin <- dplyr::filter(t_dat, element == "tmin")
+t1c <- monthly_figure(x_var = t_tmin$month_name, 
+                   y_var = t_tmin$departure, 
+                   year_group = t_tmin$water_yr,
+                   y_intercept = 0, 
+                   my_year = my_year, 
+                   line_color = "red3", 
+                   my_title = "C. Average Monthly TMIN", 
+                   my_ylab = "Departure (°F)")
+
+
+cowplot::plot_grid(t1a, t1b, t1c, labels = c(), ncol = 1, align = "v", vjust = 1, 
+                scale = 1)
+```
+
+```{r Fig2, echo=FALSE, fig.cap="Trends in  precipitation.", fig.height=6.7, message=FALSE, warning=FALSE}
+#-- Water year precipitation totals
+# Labels
+p1_lab <- annual_30yr %>%
+  mutate(Label = paste0("1981-2010 Avg: ", round(annual_30yr$PRCP, 1), " in"))
+# Figure
+p1 <- area_figure(dat = annual_dat, # Dataframe to plot
+                  x_var = annual_dat$Year, # The vector for the x-variable
+                  y_var = annual_dat$PRCP_wy, # The vector of the y-variable
+                  area_color = "darkgreen", # The color of the area
+                  ref_dat = annual_30yr$PRCP,# 30-year reference period dataframe
+                  line_color = "darkgreen", # Color of line and points
+                  lab_dat = p1_lab, # Dataframe to map labels
+                  lab_y = p1_lab$PRCP, # Label location on y-axis
+                  my_title = "A. Water Year Precipitation Totals", # The title of the plot
+                  my_ylab = "Precipitation (in)")
+
+#-- Monthly precipitation totals
+# Prepare data
+p_mth <- mth_depart %>%
+  select(waterYr, mthName, PRCP_pctavg) %>%
+  rename("PRCP" = PRCP_pctavg) %>%
+  gather(key = "Element", value = "PctAvg", PRCP)
+# Figure
+p2 <- line_figure(dat = p_mth, 
+                  x_var = p_mth$mthName, 
+                  y_var = p_mth$PctAvg, 
+                  my_yintercept = 100,
+                  wy_dat = filter(p_mth, waterYr == year),
+                  wy_xvar = filter(p_mth, waterYr == year)$mthName,
+                  wy_yvar = filter(p_mth, waterYr == year)$PctAvg,
+                  line_color = "darkgreen", 
+                  my_title = "B. Montly Departure Realtive to the Historic Record", 
+                  my_ylab = "Percent Average") +
+  theme(axis.text.x = element_blank())
+
+#-- Water year accumulation
+# Prepare Data
+p_acc <- mth_depart %>%
+  ungroup() %>%
+  select(waterYr, mthName, PRCP_accum_depart) %>%
+  rename("PRCP" = PRCP_accum_depart) %>%
+  gather(key = "Element", value = "Accumulation", PRCP)
+
+# Figure
+p3 <- line_figure(dat = p_acc, # Data to plot
+                  x_var = p_acc$mthName, # The vector for the x-variable
+                  y_var = p_acc$Accumulation, # The vector for the y-variable
+                  my_yintercept = 0, # The y-intercept for the reference line
+                  wy_dat = filter(p_acc, waterYr == year), 
+                  wy_xvar= filter(p_acc, waterYr == year)$mthName, 
+                  wy_yvar = filter(p_acc, waterYr == year)$Accumulation, 
+                  line_color = "darkgreen", # Color of line and points
+                  lab_dat = park_unit, # Data to map labels
+                  my_title = "C. Accumulated Departure Realtive to the Historic Record", # The title of the plot
+                  my_ylab = "Departure (in)") # Title of y-axis
+
+# Using cowplot to arrange figures
+plot_grid(p1, p2, p3, labels = c(""), ncol = 1, align = "v")
+```

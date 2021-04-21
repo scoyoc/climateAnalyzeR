@@ -21,9 +21,10 @@ import_departure(
 \item{end_year}{The four digit number of the last year of interest.}
 
 \item{month}{The month number (i.e., 1 for January through 12 for December)
-or 'all' for all months.}
+or 'all' for all months. Dafault is 'all'.}
 
-\item{norm_per}{A character string for the 30-year normalization period.}
+\item{norm_per}{A character string for the 30-year normalization period.
+Either '1971-2000' or '1981-2010'. Default is '1981-2010'.}
 
 \item{convert}{Logical. If TRUE, data are precipitation and temperature
 values are converted to metric. These converted values are included as

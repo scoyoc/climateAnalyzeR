@@ -19,12 +19,17 @@ LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Imports: 
+    cowplot, 
     dplyr,
+    ggplot2,
+    grid,
+    gridExtra,
     knitr,
     janitor,
     lubridate,
     readr,
     rmarkdown,
+    shadowtext,
     stringr,
     tibble,
     XML

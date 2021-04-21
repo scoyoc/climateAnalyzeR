@@ -54,4 +54,3 @@ import_annual = function(station_id, start_year, end_year, screen_blanks = 'true
   names(dat) = janitor::make_clean_names(names(dat))
   return(tibble::as_tibble(dat))
 }
-
