@@ -16,17 +16,18 @@ renderSummary(
 \item{station_id}{The station identification name for the weather station of
 interest.}
 
-\item{station_name}{Optional. The name of the station to display in the report.
-Default is NULL. If left as NULL the station name will be pulled using the
-stations() function.}
+\item{station_name}{Optional. A string to use for the station name. This is
+displayed in several location in the rendered report.Default is NULL. If
+NULL the station name will be pulled using
+\code{\link[climateAnalyzeR::stations]{stations}}.}
+
+\item{my_year}{The four-digit for the year of interest.}
 
 \item{report}{Type of report to render. Currently the only option is a water
 year ("water_year") report.}
 
-\item{my_dir}{String of direectory path to save repor to. If NULL, the report
-is saved to the your desktop.}
-
-\item{year}{The four-digit for the year of interest.}
+\item{my_dir}{Optional. String of direectory path to save repor to. Default
+is NULL. If NULL, the report is saved to the your desktop.}
 }
 \value{
 A PDF.

@@ -1,16 +1,12 @@
 #' Line Figure with Area
 #'
-#' This function produces a standardized line graph with colored area under the
-#' line. This figure is used in RMarkdown scrips.
+#' This function produces a standardized line graph with colored area under the line. This figure is used in RMarkdown scrips.
 #'
 #' @param x_var A character string of hte x-variable.
 #' @param y_var A character string of the y-variable.
-#' @param normal A number for the annual normal temperature or precipitation.
-#'     Typically derived from \code{\link[climateAnalyzeR::normals]{normals}}.
-#' @param reference_period Character string for the reference period used for
-#'     normals.
-#' @param area_color A character string for the color of the area. See
-#'     \code{\link[grDevices::colors]{colors}} for a list of color names.
+#' @param normal A number for the annual normal temperature or precipitation. Typically derived from \code{\link[climateAnalyzeR::normals]{normals}}.
+#' @param reference_period Character string for the reference period used for normals.
+#' @param area_color A character string for the color of the area. See \code{\link[grDevices::colors]{colors}} for a list of color names.
 #' @param line_color A character string for the line color.
 #' @param my_title A character string for the title.
 #' @param my_ylab A character string from the y-axis.
@@ -19,7 +15,7 @@
 #' @export
 #'
 #' @examples
-#' # TODO: write example
+#' # TODO: use prcp data
 annual_figure <- function(x_var, y_var, normal, reference_period, area_color,
                         line_color, my_title, my_ylab){
   #-- Crate dataframe
@@ -44,7 +40,7 @@ annual_figure <- function(x_var, y_var, normal, reference_period, area_color,
                                                        label = label),
                                 color = "black", bg.colour = "white", size = 3,
                                 hjust = -0.1, vjust = -0.5) +
-    ggplot2::coord_cartesian(xlim = c(min(dat$year), max(dat$year)),
+    ggplot2::coord_cartesian(xlim = c(min(dat$x), max(dat$x)),
                              ylim = c(floor(min(y_var, na.rm = T)),
                                       ceiling(max(y_var, na.rm = T)))) +
     ggplot2::labs(title = my_title, y = my_ylab) +

@@ -4,14 +4,15 @@
 #'
 #' @param station_id The station identification name for the weather station of
 #'     interest.
-#' @param station_name Optional. The name of the station to display in the report.
-#'     Default is NULL. If left as NULL the station name will be pulled using the
-#'     stations() function.
-#' @param year The four-digit for the year of interest.
+#' @param station_name Optional. A string to use for the station name. This is
+#'     displayed in several location in the rendered report.Default is NULL. If
+#'     NULL the station name will be pulled using
+#'     \code{\link[climateAnalyzeR::stations]{stations}}.
+#' @param my_year The four-digit for the year of interest.
 #' @param report Type of report to render. Currently the only option is a water
 #'     year ("water_year") report.
-#' @param my_dir String of direectory path to save repor to. If NULL, the report
-#'     is saved to the your desktop.
+#' @param my_dir Optional. String of direectory path to save repor to. Default
+#'     is NULL. If NULL, the report is saved to the your desktop.
 #'
 #' @return A PDF.
 #' @export
@@ -34,7 +35,7 @@ renderSummary = function(station_id, station_name = NULL, my_year,
   # Select report
   if (report == "water_year"){
     my_rmd = "water_year_summary.Rmd"
-    report_name = paste0(date_stamp, "_", station_name, " Water Year ", my_year, " Summary.pdf")
+    report_name = paste0(date_stamp, "_", station_id, "_WY", my_year, "_Summary.pdf")
   } else (message("Report type not recognized. See help(renderSummary) for options."))
 
 

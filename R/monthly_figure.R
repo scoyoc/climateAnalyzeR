@@ -20,11 +20,14 @@
 #' @export
 #'
 #' @examples
+#'
 monthly_figure <- function(x_var, y_var, year_group, y_intercept, my_year,
                         line_color, my_title, my_ylab){ # Title of y-axis
   # Create dataframe
   dat = tibble::tibble(x_var, y_var, year_group)
   names(dat) = c("x", "y", "g")
+  ref_lab = paste0(min(year_group, na.rm = TRUE), "-",
+                   max(year_group, na.rm = TRUE))
 
   # Create figure
   gg = ggplot2::ggplot(dat, ggplot2::aes(x = x, y = y, group = g)) +
@@ -42,7 +45,7 @@ monthly_figure <- function(x_var, y_var, year_group, y_intercept, my_year,
                                 color = line_color, bg.colour = "white",
                                 hjust = -1.5, vjust = 1.5, fontface = "bold") +
     shadowtext::geom_shadowtext(mapping = ggplot2::aes(x = Inf, y = Inf,
-                                                       label = my_year),
+                                                       label = ref_lab),
                                 color = "gray40", bg.colour = "white",
                                 hjust = 1.5, vjust = 1.5) +
     ggplot2::labs(title = my_title, y = my_ylab) +
