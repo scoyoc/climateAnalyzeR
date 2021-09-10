@@ -1,0 +1,297 @@
+---
+title: "Contitional Text Testing"
+author: "Matthew Van Scoyoc"
+date: "`r format(as.Date(Sys.Date(), format = '%Y-%m-%d'), '%B %d, %Y')`"
+output:
+  pdf_document:
+  fig_caption: yes
+latex_engine: xelatex
+editor_options:
+  chunk_output_type: console
+mainfont: Arial
+urlcolor: blue
+---
+\raggedright
+```{r Setup, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
+#-- Packages
+# install.packages(c("cowplot", "devtools", "grid", "gridExtra", "knitr",
+#                    "lubridate", "tidyverse", "shadowtext"))
+# devtools::install_github("scoyoc/climateAnalyzeR")
+library("climateAnalyzeR") # Import data from ClimateAnalyzer.org
+# library("cowplot") # Streamlining for ggplot2
+# library("grid")
+# library("gridExtra")
+# library("knitr") # Makes nice output
+# library("lubridate") # Makes dating easier
+# library("tidyverse") # Data manipulation
+# library("shadowtext") # Figure detailing
+
+#-- Functions
+# Number contraction ---
+# Prints the appropriate number contraction for a given number.
+number_contraction <- function(x) {
+  if (is.na(x)){
+    y = FALSE
+  } else if  (x == 1) {
+    y = paste0(x, "st")
+  } else if (x == 2) {
+    y = paste0(x, "nd")
+  } else if (x == 3) {
+    y = paste0(x, "rd")
+  } else {
+    y = paste0(x, "th")
+  }
+  return(y)
+}
+
+# # Visitor Center ---
+# # Produces text appropriate for the visitor center.
+# visitor_center <- function(my_park) {
+#   if (my_park == "CANY") {
+#     (y <- "Co-op weather stations at the ISKY, MAZE, and NEED visitor centers by NPS personnel")
+#   } else if (my_park == "Moab") {
+#     (y <- "Co-op weather station in downtown Moab")
+#   } else {
+#     (y <- "Co-op weather station at the visitor center by NPS personnel")
+#   }
+#   return(y)
+# }
+
+# Create a data frame of months.
+data(month_df)
+
+#-- Session information (for text)
+info <- sessionInfo()
+r_ver <- paste(info$R.version$major, info$R.version$minor, sep=".")
+```
+
+```{r Data, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
+#-- Set desired park unit, water year, and month
+# These are parameters hashed our as they are set in renderSummaries.Rmd.
+
+# Adequate data
+# station_id <- "hans_flat_rs"
+# my_year <- 2020
+
+# Inadequate data
+station_id <- "canyonlands_theneck"
+my_year <- 2021
+
+#-- Retreive station metadata
+my_station <- stations(my_stations = station_id)
+yrs_avail <- as.numeric(stringr::str_split(my_station$years_avail,
+                                           pattern = ";", simplify = T))
+my_station <- my_station %>%
+  dplyr::mutate("label" = paste(min(yrs_avail, na.rm = T),
+                                max(yrs_avail, na.rm = T), sep = "-"),
+                "water_yr" = my_year) %>%
+  dplyr::distinct()
+
+# 30-year Normals
+normals_30yr <- normals(my_stations = station_id) %>%
+  tidyr::spread("element", "value")
+annual_30yr <- normals_30yr %>%
+  dplyr::filter(month == "Annual") %>%
+  dplyr::mutate("TEMP_midpt" = ((TMAX - TMIN) / 2) + TMIN)
+month_30yr <- normals_30yr %>%
+  dplyr::filter(month %in% month.abb) %>%
+  dplyr::mutate("month" = month_df$month_name) %>%
+  dplyr::rename("month_name" = month,
+                "prcp_30yr" = PRCP,
+                "tmax_30yr" = TMAX,
+                "tmin_30yr" = TMIN) %>%
+  dplyr::arrange(month_name) %>%
+  dplyr::mutate("prcp_accum_30yr" = cumsum(prcp_30yr),
+                "temp_midpt_30yr" =((tmax_30yr - tmin_30yr) / 2) + tmin_30yr)
+
+#-- Annual Data ----
+annual_dat  <- import_annual(station_id = station_id,
+                             start_year = min(yrs_avail, na.rm = T),
+                             end_year = lubridate::year(lubridate::today()),
+                             screen_blanks = 'true',
+                             remove_missing = TRUE) %>%
+  #  filter(year <= my_year) %>%
+  dplyr::select(year | contains("wy")) %>%
+  dplyr::mutate("temp_midpt" = ifelse(is.na(tmax_wy) | is.na(tmin_wy), NA,
+                                      ((tmax_wy - tmin_wy) / 2) + tmin_wy),
+                "prcp_driest" = dplyr::min_rank(prcp_wy),
+                "temp_warmest" = dplyr::min_rank(-temp_midpt),
+                "tmax_warmest" = dplyr::min_rank(-tmax_wy),
+                "tmin_warmest" = dplyr::min_rank(-tmin_wy),
+                "prcp_depart" = prcp_wy - annual_30yr$PRCP,
+                "temp_depart" = temp_midpt - annual_30yr$TEMP_midpt,
+                "tmax_depart" = tmax_wy - annual_30yr$TMAX,
+                "tmin_depart" = tmin_wy - annual_30yr$TMIN)
+
+#-- Monthly Data ----
+# Monthly weather data
+mth_dat <- import_monthly(station_id = station_id,
+                          start_year = min(yrs_avail, na.rm = T),
+                          end_year = lubridate::year(lubridate::today())) %>%
+  dplyr::left_join(month_df) %>%
+  dplyr::mutate("water_yr" = ifelse(month >= 10, year +1, year)) %>%
+  dplyr::arrange(water_yr, water_month) %>%
+  dplyr::group_by(water_yr) %>%
+  dplyr::mutate("prcp_accum" = cumsum(prcp)) %>%
+  dplyr::mutate("temp_midpt" = ifelse(is.na(tmax) | is.na(tmin), NA,
+                                      ((tmax - tmin) / 2) + tmin)) %>%
+  dplyr::group_by(water_month) %>%
+  dplyr::mutate("prcp_driest" = dplyr::min_rank(prcp),
+                "temp_warmest" = dplyr::min_rank(-temp_midpt),
+                "tmax_warmest" = dplyr::min_rank(-tmax),
+                "tmin_warmest" = dplyr::min_rank(-tmin))
+
+# Monthly departure
+mth_depart <- import_departure(station_id = station_id,
+                               min(yrs_avail, na.rm = T),
+                               end_year = lubridate::year(lubridate::today())) %>%
+  dplyr::left_join(month_df) %>%
+  dplyr::mutate(water_yr = ifelse(month >= 10, year + 1, year)) %>%
+  # filter(water_yr <= my_year) %>%
+  dplyr::left_join(dplyr::left_join(mth_dat, month_30yr) %>%
+                     dplyr::mutate("prcp_accum_depart" = prcp_accum - prcp_accum_30yr) %>%
+                     dplyr::ungroup() %>%
+                     dplyr::select(water_yr, month_name, prcp_accum_depart))
+
+#-- Small subsets for text
+# Filter data sets by year
+# wy_annual <- filter(annual_dat, Year == year)
+# wy_mth <- filter(mth_dat, waterYr == year)
+# wy_depart <- filter(mth_depart, waterYr == year)
+tmax_exceed <- dplyr::filter(mth_depart, water_yr == my_year & tmax_depart > 0)
+tmin_exceed <- dplyr::filter(mth_depart, water_yr == my_year & tmin_depart > 0)
+prcp_above <- dplyr::filter(mth_depart, water_yr == my_year & prcp_pctavg > 100)
+prcp_below <- dplyr::filter(mth_depart, water_yr == my_year & prcp_pctavg < 100)
+tmax_missing <- dplyr::filter(mth_depart, water_yr == my_year & 
+                                is.na(tmax_depart))$month_name
+tmin_missing <- dplyr::filter(mth_depart, water_yr == my_year & 
+                                is.na(tmin_depart))$month_name
+prcp_missing <- dplyr::filter(mth_depart, water_yr == my_year & 
+                                is.na(prcp_pctavg))$month_name
+prcp_missing <- dplyr::filter(mth_depart, water_yr == my_year & 
+                                is.na(prcp_pctavg))$month_name
+text_refs <- my_station %>%
+  dplyr::bind_cols(dplyr::filter(annual_dat, year == my_year)) %>%
+  dplyr::mutate("timespan" = max(yrs_avail, na.rm = T) - min(yrs_avail, na.rm = T))
+
+#-- Model annual trends
+prcp_lm <- summary(lm(prcp_wy ~ year, data = annual_dat))$coefficients[2, 1]
+temp_lm <- summary(lm(temp_midpt ~ year, data = annual_dat))$coefficients[2, 1]
+
+temp_text <- is.na(text_refs$temp_warmest)
+prcp_text <- is.na(text_refs$prcp_driest)
+```
+
+This document summarizes current temperature and precipitation anomalies relative to 30-year (1981-2010) averages for `r my_station$name` during the `r my_year` water year (October `r my_year - 1` through September `r my_year`).
+The data used in these analyses are part of the NOAA Global Historical Climatology Network (GHCN) Cooperative Observer Network (COOP) and were downloaded from [ClimateAnalyzer.org](http://www.climateanalyzer.org/) on `r format(as.Date(lubridate::today(), format = "%Y-%m-%d"), "%d %B, %Y")` using R (ver. `r r_ver`, R Core Team, `r info$R.version$year`) and the climateAnalyzeR package (ver  `r info$otherPkgs$climateAnalyzeR$Version`, Van Scoyoc, `r lubridate::year(stringr::str_split(info$otherPkgs$climateAnalyzeR$Packaged, pattern = ";")[[1]][1])`).
+The data used for these analyses include the daily high temperature (TMAX), daily low temperature (TMIN), and daily precipitation accumulation (PRCP). This is an automated summary and all results are provisional.
+
+\newpage
+# Temperature
+```{r Temp_Text, echo=FALSE, results='asis', eval=!temp_text}
+# Text is printed in PDF if is.na(text_refs$temp_warmest) == FALSE.
+cat(
+  paste0("Water year ", my_year, " was the ",  number_contraction(text_refs$temp_warmest), " warmest water year in the ", text_refs$timespan, "-year record for ", my_station$name, "."), 
+  paste0("The average annual temperature was ", round(text_refs$temp_midpt, 2), "°F which is ", abs(round(text_refs$temp_depart, 2)), "°F ", ifelse(text_refs$temp_depart > 0, "above", "below"), " the 30-year average (", round(annual_30yr$TEMP_midpt, 2), "°F)."), 
+  paste0("This summary suggests that temperatures are ", ifelse(temp_lm > 0, "increasing", "decreasing"), " ", abs(round(temp_lm*10, 2)), "°F per decade (Figure 1A)."), 
+  paste0("The monthly average TMAX was ", ifelse(nrow(tmax_exceed) >= 6, "above", "below"), " normal most of the year and exceeded the 30-year monthly average ", nrow(tmax_exceed), " times (", paste(paste(tmax_exceed$month_name[1:nrow(tmax_exceed)-1], collapse = ", "), tmax_exceed$month_name[nrow(tmax_exceed)], sep = ", and "), "; Figure 1B)."), 
+  paste0("The monthly average TMIN was ", ifelse(nrow(tmin_exceed) >= 6, "above", "below"), " normal most of the year and exceeded the 30-year monthly average ",
+nrow(tmin_exceed), " times (",  paste(paste(tmin_exceed$month_name[1:nrow(tmin_exceed)-1], collapse = ", "), tmin_exceed$month_name[nrow(tmin_exceed)], sep = ", and "), "; Figure 1C).")
+)
+```
+
+```{r Insufficient_Temp, echo=FALSE, results='asis', eval=temp_text}
+# Text is printed in PDF if is.na(text_refs$temp_warmest) == TRUE.
+cat(
+  paste0("There are too many missing records to meansingfully summarize data from this station for water year ", my_year, "."), 
+  paste0("However, this summary suggests that temperatures are ", ifelse(temp_lm > 0, "increasing", "decreasing"), " ", abs(round(temp_lm*10, 2)), "°F per decade (Figure 1A)."), 
+  paste0("There are ", length(tmax_missing), " missing months of TMAX data and ", length(tmin_missing), " missing months of TMIN data for ", my_station$name, " (Figures 1B and 1C).")
+)
+```
+
+```{r TempFig, echo=FALSE, fig.cap="Trends in average temperature.", fig.height=6.7, message=FALSE, warning=FALSE}
+#-- Average Annual Temps
+# TODO: Stopped here.
+
+# Figure
+t1 <- annual_figure(x_var = annual_dat$year,
+                    y_var = annual_dat$temp_midpt,
+                    normal = annual_30yr$TEMP_midpt,
+                    reference_period = "1981-2010",
+                    area_color = "orange",
+                    line_color = "red3",
+                    my_title = "A. Average Annual Temperature",
+                    my_ylab = "Temperature (°F)")
+
+#-- Average WY TMAX/TMIN
+t2 <- monthly_figure(x_var = mth_depart$month_name,
+                     y_var = mth_depart$tmax_depart,
+                     year_group = mth_depart$water_yr,
+                     y_intercept = 0,
+                     my_year = my_year,
+                     line_color = "red3",
+                     my_title = "B. Average Monthly TMAX",
+                     my_ylab = "Departure (°F)") +
+  ggplot2::theme(axis.text.x = ggplot2::element_blank())
+
+#-- TMIN
+t3 <- monthly_figure(x_var = mth_depart$month_name,
+                     y_var = mth_depart$tmin_depart,
+                     year_group = mth_depart$water_yr,
+                     y_intercept = 0,
+                     my_year = my_year,
+                     line_color = "red3",
+                     my_title = "C. Average Monthly TMIN",
+                     my_ylab = "Departure (°F)")
+
+
+cowplot::plot_grid(t1, t2, t3, labels = c(), ncol = 1, align = "v",
+                   vjust = 1, scale = 1)
+```
+
+\newpage
+# Precipitation
+```{r PRCP_Text, echo=FALSE, results='asis', eval=prcp_text}
+cat("Data are sufficient to summarize.
+    
+    Testing new line.")
+```
+```{r Insufficient_PRCP, echo=FALSE, results='asis', eval=!prcp_text}
+cat("Data are insufficent to meansingfully summarize.")
+```
+```{r Fig2, echo=FALSE, fig.cap="Trends in  precipitation.", fig.height=6.7, message=FALSE, warning=FALSE}
+#-- Water year precipitation totals
+
+p1 <- annual_figure(x_var = annual_dat$year,
+                    y_var = annual_dat$prcp_wy,
+                    normal = annual_30yr$PRCP,
+                    reference_period = "1981-2010",
+                    area_color = "green3",
+                    line_color = "darkgreen",
+                    my_title = "A. Water Year Precipitation Totals",
+                    my_ylab = "Temperature (°F)")
+
+#-- Monthly precipitation totals
+p2 <- monthly_figure(x_var = mth_depart$month_name,
+                     y_var = mth_depart$prcp_pctavg,
+                     year_group = mth_depart$water_yr,
+                     y_intercept = 100,
+                     my_year = my_year,
+                     line_color = "darkgreen",
+                     my_title = "B. Monthly Departure Realtive to the Historic Record",
+                     my_ylab = "Percent Average (%)") +
+  ggplot2::theme(axis.text.x = ggplot2::element_blank())
+
+#-- Water year accumulation
+p3 <- monthly_figure(x_var = mth_depart$month_name,
+                     y_var = mth_depart$prcp_accum_depart,
+                     year_group = mth_depart$water_yr,
+                     y_intercept = 0,
+                     my_year = my_year,
+                     line_color = "darkgreen",
+                     my_title = "C. Accumulated Departure Realtive to the Historic Record",
+                     my_ylab = "Departure (in)")
+
+# Using cowplot to arrange figures
+cowplot::plot_grid(p1, p2, p3, labels = c(""), ncol = 1, align = "v")
+```

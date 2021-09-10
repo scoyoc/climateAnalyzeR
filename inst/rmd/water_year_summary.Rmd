@@ -166,11 +166,8 @@ text_refs <- my_station %>%
 prcp_lm <- summary(lm(prcp_wy ~ year, data = annual_dat))$coefficients[2, 1]
 temp_lm <- summary(lm(temp_midpt ~ year, data = annual_dat))$coefficients[2, 1]
 ```
-This document summarizes current temperature and precipitation anomalies 
-relative to 30-year (1981-2010) averages for 
-`r station_name` during the 
-`r my_year` water year (October `r my_year - 1` through September `r my_year`). 
-The data used in these analyses are part of the NOAA Global Historical 
+This document summarizes current temperature and precipitation anomalies relative to 30-year (1981-2010) averages for `r station_name` during the `r my_year` water year (October `r my_year - 1` through September `r my_year`). 
+The data used in these analyses are from the NOAA Global Historical 
 Climatology Network (GHCN) Cooperative Observer Network (COOP) and were 
 downloaded from [ClimateAnalyzer.org](http://www.climateanalyzer.org/) 
 on `r format(as.Date(lubridate::today(), format = "%Y-%m-%d"), "%d %B, %Y")` 
