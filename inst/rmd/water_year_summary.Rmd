@@ -166,11 +166,8 @@ text_refs <- my_station %>%
 prcp_lm <- summary(lm(prcp_wy ~ year, data = annual_dat))$coefficients[2, 1]
 temp_lm <- summary(lm(temp_midpt ~ year, data = annual_dat))$coefficients[2, 1]
 ```
-This document summarizes current temperature and precipitation anomalies 
-relative to 30-year (1981-2010) averages for 
-`r station_name` during the 
-`r my_year` water year (October `r my_year - 1` through September `r my_year`). 
-The data used in these analyses are part of the NOAA Global Historical 
+This document summarizes current temperature and precipitation anomalies relative to 30-year (1981-2010) averages for `r station_name` during the `r my_year` water year (October `r my_year - 1` through September `r my_year`). 
+The data used in these analyses are from the NOAA Global Historical 
 Climatology Network (GHCN) Cooperative Observer Network (COOP) and were 
 downloaded from [ClimateAnalyzer.org](http://www.climateanalyzer.org/) 
 on `r format(as.Date(lubridate::today(), format = "%Y-%m-%d"), "%d %B, %Y")` 
@@ -206,23 +203,10 @@ exceeded the 30-year monthly average
 ; Figure 1C).
 
 # Precipitation
-Water year `r my_year` was the 
-`r number_contraction(text_refs$prcp_driest)` driest on record for `r station_name`. 
-Total accumulated precipitation was
-`r text_refs$prcp_wy` inches and was 
-`r round(abs(text_refs$prcp_wy - annual_30yr$PRCP), 2)` inches 
-`r ifelse(text_refs$prcp_wy - annual_30yr$PRCP < 0, "below", "above")` 
-the 30-year average 
-(`r round(annual_30yr$PRCP, 2)` inches). This summary suggests that 
-precipitation is 
-`r ifelse(prcp_lm > 0, "increasing", "decreasing")` at a rate of 
-`r abs(round(prcp_lm * 10, 2))` inches per decade (Figure 2A).
-`r paste(paste(prcp_above$month_name[1:nrow(prcp_above)-1], collapse = ", "), prcp_above$month_name[nrow(prcp_above)], sep = ", and ")` 
-received above average precipitation (Figure 2B), but were not enough to 
-compensate for the 
-`r nrow(prcp_below)` months that were below average 
-(`r paste(paste(prcp_below$month_name[1:nrow(prcp_below)-1], collapse = ", "), prcp_below$month_name[nrow(prcp_below)], sep = ", and ")`
-; Figure 2C).
+Water year `r my_year` was the `r number_contraction(text_refs$prcp_driest)` driest on record for `r station_name`. 
+Total accumulated precipitation was `r text_refs$prcp_wy` inches and was `r round(abs(text_refs$prcp_wy - annual_30yr$PRCP), 2)` inches `r ifelse(text_refs$prcp_wy - annual_30yr$PRCP < 0, "below", "above")` the 30-year average (`r round(annual_30yr$PRCP, 2)` inches). 
+This summary suggests that precipitation is `r ifelse(prcp_lm > 0, "increasing", "decreasing")` at a rate of `r abs(round(prcp_lm * 10, 2))` inches per decade (Figure 2A).
+`r paste(paste(prcp_above$month_name[1:nrow(prcp_above)-1], collapse = ", "), prcp_above$month_name[nrow(prcp_above)], sep = ", and ")` received above average precipitation (Figure 2B), but were not enough to compensate for the `r nrow(prcp_below)` months that were below average (`r paste(paste(prcp_below$month_name[1:nrow(prcp_below)-1], collapse = ", "), prcp_below$month_name[nrow(prcp_below)], sep = ", and ")`; Figure 2C).
 
 \newpage
 # Figures
