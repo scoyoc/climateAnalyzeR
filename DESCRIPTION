@@ -22,6 +22,7 @@ Imports:
     cowplot, 
     dplyr,
     ggplot2,
+    ggmap,
     grid,
     gridExtra,
     knitr,
