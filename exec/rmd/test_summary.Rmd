@@ -141,66 +141,11 @@ mth_depart <- import_departure(station_id = station_id,
 ```
 
 ```{r Text_Refs, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
-# Calculate percentiles
-temp_25 <- quantile(annual_dat$temp_warmest, 0.25, na.rm = TRUE)
-temp_75 <- quantile(annual_dat$temp_warmest, 0.75, na.rm = TRUE)
-prcp_25 <- quantile(annual_dat$prcp_depart, 0.25, na.rm = TRUE)
-prcp_75 <- quantile(annual_dat$prcp_depart, 0.75, na.rm = TRUE)
 
 # Consolidate text references
 text_refs <- my_station %>%
   dplyr::bind_cols(dplyr::filter(annual_dat, year == my_year)) %>%
   dplyr::mutate("timespan" = max(yrs_avail, na.rm = T) - min(yrs_avail, na.rm = T))
-
-# Evaluate data for conditional text
-temp_text <- if (is.na(text_refs$temp_warmest)) {
-  TRUE
-  } else if (text_refs$temp_warmest <= temp_25) {
-    "cool"
-    } else if (text_refs$temp_warmest > temp_25 & text_refs$temp_warmest < temp_75){
-      "avg"
-      } else if (text_refs$temp_warmest >= temp_75){
-        "warm"
-        } else (FALSE)
-
-prcp_text <- if (is.na(text_refs$prcp_depart)) {
-  TRUE
-  } else if (text_refs$prcp_depart <= prcp_25) {
-    "dry"
-    } else if (text_refs$prcp_depart > prcp_25 & text_refs$prcp_depart < prcp_75){
-      "avg"
-      } else if (text_refs$prcp_depart >= prcp_75){
-        "wet"
-        } else (FALSE)
-
-# TODO: Evaluate if error is in annual or monthly data set. Then write conditional text.
-# TODO: Test missing month threshold for annual ranking.
-# 1. Pull annual data and rank.
-# 2. Pull monthly data and count NA's for temp/prcp data.
-# 3. Compare annual ranking to # of monthly NA's. Filter rows of monthly NA's > 1.
-# 4. write lappy to cycle through co-op stations.
-
-error_eval <- tibble::tibble(annual_dat[, c("year", "temp_warmest", 
-                                            "tmax_warmest", "tmin_warmest", 
-                                            "prcp_driest")]) %>%
-  dplyr::left_join(mth_depart %>% 
-                     dplyr::filter(is.na(tmax_depart)) %>% 
-                     dplyr::group_by(year) %>%
-                     dplyr::count()) %>%
-  dplyr::rename("monthly.tmax.na" = "n") %>%
-  dplyr::left_join(mth_depart %>% 
-                     dplyr::filter(is.na(tmin_depart)) %>% 
-                     dplyr::group_by(year) %>%
-                     dplyr::count()) %>%  
-  dplyr::rename("monthly.tmin.na" = "n") %>%
-  dplyr::left_join(mth_depart %>% 
-                     dplyr::filter(is.na(prcp_pctavg)) %>% 
-                     dplyr::group_by(year) %>%
-                     dplyr::count()) %>%
-  dplyr::rename("monthly.prcp.na" = "n") %>%
-  dplyr:: mutate("total" = monthly.tmax.na + monthly.tmin.na + monthly.prcp.na) %>%
-  dplyr::filter(!is.na(total))
-
 
 #-- Model annual trends
 prcp_lm <- summary(lm(prcp_wy ~ year, data = annual_dat))$coefficients[2, 1]
@@ -216,7 +161,69 @@ prcp_above <- dplyr::filter(mth_depart, water_yr == my_year &
 prcp_below <- dplyr::filter(mth_depart, water_yr == my_year & 
                               prcp_pctavg < 100)$month_name
 
+# Evaluate data for conditional text
+# Calculate percentiles
+temp_25 <- quantile(annual_dat$temp_warmest, 0.25, na.rm = TRUE)
+temp_75 <- quantile(annual_dat$temp_warmest, 0.75, na.rm = TRUE)
+prcp_25 <- quantile(annual_dat$prcp_depart, 0.25, na.rm = TRUE)
+prcp_75 <- quantile(annual_dat$prcp_depart, 0.75, na.rm = TRUE)
+# Assign condition
+temp_text <- if (is.na(text_refs$temp_warmest)) {
+  TRUE
+  } else if (text_refs$temp_warmest <= temp_25) {
+    "cool"
+    } else if (text_refs$temp_warmest > temp_25 & text_refs$temp_warmest < temp_75){
+      "avg"
+      } else if (text_refs$temp_warmest >= temp_75){
+        "warm"
+        } else (FALSE)
+prcp_text <- if (is.na(text_refs$prcp_depart)) {
+  TRUE
+  } else if (text_refs$prcp_depart <= prcp_25) {
+    "dry"
+    } else if (text_refs$prcp_depart > prcp_25 & text_refs$prcp_depart < prcp_75){
+      "avg"
+      } else if (text_refs$prcp_depart >= prcp_75){
+        "wet"
+        } else (FALSE)
 
+# Error evaluation
+if (temp_text == TRUE | prcp_text == TRUE) {
+  error_eval <- tibble::tibble(annual_dat[, c("year", "prcp_wy", 
+                                            "tmax_wy", "tmin_wy")]) %>%
+    dplyr::left_join(mth_dat %>% 
+                       dplyr::filter(is.na(prcp)) %>% 
+                       dplyr::group_by(year) %>%
+                       dplyr::count()) %>%
+    dplyr::rename("prcp_mth_na" = "n") %>%
+    dplyr::left_join(mth_dat %>% 
+                       dplyr::filter(is.na(tmax)) %>% 
+                       dplyr::group_by(year) %>%
+                       dplyr::count()) %>%
+    dplyr::rename("tmax_mth_na" = "n") %>%
+    dplyr::left_join(mth_dat %>% 
+                       dplyr::filter(is.na(tmin)) %>% 
+                       dplyr::group_by(year) %>%
+                       dplyr::count()) %>%  
+    dplyr::rename("tmin_mth_na" = "n") %>%
+    dplyr::filter(year == my_year)
+  
+  prcp_error <- tibble::tibble(annual = ifelse(is.na(error_eval$prcp_wy), 
+                                               TRUE, FALSE), 
+                               month = ifelse(!is.na(error_eval$prcp_mth_na), 
+                                              TRUE, FALSE)) %>%
+    dplyr::mutate(both = ifelse((annual == TRUE & month == TRUE), 
+                                TRUE, FALSE))
+  
+  temp_error <- tibble::tibble(annual = ifelse(is.na(error_eval$tmax_wy) | 
+                                                 is.na(error_eval$tmin_wy),
+                                               TRUE, FALSE), 
+                               month = ifelse(!is.na(error_eval$tmax_mth_na) |
+                                                !is.na(error_eval$tmin_mth_na), 
+                                              TRUE, FALSE)) %>%
+    dplyr::mutate(both = ifelse((annual == TRUE & month == TRUE), 
+                                TRUE, FALSE))
+}
 ```
 
 This document summarizes current temperature and precipitation anomalies relative to 30-year (1981-2010) averages for `r my_station$name` during the `r my_year` water year (October `r my_year - 1` through September `r my_year`).
@@ -224,7 +231,7 @@ The data used in these analyses are part of the NOAA Global Historical Climatolo
 The data used for these analyses include the daily high temperature (TMAX), daily low temperature (TMIN), and daily precipitation accumulation (PRCP). This is an automated summary and all results are provisional.
 
 ```{r Map, echo=FALSE, fig.cap="Location of weather station.", fig.height=5, message=FALSE, warning=FALSE}
-# TODO: code map
+# TODO: push to Github and reinstall
 library(ggmap)
 
 extent <- dplyr::select(my_station, lon, lat)
@@ -288,16 +295,18 @@ cat(
 
 ```{r Insufficient_Temp, echo=FALSE, results='asis', eval=(temp_text == TRUE)}
 # Text is printed in PDF if is.na(text_refs) == TRUE
-cat(
+if (temp_error$both == TRUE) {
+  cat(
   # Sentence 1
-  paste0("There are too many missing records to meaningfully summarize data from this station for water year ", my_year, ";"), 
+  paste0("There are too many missing records to meaningfully summarize data from this station for water year ", my_year, "."), 
 
   # Sentence 2
   ("Examine annual and monthly tabular data sets on ClimateAnalyzer.org for more information."),
 
   # Sentence 3
     paste0("However, this summary suggests that temperatures are ", ifelse(temp_lm > 0, "increasing", "decreasing"), " ", abs(round(temp_lm*10, 2)), "°F per decade (Figure 1A).") 
-)
+  )
+}
 ```
 
 ```{r Error_Temp, echo=FALSE, results='asis', eval=(temp_text == FALSE)}
