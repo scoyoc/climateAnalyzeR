@@ -56,8 +56,8 @@ r_ver <- paste(info$R.version$major, info$R.version$minor, sep=".")
 station_id <- "canyonlands_theneck"
 station_name <- "Island in the Sky Visitor Center"
 # my_year <- 2020 # Throws an NA when ranking annual data 
-my_year <- 1973 # Coldest
-# my_year <- 1993 # 10th coldest
+# my_year <- 1973 # Coldest
+my_year <- 1993 # 10th coldest
 # my_year <- 2018 # Warmest
 # my_year <- 2007 # 10th warmest
 # my_year <- 1984 # wettest
@@ -102,7 +102,7 @@ month_30yr <- normals_30yr %>%
                 "tmax_30yr" = TMAX,
                 "tmin_30yr" = TMIN) %>%
   dplyr::arrange(month_name) %>%
-  dplyr::mutate("prcp_accum_30yr" = cumsum(prcp_30yr),
+  dplyr::mutate("prcp_accum_30yr" = cumsum(tidyr::replace_na(prcp_30yr, 0)),
                 "temp_midpt_30yr" =((tmax_30yr - tmin_30yr) / 2) + tmin_30yr)
 
 #-- Annual Data
@@ -132,7 +132,7 @@ mth_dat <- import_monthly(station_id = station_id,
   dplyr::mutate("water_yr" = ifelse(month >= 10, year +1, year)) %>%
   dplyr::arrange(water_yr, water_month) %>%
   dplyr::group_by(water_yr) %>%
-  dplyr::mutate("prcp_accum" = cumsum(prcp)) %>%
+  dplyr::mutate("prcp_accum" = cumsum(tidyr::replace_na(prcp, 0))) %>%
   dplyr::mutate("temp_midpt" = ifelse(is.na(tmax) | is.na(tmin), NA,
                                       ((tmax - tmin) / 2) + tmin)) %>%
   dplyr::group_by(water_month) %>%
@@ -467,7 +467,7 @@ cat(
 )
 ```
 
-```{r Insufficient_PRCP, echo=FALSE, results='asis', eval=(prcp_text == TRUE)}
+```{r Insufficient_PRCP, echo=FALSE, results='asis', eval=(prcp_text == "error")}
 # Text for errors in monthly and annual data sets.
 if (prcp_error == "both"){
   cat(

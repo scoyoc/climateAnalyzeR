@@ -36,7 +36,8 @@ annual_figure <- function(x_var, y_var, my_year, normal, reference_period, area_
     ggplot2::geom_line(stat = "identity", color = line_color, size = 1) +
     ggplot2::geom_point(stat = "identity", color = line_color, size = 2) +
     ggplot2::geom_point(data = dplyr::filter(dat, x == my_year),
-                        stat = "identity", color = line_color, size = 6) +
+                        stat = "identity", shape = 21, color = "black",
+                        fill = line_color, size = 4) +
     ggplot2::geom_smooth(method = "lm", se = FALSE, color = "blue") +
     shadowtext::geom_shadowtext(lab_dat,
                                 mapping = ggplot2::aes(x = -Inf, y = normal,
