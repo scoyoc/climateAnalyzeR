@@ -4,6 +4,7 @@
 #'
 #' @param x_var A character string of hte x-variable.
 #' @param y_var A character string of the y-variable.
+#' @param my_year A number for the your of interest. # TODO: make like consistent with project.
 #' @param normal A number for the annual normal temperature or precipitation. Typically derived from \code{\link[climateAnalyzeR::normals]{normals}}.
 #' @param reference_period Character string for the reference period used for normals.
 #' @param area_color A character string for the color of the area. See \code{\link[grDevices::colors]{colors}} for a list of color names.
@@ -16,7 +17,7 @@
 #'
 #' @examples
 #' # TODO: use prcp data
-annual_figure <- function(x_var, y_var, normal, reference_period, area_color,
+annual_figure <- function(x_var, y_var, my_year, normal, reference_period, area_color,
                         line_color, my_title, my_ylab){
   #-- Crate dataframe
   # Plotting data
@@ -33,6 +34,9 @@ annual_figure <- function(x_var, y_var, normal, reference_period, area_color,
     ggplot2::geom_hline(ggplot2::aes(yintercept = normal),
                         linetype = "dashed", size = 0.5, color = "black") +
     ggplot2::geom_line(stat = "identity", color = line_color, size = 1) +
+    ggplot2::geom_point(data = dplyr::filter(dat, x == my_year),
+                        stat = "identity", shape = 21, color = "black",
+                        fill = "yellow", size = 4) +
     ggplot2::geom_point(stat = "identity", color = line_color, size = 2) +
     ggplot2::geom_smooth(method = "lm", se = FALSE, color = "blue") +
     shadowtext::geom_shadowtext(lab_dat,

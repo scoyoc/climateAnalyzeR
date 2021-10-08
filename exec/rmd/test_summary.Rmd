@@ -70,11 +70,12 @@ my_year <- 1973 # Coldest
 # station_name <- "Arches Visitor Center"
 # my_year <- 2020
 
-# annual_dat %>%
-#   dplyr::select(year, temp_warmest, prcp_driest)
+# View(annual_dat %>% dplyr::select(year, temp_warmest, prcp_driest))
 # 
 # (annual_dat %>%
-#   dplyr::filter(temp_warmest == min(temp_warmest, na.rm = T) + 10))$year
+#   dplyr::filter(temp_warmest == max(temp_warmest, na.rm = T)))$year
+# (annual_dat %>%
+#   dplyr::filter(temp_warmest == min(prcp_driest, na.rm = T)))$year
 
 #-- Retreive station metadata
 my_station <- stations(my_stations = station_id) %>%
@@ -155,10 +156,6 @@ mth_depart <- import_departure(station_id = station_id,
 ```
 
 ```{r Text_Refs, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
-<<<<<<< HEAD
-=======
-
->>>>>>> 44d99b699d1e06d45897b886f709e23501123b8d
 # Consolidate text references
 text_refs <- my_station %>%
   dplyr::bind_cols(dplyr::filter(annual_dat, year == my_year)) %>%
@@ -178,100 +175,55 @@ prcp_above <- dplyr::filter(mth_depart, water_yr == my_year &
 prcp_below <- dplyr::filter(mth_depart, water_yr == my_year & 
                               prcp_pctavg < 100)$month_name
 
-<<<<<<< HEAD
 # Error evaluation
 error_eval <- tibble::tibble(annual_dat[, c("year", "prcp_wy", 
-=======
-# Evaluate data for conditional text
-# Calculate percentiles
-temp_25 <- quantile(annual_dat$temp_warmest, 0.25, na.rm = TRUE)
-temp_75 <- quantile(annual_dat$temp_warmest, 0.75, na.rm = TRUE)
-prcp_25 <- quantile(annual_dat$prcp_depart, 0.25, na.rm = TRUE)
-prcp_75 <- quantile(annual_dat$prcp_depart, 0.75, na.rm = TRUE)
-# Assign condition
-temp_text <- if (is.na(text_refs$temp_warmest)) {
-  TRUE
-  } else if (text_refs$temp_warmest <= temp_25) {
-    "cool"
-    } else if (text_refs$temp_warmest > temp_25 & text_refs$temp_warmest < temp_75){
-      "avg"
-      } else if (text_refs$temp_warmest >= temp_75){
-        "warm"
-        } else (FALSE)
-prcp_text <- if (is.na(text_refs$prcp_depart)) {
-  TRUE
-  } else if (text_refs$prcp_depart <= prcp_25) {
-    "dry"
-    } else if (text_refs$prcp_depart > prcp_25 & text_refs$prcp_depart < prcp_75){
-      "avg"
-      } else if (text_refs$prcp_depart >= prcp_75){
-        "wet"
-        } else (FALSE)
-
-# Error evaluation
-if (temp_text == TRUE | prcp_text == TRUE) {
-  error_eval <- tibble::tibble(annual_dat[, c("year", "prcp_wy", 
->>>>>>> 44d99b699d1e06d45897b886f709e23501123b8d
                                             "tmax_wy", "tmin_wy")]) %>%
-    dplyr::left_join(mth_dat %>% 
-                       dplyr::filter(is.na(prcp)) %>% 
-                       dplyr::group_by(year) %>%
-                       dplyr::count()) %>%
-    dplyr::rename("prcp_mth_na" = "n") %>%
-    dplyr::left_join(mth_dat %>% 
-                       dplyr::filter(is.na(tmax)) %>% 
-                       dplyr::group_by(year) %>%
-                       dplyr::count()) %>%
-    dplyr::rename("tmax_mth_na" = "n") %>%
-    dplyr::left_join(mth_dat %>% 
-                       dplyr::filter(is.na(tmin)) %>% 
-                       dplyr::group_by(year) %>%
-                       dplyr::count()) %>%  
-    dplyr::rename("tmin_mth_na" = "n") %>%
-    dplyr::filter(year == my_year)
+  dplyr::left_join(mth_dat %>%
+                     dplyr::filter(is.na(prcp)) %>% 
+                     dplyr::group_by(year) %>%
+                     dplyr::count()) %>%
+  dplyr::rename("prcp_mth_na" = "n") %>%
+  dplyr::left_join(mth_dat %>% 
+                     dplyr::filter(is.na(tmax)) %>% 
+                     dplyr::group_by(year) %>%
+                     dplyr::count()) %>%
+  dplyr::rename("tmax_mth_na" = "n") %>%
+  dplyr::left_join(mth_dat %>% 
+                     dplyr::filter(is.na(tmin)) %>% 
+                     dplyr::group_by(year) %>%
+                     dplyr::count()) %>%  
+  dplyr::rename("tmin_mth_na" = "n") %>%
+  dplyr::filter(year == my_year)
   
-<<<<<<< HEAD
 prcp_error <- tibble::tibble(annual = ifelse(is.na(error_eval$prcp_wy), 
-                                               TRUE, FALSE), 
+                                             TRUE, FALSE), 
                                month = ifelse(!is.na(error_eval$prcp_mth_na ), 
-                                              ifelse(error_eval$prcp_mth_na >2, 
+                                              ifelse(error_eval$prcp_mth_na >2,
                                                      TRUE, FALSE), FALSE))
 prcp_error <- if (prcp_error$annual == TRUE & prcp_error$month == TRUE) {
-    "both"
-    } else if (prcp_error$annual == TRUE & prcp_error$month == FALSE){
-      "annual"
-      } else if (prcp_error$annual == FALSE & prcp_error$month == TRUE) {
-        "month"
-        } else ("no error")
+  "both"
+  } else if (prcp_error$annual == TRUE & prcp_error$month == FALSE){
+    "annual"
+    } else if (prcp_error$annual == FALSE & prcp_error$month == TRUE) {
+      "month"
+      } else ("no error")
   
 temp_error <- tibble::tibble(annual = ifelse(is.na(error_eval$tmax_wy) | 
-=======
-  prcp_error <- tibble::tibble(annual = ifelse(is.na(error_eval$prcp_wy), 
-                                               TRUE, FALSE), 
-                               month = ifelse(!is.na(error_eval$prcp_mth_na), 
-                                              TRUE, FALSE)) %>%
-    dplyr::mutate(both = ifelse((annual == TRUE & month == TRUE), 
-                                TRUE, FALSE))
-  
-  temp_error <- tibble::tibble(annual = ifelse(is.na(error_eval$tmax_wy) | 
->>>>>>> 44d99b699d1e06d45897b886f709e23501123b8d
-                                                 is.na(error_eval$tmin_wy),
-                                               TRUE, FALSE), 
-                               month = ifelse(!is.na(error_eval$tmax_mth_na) |
-                                                !is.na(error_eval$tmin_mth_na), 
-<<<<<<< HEAD
-                                              ifelse(error_eval$tmax_mth_na > 2 |
-                                                       error_eval$tmin_mth_na > 2, 
-                                                     TRUE, FALSE), 
-                                              FALSE))
+                                               is.na(error_eval$tmin_wy),
+                                             TRUE, FALSE), 
+                             month = ifelse(!is.na(error_eval$tmax_mth_na) |
+                                              !is.na(error_eval$tmin_mth_na),
+                                            ifelse(error_eval$tmax_mth_na > 2 |
+                                                     error_eval$tmin_mth_na > 2,
+                                                   TRUE, FALSE), 
+                                            FALSE))
 temp_error <- if (temp_error$annual == TRUE & temp_error$month == TRUE) {
-    "both"
-    } else if (temp_error$annual == TRUE & temp_error$month == FALSE){
-      "annual"
-      } else if (temp_error$annual == FALSE & temp_error$month == TRUE) {
-        "month"
-        } else ("no error")
-
+  "both"
+  } else if (temp_error$annual == TRUE & temp_error$month == FALSE){
+    "annual"
+    } else if (temp_error$annual == FALSE & temp_error$month == TRUE) {
+      "month"
+      } else ("no error")
 
 # Evaluate data for conditional text
 # Calculate percentiles
@@ -300,13 +252,6 @@ temp_text <- if (temp_error %in% c("both", "annual", "month")) {
       } else if (text_refs$temp_warmest >= temp_75){
         "warm"
         } else (FALSE)
-
-=======
-                                              TRUE, FALSE)) %>%
-    dplyr::mutate(both = ifelse((annual == TRUE & month == TRUE), 
-                                TRUE, FALSE))
-}
->>>>>>> 44d99b699d1e06d45897b886f709e23501123b8d
 ```
 
 This document summarizes current temperature and precipitation anomalies relative to 30-year (1981-2010) averages for `r my_station$name` during the `r my_year` water year (October `r my_year - 1` through September `r my_year`).
@@ -376,15 +321,10 @@ cat(
 )
 ```
 
-<<<<<<< HEAD
+
 ```{r Insufficient_Temp, echo=FALSE, results='asis', eval=(temp_text == "error")}
 # Text for errors in monthly and annual data sets.
 if (temp_error == "both") {
-=======
-```{r Insufficient_Temp, echo=FALSE, results='asis', eval=(temp_text == TRUE)}
-# Text is printed in PDF if is.na(text_refs) == TRUE
-if (temp_error$both == TRUE) {
->>>>>>> 44d99b699d1e06d45897b886f709e23501123b8d
   cat(
   # Sentence 1
   paste0("There are too many missing records to meaningfully summarize data from this station for water year ", my_year, "."), 
@@ -396,7 +336,6 @@ if (temp_error$both == TRUE) {
     paste0("However, this summary suggests that temperatures are ", ifelse(temp_lm > 0, "increasing", "decreasing"), " ", abs(round(temp_lm*10, 2)), "°F per decade (Figure 1A).") 
   )
 }
-<<<<<<< HEAD
 
 # Text for errors in annual data set. Monthly data set is good.
 if (temp_error == "annual") {
@@ -454,8 +393,6 @@ if (temp_error == "month") {
   paste0("This summary suggests that temperatures are ", ifelse(temp_lm > 0, "increasing", "decreasing"), " ", abs(round(temp_lm*10, 2)), "°F per decade (Figure 1A).")
   )
 }
-=======
->>>>>>> 44d99b699d1e06d45897b886f709e23501123b8d
 ```
 
 ```{r Error_Temp, echo=FALSE, results='asis', eval=(temp_text == FALSE)}
@@ -467,6 +404,7 @@ cat("Error: temperature data could not be evaluated. Examine tabular data sets o
 #-- Average Annual Temps
 t1 <- annual_figure(x_var = annual_dat$year,
                     y_var = annual_dat$temp_midpt,
+                    my_year = my_year,
                     normal = annual_30yr$TEMP_midpt,
                     reference_period = "1981-2010",
                     area_color = "orange",
