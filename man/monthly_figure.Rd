@@ -43,3 +43,6 @@ A ggplot object.
 This function produces a standardized line graph the is grouped by year. This
 figure is used in RMarkdown scrips.
 }
+\examples{
+
+}

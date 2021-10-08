@@ -259,9 +259,6 @@ The data used in these analyses are part of the NOAA Global Historical Climatolo
 The data used for these analyses include the daily high temperature (TMAX), daily low temperature (TMIN), and daily precipitation accumulation (PRCP). This is an automated summary and all results are provisional.
 
 ```{r Map, echo=FALSE, fig.cap="Location of weather station.", fig.height=5, message=FALSE, warning=FALSE}
-# TODO: push to Github and reinstall
-library(ggmap)
-
 extent <- dplyr::select(my_station, lon, lat)
 extent[2, ] <- c(extent[1, 1] + 0.04, extent[1, 2] + 0.025)
 extent[3, ] <- c(extent[1, 1] - 0.04, extent[1, 2] - 0.025)
