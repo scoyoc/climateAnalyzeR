@@ -264,10 +264,10 @@ extent[2, ] <- c(extent[1, 1] + 0.04, extent[1, 2] + 0.025)
 extent[3, ] <- c(extent[1, 1] - 0.04, extent[1, 2] - 0.025)
 
 my_box <- ggmap::make_bbox(lon = extent$lon, lat = extent$lat, f = 0.1)
-my_map <- ggmap::get_map(location = my_box, maptype = "hybrid", source = "google", 
+my_map <- ggmap::get_map(location = my_box, maptype = "terrain", source = "google", 
                   zoom = 13, force = TRUE, messaging = TRUE)
 my_map <- ggmap::ggmap(my_map) + 
-  ggplot2::geom_point(data = my_station, aes(x = lon, y = lat), 
+  ggplot2::geom_point(data = my_station, ggplot2::aes(x = lon, y = lat), 
                       color = "red", size = 4) +
   shadowtext::geom_shadowtext(data = my_station, 
                               mapping = ggplot2::aes(x = lon, y = lat, 
@@ -535,6 +535,7 @@ cat("Error: precipitation data could not be evaluated. Examine tabular data set 
 #-- Water year precipitation totals
 p1 <- annual_figure(x_var = annual_dat$year,
                     y_var = annual_dat$prcp_wy,
+                    my_year = my_year,
                     normal = annual_30yr$PRCP,
                     reference_period = "1981-2010",
                     area_color = "green3",
