@@ -18,23 +18,39 @@ urlcolor: blue
 library("climateAnalyzeR")
 
 #-- Functions
-# Number contraction ---
+# Number Contraction --
 # Prints the appropriate number contraction for a given number.
-number_contraction <- function(x) {
-  if (is.na(x)){
+number_contraction <- function(x){
+  if(is.na(x)){
     y = FALSE
-  } else if (x == 11 | x == 12 | x == 13) {
+  } else if(x == 11 | x == 12 | x == 13){
     y = paste0(x, "th")
-  } else if  (x - round(x, -1) == 1) {
+  } else if(x - round(x, -1) == 1){
     y = paste0(x, "st")
-  } else if (x - round(x, -1) == 2) {
+  } else if(x - round(x, -1) == 2){
     y = paste0(x, "nd")
-  } else if (x - round(x, -1) == 3) {
+  } else if(x - round(x, -1) == 3){
     y = paste0(x, "rd")
-  } else {
+  } else{
     y = paste0(x, "th")
   }
   return(y)
+}
+
+# Glue Months --
+# Returns a string of months with comma's between each month.
+glue_mths <- function(mths){
+  if (length(mths) == 2){
+    glue::glue("{mths[1]} and {mths[2]}")
+  } else {
+    glue::glue("{paste(mths[1:length(mths) - 1], collapse = ', ')}, and {mths[length(mths)]}")
+  }
+}
+
+# Round with Zeros --
+# Rounds numbers and includes zeros for significant digits
+round_with_zeros <- function(x){
+  as.numeric(format(round(x, digits = 1), nsmall = 1))
 }
 
 #-- Load data frame of months.
@@ -55,26 +71,26 @@ r_ver <- paste(info$R.version$major, info$R.version$minor, sep=".")
 
 station_id <- "canyonlands_theneck"
 station_name <- "Island in the Sky Visitor Center"
-# my_year <- 2020 # Throws an NA when ranking annual data 
-# my_year <- 1973 # Coldest
-# my_year <- 1988 # 10th coldest
-# my_year <- 2018 # Warmest
-# my_year <- 2078 # 10th warmest
-# my_year <- 1984 # wettest
-# my_year <- 1980 # 10th wettest
-# my_year <- 1977 # driest
-my_year <- 2000 # 10th driest
-
 # station_id <- "arches"
 # station_name <- "Arches Visitor Center"
-# my_year <- 2020
+my_year <- 2020 # Throws an NA when ranking annual data @ ISKY
+# my_year <- 1973 # Coldest @ ISKY
+# my_year <- 2010 # Coldest @ ARCH
+# my_year <- 1978 # 10th coldest @ ISKY
+# my_year <- 1988 # 10th coldest @ ARCH
+# my_year <- 2018 # Warmest
+# my_year <- 1978 # 10th warmest @ ISKY
+# my_year <- 2016 # 10th warmest @ ARCH
+# my_year <- 1984 # wettest
+# my_year <- 1980 # 10th wettest
+# my_year <- 1977 # driest @ ISKY
+# my_year <- 2021 # driest @ ARCH
+# my_year <- 2000 # 10th driest
 
-# View(annual_dat %>% dplyr::select(year, temp_warmest, prcp_driest))
-# 
 # (annual_dat %>%
 #   dplyr::filter(temp_warmest == 10))$year
 # (annual_dat %>%
-#   dplyr::filter(temp_coldest == 10))$year
+#   dplyr::filter(temp_coldest == 1))$year
 # (annual_dat %>%
 #   dplyr::filter(prcp_driest == 10))$year
 # (annual_dat %>%
@@ -201,13 +217,13 @@ prcp_error <- tibble::tibble(annual = ifelse(is.na(error_eval$prcp_wy),
                                month = ifelse(!is.na(error_eval$prcp_mth_na ), 
                                               ifelse(error_eval$prcp_mth_na >2,
                                                      TRUE, FALSE), FALSE))
-prcp_error <- if (prcp_error$annual == TRUE & prcp_error$month == TRUE) {
+prcp_error <- if(prcp_error$annual == TRUE & prcp_error$month == TRUE){
   "both"
-  } else if (prcp_error$annual == TRUE & prcp_error$month == FALSE){
+  } else if(prcp_error$annual == TRUE & prcp_error$month == FALSE){
     "annual"
-    } else if (prcp_error$annual == FALSE & prcp_error$month == TRUE) {
+    } else if(prcp_error$annual == FALSE & prcp_error$month == TRUE){
       "month"
-      } else ("no error")
+      } else("no error")
   
 temp_error <- tibble::tibble(annual = ifelse(is.na(error_eval$tmax_wy) | 
                                                is.na(error_eval$tmin_wy),
@@ -218,13 +234,13 @@ temp_error <- tibble::tibble(annual = ifelse(is.na(error_eval$tmax_wy) |
                                                      error_eval$tmin_mth_na > 2,
                                                    TRUE, FALSE), 
                                             FALSE))
-temp_error <- if (temp_error$annual == TRUE & temp_error$month == TRUE) {
+temp_error <- if(temp_error$annual == TRUE & temp_error$month == TRUE){
   "both"
-  } else if (temp_error$annual == TRUE & temp_error$month == FALSE){
+  } else if(temp_error$annual == TRUE & temp_error$month == FALSE){
     "annual"
-    } else if (temp_error$annual == FALSE & temp_error$month == TRUE) {
+    } else if(temp_error$annual == FALSE & temp_error$month == TRUE){
       "month"
-      } else ("no error")
+      } else("no error")
 
 # Evaluate data for conditional text
 # Calculate percentiles
@@ -232,38 +248,36 @@ prcp_quant <- quantile(annual_dat$prcp_depart, c(0.25, 0.75), na.rm = TRUE)
 temp_quant <- quantile(annual_dat$temp_midpt, c(0.25, 0.75), na.rm = TRUE)
 
 # Assign condition
-prcp_text <- if (prcp_error %in% c("both", "annual", "month")) {
+prcp_text <- if(prcp_error %in% c("both", "annual", "month")){
   "error"
-  } else if (text_refs$prcp_depart <= prcp_quant[1]) {
+  } else if(text_refs$prcp_depart <= prcp_quant[1]){
     "dry"
-    } else if (text_refs$prcp_depart > prcp_quant[1] & 
+    } else if(text_refs$prcp_depart > prcp_quant[1] & 
                text_refs$prcp_depart < prcp_quant[2]){
       "avg"
-      } else if (text_refs$prcp_depart >= prcp_quant[2]){
+      } else if(text_refs$prcp_depart >= prcp_quant[2]){
         "wet"
-        } else (FALSE)
+        } else(FALSE)
 
-temp_text <- if (temp_error %in% c("both", "annual", "month")) {
+temp_text <- if(temp_error %in% c("both", "annual", "month")){
   'error'
-  } else if (text_refs$temp_midpt <= temp_quant[1]) {
+  } else if(text_refs$temp_midpt <= temp_quant[1]){
     "cool"
-    } else if (text_refs$temp_midpt > temp_quant[1] & 
+    } else if(text_refs$temp_midpt > temp_quant[1] & 
                text_refs$temp_midpt < temp_quant[2]){
       "avg"
-      } else if (text_refs$temp_midpt >= temp_quant[2]){
+      } else if(text_refs$temp_midpt >= temp_quant[2]){
         "warm"
-        } else (FALSE)
+        } else(FALSE)
 ```
 
 This document summarizes current temperature and precipitation anomalies relative to 30-year (1981-2010) averages for `r my_station$name` during the `r my_year` water year (October `r my_year - 1` through September `r my_year`).
 The data used in these analyses are part of the NOAA Global Historical Climatology Network (GHCN) Cooperative Observer Network (COOP) and were downloaded from [ClimateAnalyzer.org](http://www.climateanalyzer.org/) on `r format(as.Date(lubridate::today(), format = "%Y-%m-%d"), "%d %B, %Y")` using R (ver. `r r_ver`, R Core Team, `r info$R.version$year`) and the climateAnalyzeR package (ver  `r info$otherPkgs$climateAnalyzeR$Version`, Van Scoyoc, `r lubridate::year(stringr::str_split(info$otherPkgs$climateAnalyzeR$Built, pattern = ";")[[1]][3])`).
 The data used for these analyses include the daily high temperature (TMAX), daily low temperature (TMIN), and daily precipitation accumulation (PRCP). This is an automated summary and all results are provisional.
 
-```{r Map, echo=FALSE, fig.cap="Location of weather station.", fig.height=5, message=FALSE, warning=FALSE}
+```{r Map, eval=TRUE, echo=FALSE, fig.cap="Location of weather station.", fig.height=5, message=FALSE, warning=FALSE}
 # Identify location
 extent <- dplyr::select(my_station, lon, lat)
-print(extent)
-
 # Expand to desired scale
 extent[2, ] <- c(extent[1, 1] + 0.04, extent[1, 2] + 0.025)
 extent[3, ] <- c(extent[1, 1] - 0.04, extent[1, 2] - 0.025)
@@ -288,124 +302,99 @@ my_map
 
 \newpage
 # Temperature
-```{r Temp_Text, echo=FALSE, results='asis', eval=(temp_text %in% c("cool", "avg", "warm"))}
-# Text is printed in PDF if `temp_text %in% c("cool", "avg", "warm")` returns TRUE
-cat(
-  # Sentence 1
-  if (text_refs$temp_coldest == 1){
-    paste0("Water year ", my_year, " was the coldest year on record for ", my_station$name, ".")
-    } else if (temp_text == "cool"){
-    paste0("Water year ", my_year, " was the ",  number_contraction(text_refs$temp_coldest), " coolest water year in the ", text_refs$timespan, "-year record for ", my_station$name, ".")
-      } else if (temp_text == "avg"){
-        paste0("Temperatures were normal for water year ", my_year, ", this water year was the ",  number_contraction(text_refs$temp_warmest), " warmest water year in the ", text_refs$timespan, "-year record for ", my_station$name, ".")
-        } else if (text_refs$temp_warmest == 1){
-          paste0("Water year ", my_year, " was the hottest year on record for ", my_station$name, ".")
-          } else if (temp_text == "warm"){
-            paste0("Water year ", my_year, " was the ",  number_contraction(text_refs$temp_warmest), " warmest water year in the ", text_refs$timespan, "-year record for ", my_station$name, ".")
-            },
-  
-  # Sentence 2
-  paste0("The average annual temperature was ", round(text_refs$temp_midpt, 2), "°F which is ", abs(round(text_refs$temp_depart, 2)), "°F ", ifelse(text_refs$temp_depart > 0, "above", "below"), " the 30-year average (", round(annual_30yr$TEMP_midpt, 2), "°F)."), 
-  
-  # Sentence 3
-  paste0("This summary suggests that temperatures are ", ifelse(temp_lm > 0, "increasing", "decreasing"), " ", abs(round(temp_lm*10, 2)), "°F per decade (Figure 1A)."), 
-  
-  # Sentence 4
-  if (length(tmax_exceed) == 0){
-    paste0("Every monthly average TMAX was below normal in ", my_year, " (Figure 1B).")
-  } else if (length(tmax_exceed) == 12){
-    paste0("Every monthly average TMAX was above normal in ", my_year, " (Figure 1B).")
-  } else (paste0("The monthly average TMAX was ", ifelse(length(tmax_exceed) >= 6, "above", "below"), " normal most of the year and exceeded the 30-year monthly average ", length(tmax_exceed), " times (", paste(paste(tmax_exceed[1:length(tmax_exceed)-1], collapse = ", "), tmax_exceed[length(tmax_exceed)], sep = ", and "), "; Figure 1B)."))  , 
-  
-  # Sentence 5
-  if (length(tmin_exceed) == 0){
-    paste0("Every monthly average TMAX was below normal in ", my_year, " (Figure 1B).")
-  } else if (length(tmin_exceed) == 12){
-    paste0("Every monthly average TMAX was above normal in ", my_year, " (Figure 1B).")
-  } else (paste0("The monthly average TMIN was ", ifelse(length(tmin_exceed) >= 6, "above", "below"), " normal most of the year and exceeded the 30-year monthly average ", length(tmin_exceed), " times (",  paste(paste(tmin_exceed[1:length(tmin_exceed)-1], collapse = ", "), tmin_exceed[length(tmin_exceed)], sep = ", and "), "; Figure 1C)."))
-)
+```{r Temp_Text, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
+# Create text objects for temp discussion
+temp_rank_text <- if(temp_error == "annual"){
+  glue::glue("There are too many missing records to meaningfully summarize the annual data from this station for water year {my_year}.")
+  } else if(text_refs$temp_coldest == 1){
+    glue::glue("Water year {my_year} was the coldest year on record at {my_station$name}.")
+    } else if(temp_text == "cool"){
+      glue::glue("Water year {my_year} was the {number_contraction(text_refs$temp_coldest)} coolest water year in the {text_refs$timespan}-year record for {my_station$name}.")
+      } else if(temp_text == "avg"){
+        glue::glue("Temperatures were normal for water year {my_year}. This water year was the {number_contraction(text_refs$temp_warmest)} warmest water year in the {text_refs$timespan}-year record for {my_station$name}.")
+        } else if(text_refs$temp_warmest == 1){
+          glue::glue("Water year {my_year} was the warmest year on record for {my_station$name}.")
+          } else if(temp_text == "warm"){
+            glue::glue("Water year {my_year} was the {number_contraction(text_refs$temp_warmest)} warmest water year in the {text_refs$timespan}-year record for {my_station$name}.")
+            }
+temp_annual_text <- glue::glue("The average annual temperature was {round_with_zeros(text_refs$temp_midpt)}°F which is {abs(round_with_zeros(text_refs$temp_depart))}°F {ifelse(text_refs$temp_depart > 0, 'above', 'below')} the 30-year average ({round_with_zeros(annual_30yr$TEMP_midpt)}°F).")
+
+temp_trend_text <- glue::glue("This summary suggests that temperatures are {ifelse(temp_lm > 0, 'increasing', 'decreasing')} {abs(round_with_zeros(temp_lm * 10))}°F per decade (Figure 1A).")
+
+temp_tmax_text <- if(length(tmax_exceed) == 0){
+    glue::glue("Every monthly average TMAX was below normal in {my_year} (Figure 1B).")
+    } else if(length(tmax_exceed) == 6){
+      glue::glue("Montly average TMAX was {ifelse(temp_text == 'cool', 'below', 'above')} normal for half of {my_year} (Figure 1B).")
+      } else if(length(tmax_exceed) == 12){
+        glue::glue("Every monthly average TMAX was above normal in {my_year} (Figure 1B).")
+        } else(
+          glue::glue("The monthly average TMAX was {ifelse(length(tmax_exceed) >= 6, 'above', 'below')} normal most of the year and exceeded the 30-year monthly average {length(tmax_exceed)} times ({glue_mths(tmax_exceed)}; Figure 1B).")
+    )
+
+temp_tmin_text <- if (length(tmin_exceed) == 0){
+    glue::glue("Every monthly average TMIN was below normal in {my_year} (Figure 1B).")
+    } else if(length(tmin_exceed) == 6){
+      glue::glue("Montly average TMIN was {ifelse(temp_text == 'cool', 'below', 'above')} normal for half of {my_year} (Figure 1B).")
+      } else if(length(tmin_exceed) == 12){
+        glue::glue("Every monthly average TMIN was above normal in {my_year} (Figure 1B).")
+          } else(
+            glue::glue("The monthly average TMIN was {ifelse(length(tmin_exceed) >= 6, 'above', 'below')} normal most of the year and exceeded the 30-year monthly average {length(tmin_exceed)} times ({glue_mths(tmin_exceed)}; Figure 1B).")
+            )
 ```
 
+```{r Print_Temp_Text, eval=(temp_text %in% c('cool', 'avg', 'warm')), echo=FALSE, results='asis'}
+# Text is printed in PDF if `temp_text %in% c("cool", "avg", "warm")` returns TRUE
+cat(
+  temp_rank_text, 
+  temp_annual_text, 
+  temp_trend_text, 
+  temp_tmax_text, 
+  temp_tmin_text, 
+  sep = " ")
+```
 
-```{r Insufficient_Temp, echo=FALSE, results='asis', eval=(temp_text == "error")}
-# Text for errors in monthly and annual data sets.
-if (temp_error == "both") {
+```{r Insufficient_Temp, eval=(temp_text == 'error'), echo=FALSE, results='asis'}
+# Text for errors in temperature data sets.
+temp_error_trend_text <- glue::glue("However, this summary suggests that temperatures are {ifelse(temp_lm > 0, 'increasing', 'decreasing')} {abs(round_with_zeros(temp_lm * 10))}°F per decade (Figure 1A).")
+
+# Text for errors in annual and monthly data
+if(temp_error == "both"){
   cat(
-  # Sentence 1
-  paste0("There are too many missing records to meaningfully summarize data from this station for water year ", my_year, "."), 
-
-  # Sentence 2
-  ("Examine annual and monthly data sets on ClimateAnalyzer.org for more information."),
-
-  # Sentence 3
-    paste0("However, this summary suggests that temperatures are ", ifelse(temp_lm > 0, "increasing", "decreasing"), " ", abs(round(temp_lm*10, 2)), "°F per decade (Figure 1A).") 
-  )
+    glue::glue("There are too many missing records to meaningfully summarize data from this station for water year {my_year}."), 
+    "Examine annual and monthly data sets on ClimateAnalyzer.org for more information.", 
+    temp_error_trend_text,
+    sep = " ")
 }
 
 # Text for errors in annual data set. Monthly data set is good.
-if (temp_error == "annual") {
+if(temp_error == "annual"){
   cat(
-  # Sentence 1
-  paste0("There are too many missing records to meaningfully summarize the annual data from this station for water year ", my_year, "."),  
-
-  # Sentence 2
-  ("Examine the annual data set on ClimateAnalyzer.org for more information."),
-  
-  # Sentence 3
-  paste0("However, this summary suggests that temperatures are ", ifelse(temp_lm > 0, "increasing", "decreasing"), " ", abs(round(temp_lm*10, 2)), "°F per decade (Figure 1A)."), 
-  
-  # Sentence 4
-  if (length(tmax_exceed) == 0){
-    paste0("Every monthly average TMAX was below normal in ", my_year, " (Figure 1B).")
-  } else if (length(tmax_exceed) == 12){
-    paste0("Every monthly average TMAX was above normal in ", my_year, " (Figure 1B).")
-  } else (paste0("The monthly average TMAX was ", ifelse(length(tmax_exceed) >= 6, "above", "below"), " normal most of the year and exceeded the 30-year monthly average ", length(tmax_exceed), " times (", paste(paste(tmax_exceed[1:length(tmax_exceed)-1], collapse = ", "), tmax_exceed[length(tmax_exceed)], sep = ", and "), "; Figure 1B)."))  , 
-  
-  # Sentence 5
-  if (length(tmin_exceed) == 0){
-    paste0("Every monthly average TMAX was below normal in ", my_year, " (Figure 1B).")
-  } else if (length(tmin_exceed) == 12){
-    paste0("Every monthly average TMAX was above normal in ", my_year, " (Figure 1B).")
-  } else (paste0("The monthly average TMIN was ", ifelse(length(tmin_exceed) >= 6, "above", "below"), " normal most of the year and exceeded the 30-year monthly average ", length(tmin_exceed), " times (",  paste(paste(tmin_exceed[1:length(tmin_exceed)-1], collapse = ", "), tmin_exceed[length(tmin_exceed)], sep = ", and "), "; Figure 1C)."))
-  )
+    temp_rank_text,  
+    "Examine the annual data set on ClimateAnalyzer.org for more information.", 
+    temp_error_trend_text,
+    temp_tmax_text,
+    temp_tmin_text,
+    sep = " ")
 }
 
 # Text for errors in monthly data set. Annual data set is good.
-if (temp_error == "month") {
+if(temp_error == "month"){
   cat(
-  # Sentence 1
-    paste0("There are too many missing records to meaningfully summarize the montly data from this station for water year ", my_year, "."),
-    
-  # Sentence 2
-  ("Examine the montly data set on ClimateAnalyzer.org for more information."),
-    
-  # Sentence 3
-  if (text_refs$temp_warmest == text_refs$timespan){
-    paste0("However, water year ", my_year, " was the coldest year on record for ", my_station$name, ".")
-  } else if (temp_text == "cool"){
-    paste0("Water year ", my_year, " was the ",  number_contraction(text_refs$timespan - text_refs$temp_warmest), " coolest water year in the ", text_refs$timespan, "-year record for ", my_station$name, ".")
-  } else if (temp_text == "avg"){
-    paste0("Temperatures were normal for water year ", my_year, ", this water year was the ",  number_contraction(text_refs$temp_warmest), " warmest water year in the ", text_refs$timespan, "-year record for ", my_station$name, ".")
-  } else if (text_refs$temp_warmest == 1){
-    paste0("Water year ", my_year, " was the hottest year on record for ", my_station$name, ".")
-  } else (
-    paste0("Water year ", my_year, " was the ",  number_contraction(text_refs$temp_warmest), " warmest water year in the ", text_refs$timespan, "-year record for ", my_station$name, ".")),
-  
-  # Sentence 4
-  paste0("The average annual temperature was ", round(text_refs$temp_midpt, 2), "°F which is ", abs(round(text_refs$temp_depart, 2)), "°F ", ifelse(text_refs$temp_depart > 0, "above", "below"), " the 30-year average (", round(annual_30yr$TEMP_midpt, 2), "°F)."), 
-  
-  # Sentence 5
-  paste0("This summary suggests that temperatures are ", ifelse(temp_lm > 0, "increasing", "decreasing"), " ", abs(round(temp_lm*10, 2)), "°F per decade (Figure 1A).")
-  )
+    glue::glue("There are too many missing records to meaningfully summarize the montly data from this station for water year {my_year}."),
+    "Examine the monthly data set on ClimateAnalyzer.org for more information.", 
+    temp_rank_text, 
+    temp_annual_text,
+    temp_trend_text,
+    sep = " ")
 }
 ```
 
-```{r Error_Temp, echo=FALSE, results='asis', eval=(temp_text == FALSE)}
+```{r Error_Temp, eval=(temp_text == FALSE), echo=FALSE, results='asis'}
 # Text is printed if temp_text == FALSE
-cat("Error: temperature data could not be evaluated. Examine tabular data sets on ClimateAnalyzer.org.")
+cat("Error: Temperature data could not be evaluated. Examine tabular data sets on ClimateAnalyzer.org.")
 ```
 
-```{r Temp_Fig, echo=FALSE, fig.cap="Trends in average temperature.", fig.height=6.7, message=FALSE, warning=FALSE}
+```{r Temp_Fig, eval=TRUE, echo=FALSE, fig.cap='Trends in average temperature.', fig.height=6.7, message=FALSE, warning=FALSE}
 #-- Average Annual Temps
 t1 <- annual_figure(x_var = annual_dat$year,
                     y_var = annual_dat$temp_midpt,
@@ -445,101 +434,85 @@ cowplot::plot_grid(t1, t2, t3, labels = c(), ncol = 1, align = "v",
 
 \newpage
 # Precipitation
-```{r PRCP_Text, echo=FALSE, results='asis', eval=(prcp_text %in% c("dry", "avg", "wet"))}
-cat(
-  # Sentence 1
-  if (text_refs$prcp_driest == 1){
-    paste0("Water year ", my_year, " was the driest year on record for ", my_station$name, ".")
-    } else if (prcp_text == "dry"){
-      paste0("Water year ", my_year, " was the ", number_contraction(text_refs$prcp_driest), " driest on record for ", station_name, ".")
-      } else if (prcp_text == "avg"){
-        paste0(station_name, " received an average amount of precipitation during the ", my_year, " water year and was the ", number_contraction(text_refs$prcp_driest), " driest on record.")
-        } else if (text_refs$prcp_wettest == 1){
-          paste0("Water year ", my_year, " was the wettest year on record for ", my_station$name, ".")
-          } else (paste0("Water year ", my_year, " was the ", number_contraction(text_refs$prcp_wettest), " wettest on record for ", station_name, ".")), 
-  
-  # Sentence 2
-  paste0("Total accumulated precipitation was ", text_refs$prcp_wy, " inches and was ", round(abs(text_refs$prcp_wy - annual_30yr$PRCP), 2), " inches ", ifelse(text_refs$prcp_wy - annual_30yr$PRCP < 0, "below", "above")," the 30-year average (", round(annual_30yr$PRCP, 2), " inches)."), 
-  # Sentence 3
-  paste0("This summary suggests that precipitation is ", ifelse(prcp_lm > 0, "increasing", "decreasing"), " at a rate of ", abs(round(prcp_lm * 10, 2)), " inches per decade (Figure 2A)."), 
-  
-  # Sentence 4
-  # TODO: write if else statement for dry, normal, & wet years
-  if(prcp_text == "dry"){
-    paste0(paste(paste(prcp_above[1:length(prcp_above)-1], collapse = ", "), prcp_above[length(prcp_above)], sep = ", and "), " received above average precipitation (Figure 2B), but were not enough to compensate for the ", length(prcp_below), " months that were below average (",  paste(paste(prcp_below[1:length(prcp_below)-1], collapse = ", "), prcp_below[length(prcp_below)], sep = ", and "), "; Figure 2C).")
-  } else if (prcp_text == "avg"){
-    paste0(paste(paste(prcp_above[1:length(prcp_above)-1], collapse = ", "), prcp_above[length(prcp_above)], sep = ", and "), " received above average precipitation (Figure 2B) and ",  paste(paste(prcp_below[1:length(prcp_below)-1], collapse = ", "), prcp_below[length(prcp_below)], sep = ", and "), "received below average precipitation (Figure 2C).")
-  } else if (prcp_text == "wet"){
-    paste0(paste(paste(prcp_above[1:length(prcp_above)-1], collapse = ", "), prcp_above[length(prcp_above)], sep = ", and "), " received above average precipitation (Figure 2B) and ",  paste(paste(prcp_below[1:length(prcp_below)-1], collapse = ", "), prcp_below[length(prcp_below)], sep = ", and "), "received below average precipitation (Figure 2C).")
-  }
-)
+```{r PRCP_Text, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
+# Create text objects for prcp discussion
+prcp_rank_text <- if(prcp_error == "annual"){
+  glue::glue("There are too many missing records to meaningfully summarize the annual data from this station for water year {my_year}.")
+  } else if(text_refs$prcp_driest == 1){
+    glue::glue("Water year {my_year} was the driest year on record for {my_station$name}.")
+    } else if(prcp_text == "dry"){
+      glue::glue("Water year {my_year} was the {number_contraction(text_refs$prcp_driest)} driest on record for {station_name}.")
+      } else if(prcp_text == "avg"){
+        glue::glue("{station_name} received an average amount of precipitation during the {my_year} water year and was the {number_contraction(text_refs$prcp_driest)} driest on record.")
+        } else if(text_refs$prcp_wettest == 1){
+          glue::glue("Water year {my_year} was the wettest year on record for {my_station$name}.")
+          } else(
+            glue::glue("Water year {my_year} was the {number_contraction(text_refs$prcp_wettest)} wettest on record for {station_name}.")
+            )
+
+prcp_annual_text <- glue::glue("Total accumulated precipitation was {text_refs$prcp_wy} inches and was {format(round(abs(text_refs$prcp_wy - annual_30yr$PRCP), digits = 1), nsmall = 1)} inches {ifelse(text_refs$prcp_wy - annual_30yr$PRCP < 0, 'below', 'above')} the 30-year average ({format(round(annual_30yr$PRCP, digits = 1), nsmall = 1)} inches).")
+
+prcp_trend_text <- glue::glue("This summary suggests that precipitation is {ifelse(prcp_lm > 0, 'increasing', 'decreasing')} at a rate of {abs(as.numeric(format(round(prcp_lm * 10, digits = 1), nsmall = 1)))} inches per decade (Figure 2A).")
+
+prcp_condition_text <- if(prcp_text == "dry"){
+  glue::glue("{glue_mths(prcp_above)} received above average precipitation (Figure 2B) but were not enough to compensate for the {length(prcp_below)} months that were below average ({glue_mths(prcp_below)}; Figure 2C).")
+  } else if(prcp_text == "avg"){
+    glue::glue("{glue_mths(prcp_above)}} received above average precipitation (Figure 2B) and {glue_mths(prcp_below)} received below average precipitation (Figure 2C).")
+    } else if(prcp_text == "wet"){
+      glue::glue("{glue_mths(prcp_above)} received above average precipitation (Figure 2B) and {glue_mths(prcp_below)} received below average precipitation (Figure 2C).")
+      }
 ```
 
-```{r Insufficient_PRCP, echo=FALSE, results='asis', eval=(prcp_text == "error")}
+```{r Print_PRCP_Text, eval=(prcp_text %in% c('dry', 'avg', 'wet')), echo=FALSE, results='asis'}
+cat(
+  prcp_rank_text, 
+  prcp_annual_text, 
+  prcp_trend_text, 
+  prcp_condition_text, 
+  sep = " ")
+```
+
+```{r Insufficient_PRCP, eval=(prcp_text == 'error'), echo=FALSE, results='asis'}
+# Text objects for errors in prcp data sets.
+prcp_error_trend_text <- glue::glue("However, this summary suggests that precipitation is {ifelse(prcp_lm > 0, 'increasing', 'decreasing')} by {abs(as.numeric(format(round(prcp_lm * 10, digits = 1), nsmall = 1)))} inches per decade (Figure 1A).")
+
 # Text for errors in monthly and annual data sets.
-if (prcp_error == "both"){
+if(prcp_error == "both"){
   cat(
-  # Sentence 1
-  paste0("There are too many missing records to meaningfully summarize data from this station for water year ", my_year, ";"), 
-
-  # Sentence 2
-  ("Examine annual and monthly data sets on ClimateAnalyzer.org for more information."),
-
-  # Sentence 3
-  paste0("However, this summary suggests that precipitation is ", ifelse(prcp_lm > 0, "increasing", "decreasing"), " ", abs(round(prcp_lm*10, 2)), " inches per decade (Figure 1A).")
-  )}
+  glue::glue("There are too many missing records to meaningfully summarize data from this station for water year {my_year}."),
+  "Examine annual and monthly data sets on ClimateAnalyzer.org for more information.",
+ prcp_error_trend_text, 
+ sep = " ")
+  }
 
 # Text for errors in annual data set. Monthly data set is good.
-if (prcp_error == "annual") {
+if(prcp_error == "annual"){
   cat(
-  # Sentence 1
-  paste0("There are too many missing records to meaningfully summarize the annual data from this station for water year ", my_year, "."),  
-
-  # Sentence 2
-  ("Examine the annual data set on ClimateAnalyzer.org for more information."),
-  
-  # Sentence 3
-  paste0("However, this summary suggests that precipitation is ", ifelse(prcp_lm > 0, "increasing", "decreasing"), " at a rate of ", abs(round(prcp_lm * 10, 2)), " inches per decade (Figure 2A)."), 
-  
-  # Sentence 4
-  # TODO: write if else statement for dry, normal, & wet years
-  paste0(paste(paste(prcp_above[1:length(prcp_above)-1], collapse = ", "), prcp_above[length(prcp_above)], sep = ", and "), " received above average precipitation (Figure 2B), but were not enough to compensate for the ", length(prcp_below), " months that were below average (",  paste(paste(prcp_below[1:length(prcp_below)-1], collapse = ", "), prcp_below[length(prcp_below)], sep = ", and "), "; Figure 2C).")
-  )}
+  prcp_rank_text,
+  "Examine the annual data set on ClimateAnalyzer.org for more information.",
+  prcp_error_trend_text,
+  prcp_condition_text, 
+  sep = " ")
+}
 
 # Text for errors in monthly data set. Annual data set is good.
-if (prcp_error == "month") {
+if(prcp_error == "month"){
   cat(
-  # Sentence 1
-    paste0("There are too many missing records to meaningfully summarize the montly data from this station for water year ", my_year, "."),
-    
-  # Sentence 2
-  ("Examine the montly data set on ClimateAnalyzer.org for more information."),
-    
-  # Sentence 3
-  if (text_refs$prcp_driest == 1){
-    paste0("Water year ", my_year, " was the driest year on record for ", my_station$name, ".")
-  } else if (prcp_text == "dry"){
-    paste0("Water year ", my_year, " was the ", number_contraction(text_refs$prcp_driest), " driest on record for ", station_name, ".")
-  } else if (prcp_text == "avg"){
-    paste0(station_name, " received an average amount of precipitation during the ", my_year, " water year and was the ", number_contraction(text_refs$prcp_driest), " driest on record.")
-  } else if (text_refs$prcp_driest == text_refs$timespan){
-    paste0("Water year ", my_year, " was the wettest year on record for ", my_station$name, ".")
-  } else (paste0("Water year ", my_year, " was the ", number_contraction(text_refs$prcp_driest), " wettest on record for ", station_name, ".")), 
-  
-  # Sentence 4
-  paste0("Total accumulated precipitation was ", text_refs$prcp_wy, " inches and was ", round(abs(text_refs$prcp_wy - annual_30yr$PRCP), 2), " inches ", ifelse(text_refs$prcp_wy - annual_30yr$PRCP < 0, "below", "above")," the 30-year average (", round(annual_30yr$PRCP, 2), " inches)."), 
-  
-  # Sentence 5
-  paste0("This summary suggests that precipitation is ", ifelse(prcp_lm > 0, "increasing", "decreasing"), " at a rate of ", abs(round(prcp_lm * 10, 2)), " inches per decade (Figure 2A).")
-  )}
+    glue::glue("There are too many missing records to meaningfully summarize the montly data from this station for water year {my_year}."),
+  "Examine the montly data set on ClimateAnalyzer.org for more information.",
+  prcp_rank_text, 
+  prcp_annual_text, 
+  prcp_trend_text,
+  sep = " ")
+}
 ```
 
-```{r Error_PRCP, echo=FALSE, results='asis', eval=(prcp_text == FALSE)}
+```{r Error_PRCP, eval=(prcp_text == FALSE), echo=FALSE, results='asis'}
 # Text is printed if prcp_text == FALSE
 cat("Error: precipitation data could not be evaluated. Examine tabular data set on ClimateAnalyzer.org.")
 ```
 
-```{r PRCP_Fig, echo=FALSE, fig.cap="Trends in  precipitation.", fig.height=6.7, message=FALSE, warning=FALSE}
+```{r PRCP_Fig, eval=TRUE, echo=FALSE, fig.cap='Trends in  precipitation.', fig.height=6.7, message=FALSE, warning=FALSE}
 #-- Water year precipitation totals
 p1 <- annual_figure(x_var = annual_dat$year,
                     y_var = annual_dat$prcp_wy,

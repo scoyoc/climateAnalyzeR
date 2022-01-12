@@ -1,3 +1,4 @@
+devtools::install_github("scoyoc/climateAnalyzeR")
 library("climateAnalyzeR")
 
 # TODO: Write dynamic text for current water year.

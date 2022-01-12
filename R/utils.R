@@ -1,10 +1,40 @@
-# ggplot theme settings
+#-- Number Contraction
+# Prints the appropriate number contraction for a given number.
+number_contraction <- function(x) {
+  if (is.na(x)){
+    y = FALSE
+  } else if (x == 11 | x == 12 | x == 13) {
+    y = paste0(x, "th")
+  } else if  (x - round(x, -1) == 1) {
+    y = paste0(x, "st")
+  } else if (x - round(x, -1) == 2) {
+    y = paste0(x, "nd")
+  } else if (x - round(x, -1) == 3) {
+    y = paste0(x, "rd")
+  } else {
+    y = paste0(x, "th")
+  }
+  return(y)
+}
+
+#-- Glue Months
+# Returns a string of months with comma's between each month.
+glue_mths <- function(mths) {
+  if (length(mths) == 2){
+    glue::glue("{mths[1]} and {mths[2]}")
+  } else {
+    glue::glue("{paste(mths[1:length(mths) - 1], collapse = ', ')}, and {mths[length(mths)]}")
+  }
+}
+
+#-- ggplot Theme settings
 climateAnalyzeR_theme <- ggplot2::theme_bw() +
   ggplot2::theme(strip.background = ggplot2::element_rect(fill = "white"),
                  strip.text = ggplot2::element_text(hjust = 0.1),
                  axis.title.x = ggplot2::element_blank())
 
 #-- Convert from imperial to metric
+# PRCP
 convert_prcp <- function(dat){
   dat = dat %>%
     dplyr::mutate(dplyr::across(dplyr::contains("prcp"), ~(. * 25.4),
@@ -13,8 +43,7 @@ convert_prcp <- function(dat){
                                 .names = "{.col}_mm"))
   return(dat)
 }
-
-#-- Convert from imperial to metric
+# TEMP
 convert_temp <- function(dat){
   dat = dat %>%
     dplyr::mutate(dplyr::across(dplyr::contains(c("tmax", "tmin")),
