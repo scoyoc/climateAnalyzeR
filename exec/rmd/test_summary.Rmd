@@ -13,15 +13,28 @@ urlcolor: blue
 ---
 \raggedright
 ```{r Setup, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
+#-- ToDo's
+#TODO: Create text "chunks", then insert them into text sections to reduce redundancy
+#TODO: Make rounding statements objects to reduce redundancy
+
 #-- Packages
 # devtools::install_github("scoyoc/climateAnalyzeR")
 library("climateAnalyzeR")
+# Note: See utils.R to see code for:
+# number_contraction()
+# glue_mths
 
+<<<<<<< HEAD
 #-- Functions
 # Number Contraction --
 # Prints the appropriate number contraction for a given number.
 number_contraction <- function(x){
   if(is.na(x)){
+=======
+# Delete later...
+number_contraction <- function(x) {
+  if (is.na(x)){
+>>>>>>> 7a6a09718de1b0d7f81940b04e345eff4263df0f
     y = FALSE
   } else if(x == 11 | x == 12 | x == 13){
     y = paste0(x, "th")
@@ -37,9 +50,13 @@ number_contraction <- function(x){
   return(y)
 }
 
+<<<<<<< HEAD
 # Glue Months --
 # Returns a string of months with comma's between each month.
 glue_mths <- function(mths){
+=======
+glue_mths <- function(mths) {
+>>>>>>> 7a6a09718de1b0d7f81940b04e345eff4263df0f
   if (length(mths) == 2){
     glue::glue("{mths[1]} and {mths[2]}")
   } else {
@@ -47,9 +64,13 @@ glue_mths <- function(mths){
   }
 }
 
+<<<<<<< HEAD
 # Round with Zeros --
 # Rounds numbers and includes zeros for significant digits
 round_with_zeros <- function(x){
+=======
+round_with_zeros <- function(x) {
+>>>>>>> 7a6a09718de1b0d7f81940b04e345eff4263df0f
   as.numeric(format(round(x, digits = 1), nsmall = 1))
 }
 
@@ -73,7 +94,11 @@ station_id <- "canyonlands_theneck"
 station_name <- "Island in the Sky Visitor Center"
 # station_id <- "arches"
 # station_name <- "Arches Visitor Center"
+<<<<<<< HEAD
 my_year <- 2020 # Throws an NA when ranking annual data @ ISKY
+=======
+my_year <- 2020 # Throws an NA when ranking annual data
+>>>>>>> 7a6a09718de1b0d7f81940b04e345eff4263df0f
 # my_year <- 1973 # Coldest @ ISKY
 # my_year <- 2010 # Coldest @ ARCH
 # my_year <- 1978 # 10th coldest @ ISKY
@@ -303,6 +328,7 @@ my_map
 \newpage
 # Temperature
 ```{r Temp_Text, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
+<<<<<<< HEAD
 # Create text objects for temp discussion
 temp_rank_text <- if(temp_error == "annual"){
   glue::glue("There are too many missing records to meaningfully summarize the annual data from this station for water year {my_year}.")
@@ -315,12 +341,26 @@ temp_rank_text <- if(temp_error == "annual"){
         } else if(text_refs$temp_warmest == 1){
           glue::glue("Water year {my_year} was the warmest year on record for {my_station$name}.")
           } else if(temp_text == "warm"){
+=======
+temp_rank_text <- if (temp_error == "annual"){
+  glue::glue("There are too many missing records to meaningfully summarize the annual data from this station for water year {my_year}.")
+  } else if (text_refs$temp_coldest == 1){
+    glue::glue("Water year {my_year} was the coldest year on record at {my_station$name}.")
+    } else if (temp_text == "cool"){
+      glue::glue("Water year {my_year} was the {number_contraction(text_refs$temp_coldest)} coolest water year in the {text_refs$timespan}-year record for {my_station$name}.")
+      } else if (temp_text == "avg"){
+        glue::glue("Temperatures were normal for water year {my_year}. This water year was the {number_contraction(text_refs$temp_warmest)} warmest water year in the {text_refs$timespan}-year record for {my_station$name}.")
+        } else if (text_refs$temp_warmest == 1){
+          glue::glue("Water year {my_year} was the warmest year on record for {my_station$name}.")
+          } else if (temp_text == "warm"){
+>>>>>>> 7a6a09718de1b0d7f81940b04e345eff4263df0f
             glue::glue("Water year {my_year} was the {number_contraction(text_refs$temp_warmest)} warmest water year in the {text_refs$timespan}-year record for {my_station$name}.")
             }
 temp_annual_text <- glue::glue("The average annual temperature was {round_with_zeros(text_refs$temp_midpt)}°F which is {abs(round_with_zeros(text_refs$temp_depart))}°F {ifelse(text_refs$temp_depart > 0, 'above', 'below')} the 30-year average ({round_with_zeros(annual_30yr$TEMP_midpt)}°F).")
 
 temp_trend_text <- glue::glue("This summary suggests that temperatures are {ifelse(temp_lm > 0, 'increasing', 'decreasing')} {abs(round_with_zeros(temp_lm * 10))}°F per decade (Figure 1A).")
 
+<<<<<<< HEAD
 temp_tmax_text <- if(length(tmax_exceed) == 0){
     glue::glue("Every monthly average TMAX was below normal in {my_year} (Figure 1B).")
     } else if(length(tmax_exceed) == 6){
@@ -328,21 +368,42 @@ temp_tmax_text <- if(length(tmax_exceed) == 0){
       } else if(length(tmax_exceed) == 12){
         glue::glue("Every monthly average TMAX was above normal in {my_year} (Figure 1B).")
         } else(
+=======
+temp_tmax_text <- if (length(tmax_exceed) == 0){
+    glue::glue("Every monthly average TMAX was below normal in {my_year} (Figure 1B).")
+    } else if (length(tmax_exceed) == 6){
+      glue::glue("Montly average TMAX was {ifelse(temp_text == 'cool', 'below', 'above')} normal for half of {my_year} (Figure 1B).")
+      } else if (length(tmax_exceed) == 12){
+        glue::glue("Every monthly average TMAX was above normal in {my_year} (Figure 1B).")
+        } else (
+>>>>>>> 7a6a09718de1b0d7f81940b04e345eff4263df0f
           glue::glue("The monthly average TMAX was {ifelse(length(tmax_exceed) >= 6, 'above', 'below')} normal most of the year and exceeded the 30-year monthly average {length(tmax_exceed)} times ({glue_mths(tmax_exceed)}; Figure 1B).")
     )
 
 temp_tmin_text <- if (length(tmin_exceed) == 0){
     glue::glue("Every monthly average TMIN was below normal in {my_year} (Figure 1B).")
+<<<<<<< HEAD
     } else if(length(tmin_exceed) == 6){
       glue::glue("Montly average TMIN was {ifelse(temp_text == 'cool', 'below', 'above')} normal for half of {my_year} (Figure 1B).")
       } else if(length(tmin_exceed) == 12){
         glue::glue("Every monthly average TMIN was above normal in {my_year} (Figure 1B).")
           } else(
+=======
+    } else if (length(tmin_exceed) == 6){
+      glue::glue("Montly average TMIN was {ifelse(temp_text == 'cool', 'below', 'above')} normal for half of {my_year} (Figure 1B).")
+      } else if (length(tmin_exceed) == 12){
+        glue::glue("Every monthly average TMIN was above normal in {my_year} (Figure 1B).")
+          } else (
+>>>>>>> 7a6a09718de1b0d7f81940b04e345eff4263df0f
             glue::glue("The monthly average TMIN was {ifelse(length(tmin_exceed) >= 6, 'above', 'below')} normal most of the year and exceeded the 30-year monthly average {length(tmin_exceed)} times ({glue_mths(tmin_exceed)}; Figure 1B).")
             )
 ```
 
+<<<<<<< HEAD
 ```{r Print_Temp_Text, eval=(temp_text %in% c('cool', 'avg', 'warm')), echo=FALSE, results='asis'}
+=======
+```{r Print_Temp_Text, echo=FALSE, results='asis', eval=(temp_text %in% c("cool", "avg", "warm"))}
+>>>>>>> 7a6a09718de1b0d7f81940b04e345eff4263df0f
 # Text is printed in PDF if `temp_text %in% c("cool", "avg", "warm")` returns TRUE
 cat(
   temp_rank_text, 
@@ -353,6 +414,7 @@ cat(
   sep = " ")
 ```
 
+<<<<<<< HEAD
 ```{r Insufficient_Temp, eval=(temp_text == 'error'), echo=FALSE, results='asis'}
 # Text for errors in temperature data sets.
 temp_error_trend_text <- glue::glue("However, this summary suggests that temperatures are {ifelse(temp_lm > 0, 'increasing', 'decreasing')} {abs(round_with_zeros(temp_lm * 10))}°F per decade (Figure 1A).")
@@ -363,6 +425,20 @@ if(temp_error == "both"){
     glue::glue("There are too many missing records to meaningfully summarize data from this station for water year {my_year}."), 
     "Examine annual and monthly data sets on ClimateAnalyzer.org for more information.", 
     temp_error_trend_text,
+=======
+```{r Insufficient_Temp, echo=FALSE, results='asis', eval=(temp_text == "error")}
+# Text for errors in monthly and annual data sets.
+check_data_text <- "Examine annual and monthly data sets on ClimateAnalyzer.org for more information."
+
+error_trend_text <- glue::glue("However, this summary suggests that temperatures are {ifelse(temp_lm > 0, 'increasing', 'decreasing')} {abs(round_with_zeros(temp_lm * 10))}°F per decade (Figure 1A).")
+
+# Text for errors in annual and monthly data
+if (temp_error == "both") {
+  cat(
+    glue::glue("There are too many missing records to meaningfully summarize data from this station for water year {my_year}."), 
+    check_data_text, 
+    error_trend_text,
+>>>>>>> 7a6a09718de1b0d7f81940b04e345eff4263df0f
     sep = " ")
 }
 
@@ -370,8 +446,13 @@ if(temp_error == "both"){
 if(temp_error == "annual"){
   cat(
     temp_rank_text,  
+<<<<<<< HEAD
     "Examine the annual data set on ClimateAnalyzer.org for more information.", 
     temp_error_trend_text,
+=======
+    check_data_text, 
+    error_trend_text,
+>>>>>>> 7a6a09718de1b0d7f81940b04e345eff4263df0f
     temp_tmax_text,
     temp_tmin_text,
     sep = " ")
@@ -381,10 +462,17 @@ if(temp_error == "annual"){
 if(temp_error == "month"){
   cat(
     glue::glue("There are too many missing records to meaningfully summarize the montly data from this station for water year {my_year}."),
+<<<<<<< HEAD
     "Examine the monthly data set on ClimateAnalyzer.org for more information.", 
     temp_rank_text, 
     temp_annual_text,
     temp_trend_text,
+=======
+    check_data_text, 
+    temp_rank_text, 
+    temp_annual_text,
+    error_trend_text,
+>>>>>>> 7a6a09718de1b0d7f81940b04e345eff4263df0f
     sep = " ")
 }
 ```
@@ -434,6 +522,7 @@ cowplot::plot_grid(t1, t2, t3, labels = c(), ncol = 1, align = "v",
 
 \newpage
 # Precipitation
+<<<<<<< HEAD
 ```{r PRCP_Text, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
 # Create text objects for prcp discussion
 prcp_rank_text <- if(prcp_error == "annual"){
@@ -461,6 +550,35 @@ prcp_condition_text <- if(prcp_text == "dry"){
     } else if(prcp_text == "wet"){
       glue::glue("{glue_mths(prcp_above)} received above average precipitation (Figure 2B) and {glue_mths(prcp_below)} received below average precipitation (Figure 2C).")
       }
+=======
+```{r PRCP_Text, echo=FALSE, results='asis', eval=(prcp_text %in% c("dry", "avg", "wet"))}
+cat(
+  # Sentence 1. Intro
+  if (text_refs$prcp_driest == 1){
+    glue::glue("Water year {my_year} was the driest year on record for {my_station$name}.")
+    } else if (prcp_text == "dry"){
+      glue::glue("Water year {my_year} was the {number_contraction(text_refs$prcp_driest)} driest on record for {station_name}.")
+      } else if (prcp_text == "avg"){
+        glue::glue("{station_name} received an average amount of precipitation during the {my_year} water year and was the {number_contraction(text_refs$prcp_driest)} driest on record.")
+        } else if (text_refs$prcp_wettest == 1){
+          glue::glue("Water year {my_year} was the wettest year on record for {my_station$name}.")
+          } else (
+            glue::glue("Water year {my_year} was the {number_contraction(text_refs$prcp_wettest)} wettest on record for {station_name}.")
+            ),
+  # Sentence 2. Annual
+  glue::glue("Total accumulated precipitation was {text_refs$prcp_wy} inches and was {format(round(abs(text_refs$prcp_wy - annual_30yr$PRCP), digits = 1), nsmall = 1)} inches {ifelse(text_refs$prcp_wy - annual_30yr$PRCP < 0, 'below', 'above')} the 30-year average ({format(round(annual_30yr$PRCP, digits = 1), nsmall = 1)} inches)."), 
+  # Sentence 3. Trend
+  glue::glue("This summary suggests that precipitation is {ifelse(prcp_lm > 0, 'increasing', 'decreasing')} at a rate of {abs(as.numeric(format(round(prcp_lm * 10, digits = 1), nsmall = 1)))} inches per decade (Figure 2A)."), 
+  # Sentence 4. Monthly
+  if(prcp_text == "dry"){
+    glue::glue("{paste(paste(prcp_above[1:length(prcp_above) - 1], collapse = ', '), prcp_above[length(prcp_above)], sep = ', and ')} received above average precipitation (Figure 2B) but were not enough to compensate for the {length(prcp_below)} months that were below average ({paste(paste(prcp_below[1:length(prcp_below)-1], collapse = ', '), prcp_below[length(prcp_below)], sep = ', and ')}; Figure 2C).")
+    } else if (prcp_text == "avg"){
+      glue::glue("{paste(paste(prcp_above[1:length(prcp_above)-1], collapse = ', '), prcp_above[length(prcp_above)], sep = ', and ')} received above average precipitation (Figure 2B) and {paste(paste(prcp_below[1:length(prcp_below)-1], collapse = ', '), prcp_below[length(prcp_below)], sep = ', and ')} received below average precipitation (Figure 2C).")
+      } else if (prcp_text == "wet"){
+        glue::glue("{paste(paste(prcp_above[1:length(prcp_above)-1], collapse = ', '), prcp_above[length(prcp_above)], sep = ', and ')} received above average precipitation (Figure 2B) and {paste(paste(prcp_below[1:length(prcp_below)-1], collapse = ', '), prcp_below[length(prcp_below)], sep = ', and ')} received below average precipitation (Figure 2C).")
+  }
+)
+>>>>>>> 7a6a09718de1b0d7f81940b04e345eff4263df0f
 ```
 
 ```{r Print_PRCP_Text, eval=(prcp_text %in% c('dry', 'avg', 'wet')), echo=FALSE, results='asis'}
@@ -479,31 +597,83 @@ prcp_error_trend_text <- glue::glue("However, this summary suggests that precipi
 # Text for errors in monthly and annual data sets.
 if(prcp_error == "both"){
   cat(
+<<<<<<< HEAD
   glue::glue("There are too many missing records to meaningfully summarize data from this station for water year {my_year}."),
   "Examine annual and monthly data sets on ClimateAnalyzer.org for more information.",
  prcp_error_trend_text, 
  sep = " ")
   }
+=======
+  # Sentence 1. Intro
+  glue::glue("There are too many missing records to meaningfully summarize data from this station for water year {my_year}."),
+  # Sentence 2. Check data
+  ("Examine annual and monthly data sets on ClimateAnalyzer.org for more information."),
+  # Sentence 3. Trend
+  glue::glue("However, this summary suggests that precipitation is {ifelse(prcp_lm > 0, 'increasing', 'decreasing')} by {abs(as.numeric(format(round(prcp_lm * 10, digits = 1), nsmall = 1)))} inches per decade (Figure 1A).")
+  )}
+>>>>>>> 7a6a09718de1b0d7f81940b04e345eff4263df0f
 
 # Text for errors in annual data set. Monthly data set is good.
 if(prcp_error == "annual"){
   cat(
+<<<<<<< HEAD
   prcp_rank_text,
   "Examine the annual data set on ClimateAnalyzer.org for more information.",
   prcp_error_trend_text,
   prcp_condition_text, 
   sep = " ")
+=======
+  # Sentence 1. Intro
+  paste0("There are too many missing records to meaningfully summarize the annual data from this station for water year ", my_year, "."),
+  # Sentence 2. Checck data.
+  ("Examine the annual data set on ClimateAnalyzer.org for more information."),
+  # Sentence 3. Trend
+  glue::glue("However, this summary suggests that precipitation is {ifelse(prcp_lm > 0, 'increasing', 'decreasing')} by {abs(as.numeric(format(round(prcp_lm * 10, digits = 1), nsmall = 1)))} inches per decade (Figure 1A)."),
+  # Sentence 4. Monthly
+  if(prcp_text == "dry"){
+    glue::glue("{paste(paste(prcp_above[1:length(prcp_above) - 1], collapse = ', '), prcp_above[length(prcp_above)], sep = ', and ')} received above average precipitation (Figure 2B) but were not enough to compensate for the {length(prcp_below)} months that were below average ({paste(paste(prcp_below[1:length(prcp_below)-1], collapse = ', '), prcp_below[length(prcp_below)], sep = ', and ')}; Figure 2C).")
+    } else if (prcp_text == "avg"){
+      glue::glue("{paste(paste(prcp_above[1:length(prcp_above)-1], collapse = ', '), prcp_above[length(prcp_above)], sep = ', and ')} received above average precipitation (Figure 2B) and {paste(paste(prcp_below[1:length(prcp_below)-1], collapse = ', '), prcp_below[length(prcp_below)], sep = ', and ')} received below average precipitation (Figure 2C).")
+      } else if (prcp_text == "wet"){
+        glue::glue("{paste(paste(prcp_above[1:length(prcp_above)-1], collapse = ', '), prcp_above[length(prcp_above)], sep = ', and ')} received above average precipitation (Figure 2B) and {paste(paste(prcp_below[1:length(prcp_below)-1], collapse = ', '), prcp_below[length(prcp_below)], sep = ', and ')} received below average precipitation (Figure 2C).")
+        }
+  )
+>>>>>>> 7a6a09718de1b0d7f81940b04e345eff4263df0f
 }
 
 # Text for errors in monthly data set. Annual data set is good.
 if(prcp_error == "month"){
   cat(
+<<<<<<< HEAD
     glue::glue("There are too many missing records to meaningfully summarize the montly data from this station for water year {my_year}."),
   "Examine the montly data set on ClimateAnalyzer.org for more information.",
   prcp_rank_text, 
   prcp_annual_text, 
   prcp_trend_text,
   sep = " ")
+=======
+  # Sentence 1. Intro
+    glue::glue("There are too many missing records to meaningfully summarize the montly data from this station for water year {my_year}."),
+  # Sentence 2. Check data
+  ("Examine the montly data set on ClimateAnalyzer.org for more information."),
+  # Sentence 3. Annual
+  if (text_refs$prcp_driest == 1){
+    glue::glue("Water year {my_year} was the driest year on record for {my_station$name}.")
+    } else if (prcp_text == "dry"){
+      glue::glue("Water year {my_year} was the {number_contraction(text_refs$prcp_driest)} driest on record for {station_name}.")
+      } else if (prcp_text == "avg"){
+        glue::glue("{station_name} received an average amount of precipitation during the {my_year} water year and was the {number_contraction(text_refs$prcp_driest)} driest on record.")
+        } else if (text_refs$prcp_wettest == 1){
+          glue::glue("Water year {my_year} was the wettest year on record for {my_station$name}.")
+          } else (
+            glue::glue("Water year {my_year} was the {number_contraction(text_refs$prcp_wettest)} wettest on record for {station_name}.")
+            ),
+  # Sentence 4. Annual
+  glue::glue("Total accumulated precipitation was {text_refs$prcp_wy} inches and was {format(round(abs(text_refs$prcp_wy - annual_30yr$PRCP), digits = 1), nsmall = 1)} inches {ifelse(text_refs$prcp_wy - annual_30yr$PRCP < 0, 'below', 'above')} the 30-year average ({format(round(annual_30yr$PRCP, digits = 1), nsmall = 1)} inches)."), 
+  # Sentence 5. Trend
+  glue::glue("This summary suggests that precipitation is {ifelse(prcp_lm > 0, 'increasing', 'decreasing')} at a rate of {abs(as.numeric(format(round(prcp_lm * 10, digits = 1), nsmall = 1)))} inches per decade (Figure 2A).")
+  )
+>>>>>>> 7a6a09718de1b0d7f81940b04e345eff4263df0f
 }
 ```
 
