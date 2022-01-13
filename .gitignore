@@ -1,6 +1,9 @@
+# Ignore RStudio and OS files
 .Rproj.user
 .Rhistory
 .Rdata
 .httr-oauth
 .DS_Store
-/exec/
+
+# Ignore build directory
+/exec
