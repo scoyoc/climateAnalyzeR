@@ -3,9 +3,11 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-This package imports data from [ClimateAnalyzer.org](http://climateanalyzer.org/) 
-into R. It is currently  under development and only imports annual, monthly, and 
-dialy weather data from Co-op stations and water balance data for those stations. 
+The primary function of this package is to produce brief climate reports using temperature and precipitation data from National Park Service Co-op stations using RMarkdown (*.Rmd). 
+Currently a water year (Oct-Sep) report is available, and an annual (Jan-Dec) report is in development. 
+
+This package also imports data from [ClimateAnalyzer.org](http://climateanalyzer.org/) into R. 
+Currently  annual, monthly, and dialy weather data and water balance models for those stations are available. 
 The plan is to incorporate more data sets available on ClimateAnalyzer.org.
 
 ## Installation
@@ -18,46 +20,45 @@ install it form GitHub.
 devtools::install_github("scoyoc/climateAnalyzeR")
 ```
 
-## Example
+## Examples
 
-Below are examples of how to import data from ClimateAnalyzer.orgin to R.
+Here is the function that renders pdf reports using RMarkdown.
+```r
+library(climateAnalyzeR)
+
+renderSummary(station_id = "arches",
+              station_name = "Arches National Park",
+              my_year = 2020)
+```
+
+Below are examples of function that import data from ClimateAnalyzer.org.
 
 ``` r
-library(climateAnalyzeR)
-# Examples of Existing Functions ----
 #-- Annual data
+# Import annual temperature and precipitation data and remove columns of missing
+# values.
+import_data("annual_wx", "canyonlands_theneck", 1980, 2020, 
+            remove_missing = FALSE)
+
 # Import annual temperature and precipitation data and convert values to metric
 import_data("annual_wx", "canyonlands_theneck", 1980, 2020, convert = TRUE)
-# Import annual temperature and precipitation data and remove columns of missing
-# values tally.
-import_data("annual_wx", "canyonlands_theneck", 1980, 2020, remove_missing = FALSE)
 
 #-- Daily data
 # Import daily temperature and precipitation data
 import_data("daily_wx", "hans_flat_rs", 2010, 2020)
-# Import daily temperature and precipitation data and convert values to metric
-import_data("daily_wx", "hans_flat_rs", 2010, 2020, convert = TRUE)
-
-#-- Monthly departures
-# Import monthly departures and convert values to metric
-import_data("departure", 'natural_bridges_nm', 2000, 2010, convert = TRUE)
-# Import departures for the month of July
-import_data("departure", 'natural_bridges_nm', 2000, 2010, month = 7)
 
 #-- Monthly data
-# Import monthly precipitation and temperature data and convert values to metric
-import_data("monthly_wx", 'canyonlands_theneedle', 2000, 2010, convert = TRUE)
 # Import monthly precipitation and temperature data for the month of June
 import_data("monthly_wx", 'canyonlands_theneedle', 2000, 2010, month = 6)
+
+#-- Monthly departures
+# Import departures for the month of July
+import_data("departure", 'natural_bridges_nm', 2000, 2010, month = 7)
 
 #-- Water balance data
 # Import monthly water balance data using the Hamon model with soil water
 # capacity set to 100.
 import_data("water_balance", "arches", 2015, 2020, table_type = "monthly",
             soil_water = 100, pet_type = "hamon", forgiving = "very")
-# Import daily water balance data using the Hamon model with soil water
-# capacity set to 50
-import_data("water_balance", "arches", 2015, 2020, table_type = "daily",
-            soil_water = 50, pet_type = "Penman_Montieth", forgiving = "very")
 ```
 

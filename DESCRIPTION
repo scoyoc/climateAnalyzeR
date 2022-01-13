@@ -1,15 +1,16 @@
 Package: climateAnalyzeR
 Title: Import Data from ClimateAnalyzer.org into R
-Version: 0.0.0.9000
+Version: 0.0.1.00
 Authors@R: 
     person(given = "Matthew",
            family = "Van Scoyoc",
            role = c("aut", "cre"),
            email = "matthew_vanscoyoc@nps.org",
            comment = c(ORCID = "0000-0001-6821-4476"))
-Description: This package imports data from ClimateAnalyzer.org into R. It is 
-    currently under development and only imports temperature, precipitation, 
-    and soil water balance data.
+Description: This package creates a brief climate report for National Park 
+    Service Co-op Stations and imports data from ClimateAnalyzer.org into R. 
+    Data abailable to import are temperature, precipitation, and soil water 
+    balance models.
 Depends: 
     R (>= 4.0),
     tidyr (>= 1.1.2)

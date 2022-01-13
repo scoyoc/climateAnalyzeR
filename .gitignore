@@ -1,4 +1,5 @@
 # Ignore RStudio and OS files
+*.Rproj
 .Rproj.user
 .Rhistory
 .Rdata
