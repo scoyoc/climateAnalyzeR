@@ -11,7 +11,7 @@
 #' @param my_year The four-digit for the year of interest.
 #' @param report Type of report to render. Currently the only option is a water
 #'     year ("water_year") report.
-#' @param my_dir Optional. String of direectory path to save repor to. Default
+#' @param my_dir Optional. String of directory path to save report to. Default
 #'     is NULL. If NULL, the report is saved to the your desktop.
 #'
 #' @return A PDF.

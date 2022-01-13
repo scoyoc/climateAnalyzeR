@@ -2,7 +2,6 @@ devtools::install_github("scoyoc/climateAnalyzeR")
 library("climateAnalyzeR")
 
 # TODO: Write dynamic text for current water year.
-# TODO: Write dynamic text when data are insufficient.
 # TODO: Include water balance in summary.
 # TODO: add measurement to imperial units and replace them with metric when converting.
 
@@ -108,7 +107,7 @@ stations(my_stations = "colorado_nm")$name
 stations(my_stations = c("dinosaur_nm", "dinosaur_quarry_area"))
 
 
-renderSummary(station_id = "arches",
+climateAnalyzeR::renderSummary(station_id = "arches",
               station_name = "Arches National Park",
               my_year = 2020)
 
