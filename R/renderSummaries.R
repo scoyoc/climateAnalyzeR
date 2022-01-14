@@ -8,7 +8,8 @@
 #'     displayed in several location in the rendered report.Default is NULL. If
 #'     NULL the station name will be pulled using
 #'     \code{\link[climateAnalyzeR::stations]{stations}}.
-#' @param my_year The four-digit for the year of interest.
+#' @param my_year The four-digit for the year of interest. Default is NULL. The
+#'     current year will be used if default is used.
 #' @param report Type of report to render. Currently the only option is a water
 #'     year ("water_year") report.
 #' @param my_dir Optional. String of directory path to save report to. Default
@@ -20,7 +21,7 @@
 #' @examples
 #' # Render a report for Arches National Park for the 2020 water year.
 #' renderSummary("Arches National Park", 2020, "ARCH", report = "Water Year")
-renderSummary = function(station_id, station_name = NULL, my_year,
+renderSummary = function(station_id, station_name = NULL, my_year = NULL,
                          report = "water_year", my_dir = NULL) {
 
   # Create 8-digit date stamp
@@ -32,8 +33,17 @@ renderSummary = function(station_id, station_name = NULL, my_year,
     station_name = stations(my_stations = station_id)$name
   }
 
+  # Determine year
+  if (is.null(my_year)){
+    my_year = lubridate::year(lubridate::today())
+  }
+
   # Select report
-  if (report == "water_year"){
+  if (my_year == lubridate::year(lubridate::today())) {
+    report_year = "current"
+  } else report_year = "past"
+
+  if (report == "water_year" & report_year == "past"){
     my_rmd = "water_year_summary.Rmd"
     report_name = paste0(date_stamp, "_", station_id, "_WY", my_year, "_Summary.pdf")
   } else (message("Report type not recognized. See help(renderSummary) for options."))
