@@ -304,7 +304,7 @@ temp_error_trend_text <- glue::glue("However, this summary suggests that tempera
 # Text for errors in annual and monthly data
 if(temp_error == "both"){
   cat(
-    glue::glue("There are too many missing records to meaningfully summarize data from this station for water year {my_year}."), 
+    glue::glue("There are too many missing records to meaningfully summarize temperature data from this station for water year {my_year}."), 
     "Examine annual and monthly data sets on ClimateAnalyzer.org for more information.", 
     temp_error_trend_text,
     sep = " ")
@@ -324,7 +324,7 @@ if(temp_error == "annual"){
 # Text for errors in monthly data set. Annual data set is good.
 if(temp_error == "month"){
   cat(
-    glue::glue("There are too many missing records to meaningfully summarize the montly data from this station for water year {my_year}."),
+    glue::glue("There are too many missing records to meaningfully summarize the montly temperature data from this station for water year {my_year}."),
     "Examine the monthly data set on ClimateAnalyzer.org for more information.", 
     temp_rank_text, 
     temp_annual_text,
@@ -423,7 +423,7 @@ prcp_error_trend_text <- glue::glue("However, this summary suggests that precipi
 # Text for errors in monthly and annual data sets.
 if(prcp_error == "both"){
   cat(
-  glue::glue("There are too many missing records to meaningfully summarize data from this station for water year {my_year}."),
+  glue::glue("There are too many missing records to meaningfully summarize precipitation data from this station for water year {my_year}."),
   "Examine annual and monthly data sets on ClimateAnalyzer.org for more information.",
  prcp_error_trend_text, 
  sep = " ")
@@ -442,7 +442,7 @@ if(prcp_error == "annual"){
 # Text for errors in monthly data set. Annual data set is good.
 if(prcp_error == "month"){
   cat(
-    glue::glue("There are too many missing records to meaningfully summarize the montly data from this station for water year {my_year}."),
+    glue::glue("There are too many missing records to meaningfully summarize the montly precipitation data from this station for water year {my_year}."),
   "Examine the montly data set on ClimateAnalyzer.org for more information.",
   prcp_rank_text, 
   prcp_annual_text, 
