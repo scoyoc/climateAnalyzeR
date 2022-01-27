@@ -22,34 +22,35 @@
 #' # Render a report for Arches National Park for the 2020 water year.
 #' renderSummary("Arches National Park", 2020, "ARCH", report = "Water Year")
 renderSummary = function(station_id, station_name = NULL, my_year = NULL,
-                         report = "water_year", my_dir = NULL) {
+                         my_report = "water_year", my_dir = NULL) {
 
   # Create 8-digit date stamp
   date_stamp = paste(stringr::str_split(lubridate::today(), "-")[[1]],
                      collapse = "")
 
   # Select station name
-  if (is.null(station_name)){
+  if(is.null(station_name)){
     station_name = stations(my_stations = station_id)$name
   }
 
-  # Determine year
-  if (is.null(my_year)){
-    my_year = lubridate::year(lubridate::today())
-  }
-
   # Select report
-  if (my_year == lubridate::year(lubridate::today())) {
-    report_year = "current"
-  } else report_year = "past"
-
-  if (report == "water_year" & report_year == "past"){
-    my_rmd = "water_year_summary.Rmd"
+  if(my_report == "water_year" & is.null(my_year)){
+    my_year = lubridate::year(lubridate::today())
+    my_rmd = "current_water_year.Rmd"
     report_name = paste0(date_stamp, "_", station_id, "_WY", my_year, "_Summary.pdf")
-  } else (message("Report type not recognized. See help(renderSummary) for options."))
+    } else if(my_report == "water_year" & !is.null(my_year)){
+      my_rmd = "past_water_year.Rmd"
+      report_name = paste0(date_stamp, "_", station_id, "_WY", my_year, "_Summary.pdf")
+      } else if(my_report == "annual" & is.null(my_year)){
+        my_year = lubridate::year(lubridate::today())
+        my_rmd = "current_annual.Rmd"
+        report_name = paste0(date_stamp, "_", station_id, my_year, "_Summary.pdf")
+        } else if(my_report == "annual" & !is.null(my_year)){
+          my_rmd = "past_annual.Rmd"
+          report_name = paste0(date_stamp, "_", station_id, my_year, "_Summary.pdf")
+          } else(stop("Arguments not recognized: 'my_year' or 'my_report'. See help(renderSummary) for options."))
 
-
-  # Select directory
+ # Select directory
   if (is.null(my_dir)){
     my_dir <- paste(Sys.getenv("USERPROFILE"), "Desktop", sep = "/")
   }

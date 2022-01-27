@@ -214,7 +214,7 @@ temp_text <- if(temp_error %in% c("both", "annual", "month")){
         } else(FALSE)
 ```
 
-This document summarizes current temperature and precipitation anomalies relative to 30-year (1981-2010) averages for `r my_station$name` during the `r my_year` water year (October `r my_year - 1` through September `r my_year`).
+This document summarizes temperature and precipitation anomalies relative to 30-year (1981-2010) averages for `r my_station$name` during the `r my_year` water year (October `r my_year - 1` through September `r my_year`).
 The data used in these analyses are part of the NOAA Global Historical Climatology Network (GHCN) Cooperative Observer Network (COOP) and were downloaded from [ClimateAnalyzer.org](http://www.climateanalyzer.org/) on `r format(as.Date(lubridate::today(), format = "%Y-%m-%d"), "%d %B %Y")` using R (ver. `r r_ver`, R Core Team, `r info$R.version$year`) and the climateAnalyzeR package (ver.  `r info$otherPkgs$climateAnalyzeR$Version`, Van Scoyoc, `r lubridate::year(stringr::str_split(info$otherPkgs$climateAnalyzeR$Built, pattern = ";")[[1]][3])`).
 The data used for these analyses include the daily high temperature (TMAX), daily low temperature (TMIN), and daily precipitation accumulation (PRCP).
 This is an automated summary, and all results are provisional.
