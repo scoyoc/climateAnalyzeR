@@ -4,11 +4,22 @@
 <!-- badges: end -->
 
 The primary function of this package is to produce brief climate reports using temperature and precipitation data from National Park Service Co-op stations using RMarkdown (*.Rmd). 
-Currently a water year (Oct-Sep) report is available, and an annual (Jan-Dec) report is in development. 
+Currently a water year (Oct-Sep) and annual (Jan-Dec) reports have been developed and need to be tested more thoroughly. 
 
 This package also imports data from [ClimateAnalyzer.org](http://climateanalyzer.org/) into R. 
-Currently  annual, monthly, and dialy weather data and water balance models for those stations are available. 
-The plan is to incorporate more data sets available on ClimateAnalyzer.org.
+Currently  annual, monthly, and daily weather data and water balance models for Co-op stations are available. 
+The plan is to incorporate more data sets available on ClimateAnalyzer.org in the future.
+
+Version: 0.0.1
+Depends: R (>= 4.0), tidyr (>= 1.1.2)
+Imports: cowplot, dplyr, ggplot2, ggmap, glue, grid, gridExtra, knitr, janitor, lubridate, readr, rmarkdown, shadowtext, stats, stringr, tibble, XML
+Author: Matthew Van Scoyoc
+Maintainer: Matthew Van Scoyoc
+Issues: [https://github.com/scoyoc/climateAnalyzeR/issues](https://github.com/scoyoc/climateAnalyzeR/issues)
+License: MIT + file [LICENSE](https://github.com/scoyoc/climateAnalyzeR/blob/master/LICENSE.md)
+URL: [https://github.com/scoyoc/climateAnalyzeR](https://github.com/scoyoc/climateAnalyzeR)
+Materials: Coming soon.
+Documentation: Coming soon.
 
 ## Installation
 
@@ -26,9 +37,15 @@ Here is the function that renders pdf reports using RMarkdown.
 ```r
 library(climateAnalyzeR)
 
-renderSummary(station_id = "arches",
-              station_name = "Arches National Park",
-              my_year = 2020)
+# Current water year summary for Arches National Park using the default station 
+# name on ClimateAnalyzer.org
+renderSummary(my_report = "water_year", station_id = "arches")
+
+# Calendar year report for Island in the Sky for 2018 and changing the name used 
+# in the report.
+renderSummary(my_report = "calendar_year", station_id = "canyonlands_theneck", 
+              station_name = "Island in the Sky, Canyonlands National Park", 
+              my_year = 2018)
 ```
 
 Below are examples of function that import data from ClimateAnalyzer.org.
