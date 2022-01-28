@@ -3,9 +3,12 @@
 #' This function imports weather station information from
 #'     \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 #'
-#' @param my_stations A string of the station name. This is used as an argument
-#'     for dplyr::filter to reduce the data frame to the desired stations.
-#'     Default is NULL. If NULL, a data frame of all stations is returned.
+#' @param my_name A string of the station name. This is used to reduce the data
+#'     frame using \code{\link[dplyr::filter]{filter}}. Default is NULL.
+#' @param my_stations A string of the station id. This is used to reduce the data
+#'     frame using \code{\link[dplyr::filter]{filter}}. Default is NULL.
+#' @param my_id A string of the station Id. This is used to reduce the data
+#'     frame using \code{\link[dplyr::filter]{filter}}. Default is NULL.
 #'
 #' @return A \code{\link[tibble:tibble]{tibble}}.
 #' @export
@@ -16,8 +19,8 @@
 #'
 #' # Filter station by name
 #' stations(my_stations = "arches")
-#' stations(my_stations = c("Canyonlands The Neck", "Canyonlands The Needle", "Hans Flat RS"))
-stations <- function(my_stations = NULL){
+#' stations(my_id = c("426053", "424100"))
+stations <- function(my_name = NULL, my_stations = NULL, my_id = NULL){
   dat = suppressMessages(
     suppressWarnings(
       readr::read_csv("http://climateanalyzer.science/all_stations.csv",
@@ -33,13 +36,16 @@ stations <- function(my_stations = NULL){
   )
   names(dat) = janitor::make_clean_names(names(dat))
 
-
+  # Reduce data frame
   # Filter by station name
-  if (!is.null(my_stations)){
-    dat = dplyr::filter(dat, station_id %in% my_stations)
-  }
+  if(!is.null(my_name)){
+    dat = dplyr::filter(dat, name %in% my_name)
+    } else if(!is.null(my_stations)){
+      dat = dplyr::filter(dat, station_id %in% my_stations)
+      } else if(!is.null(my_id)){
+        dat = dplyr::filter(dat, id %in% my_id)
+        }
 
-  # Return dataframe
   return(dplyr::select(dat, "name", "station_id", "id", "type", "lat", "lon",
                 "elev_m", "years_avail", "years_segments", "data_url"))
 }

@@ -159,16 +159,15 @@ prcp_below <- dplyr::filter(mth_depart, water_yr == my_year &
 # Error evaluation
 error_eval <- dplyr::filter(mth_dat, water_yr == my_year) %>%
   dplyr::ungroup() %>%
-  dplyr::select(c("year", "prcp", "temp_midpt")) %>%
+  dplyr::select(c("prcp", "temp_midpt")) %>%
   dplyr::summarise_all(function(x)(sum(is.na(x)))) %>%
-  dplyr::rename('mth_temp' = 'temp_midpt') %>%
+  dplyr::mutate(year = my_year) %>%
   dplyr::left_join(tibble::tibble(annual_dat[, c("year", "prcp_wy", 
                                                  "temp_midpt")]) %>%
                      dplyr::filter(year == my_year) %>%
                      dplyr::rename('ann_temp' = 'temp_midpt'))
 
-prcp_error <- if(is.na(error_eval$prcp_wy) & 
-                 (error_eval$prcp >= 2 | is.na(my_mth_prcp$value))){
+prcp_error <- if(is.na(error_eval$prcp_wy) & error_eval$prcp >= 2){
   "both"
   } else if(is.na(error_eval$prcp_wy) & error_eval$prcp < 2){
     "annual"
@@ -176,12 +175,11 @@ prcp_error <- if(is.na(error_eval$prcp_wy) &
       "month"
       } else("no error")
   
-temp_error <- if(is.na(error_eval$ann_temp) & 
-                 (error_eval$temp_midpt >= 2 | is.na(my_mth_temp$value))){
+temp_error <- if(is.na(error_eval$ann_temp) & error_eval$temp_midpt >= 2){
   "both"
-  } else if(is.na(error_eval$ann_temp) & error_eval$mth_temp < 2){
+  } else if(is.na(error_eval$ann_temp) & error_eval$temp_midpt < 2){
     "annual"
-    } else if(!is.na(error_eval$ann_temp) & error_eval$mth_temp >= 2){
+    } else if(!is.na(error_eval$ann_temp) & error_eval$temp_midpt >= 2){
       "month"
       } else("no error")
 

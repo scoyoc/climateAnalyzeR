@@ -33,6 +33,7 @@ Imports:
     readr,
     rmarkdown,
     shadowtext,
+    stats,
     stringr,
     tibble,
     XML

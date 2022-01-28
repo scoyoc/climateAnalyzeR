@@ -4,12 +4,17 @@
 \alias{stations}
 \title{Import station informaiton from ClimateAnalyzer.org}
 \usage{
-stations(my_stations = NULL)
+stations(my_name = NULL, my_stations = NULL, my_id = NULL)
 }
 \arguments{
-\item{my_stations}{A string of the station name. This is used as an argument
-for dplyr::filter to reduce the data frame to the desired stations.
-Default is NULL. If NULL, a data frame of all stations is returned.}
+\item{my_name}{A string of the station name. This is used to reduce the data
+frame using \code{\link[dplyr::filter]{filter}}. Default is NULL.}
+
+\item{my_stations}{A string of the station id. This is used to reduce the data
+frame using \code{\link[dplyr::filter]{filter}}. Default is NULL.}
+
+\item{my_id}{A string of the station Id. This is used to reduce the data
+frame using \code{\link[dplyr::filter]{filter}}. Default is NULL.}
 }
 \value{
 A \code{\link[tibble:tibble]{tibble}}.
@@ -24,5 +29,5 @@ stations()
 
 # Filter station by name
 stations(my_stations = "arches")
-stations(my_stations = c("Canyonlands The Neck", "Canyonlands The Needle", "Hans Flat RS"))
+stations(my_id = c("426053", "424100"))
 }

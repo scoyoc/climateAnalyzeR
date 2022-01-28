@@ -7,27 +7,29 @@
 renderSummary(
   station_id,
   station_name = NULL,
-  my_year,
-  report = "water_year",
+  my_year = NULL,
+  my_report = "water_year",
   my_dir = NULL
 )
 }
 \arguments{
-\item{station_id}{The station identification name for the weather station of
-interest.}
-
-\item{station_name}{Optional. A string to use for the station name. This is
-displayed in several location in the rendered report.Default is NULL. If
-NULL the station name will be pulled using
+\item{station_id}{The name of the weather station of interest from
 \code{\link[climateAnalyzeR::stations]{stations}}.}
 
-\item{my_year}{The four-digit for the year of interest.}
+\item{station_name}{Optional. A string to be use for the station name in the
+report. Default is NULL. If NULL the station name will be pulled from
+\code{\link[climateAnalyzeR::stations]{stations}}. This is displayed in
+several location in the report and the default name of the weather
+station can be changed.}
+
+\item{my_year}{The four-digit for the year of interest. Default is NULL. The
+current year will be used if default is used.}
+
+\item{my_dir}{Optional. String of directory path to save report to. Default
+is NULL. If NULL, the report is saved to the your desktop.}
 
 \item{report}{Type of report to render. Currently the only option is a water
 year ("water_year") report.}
-
-\item{my_dir}{Optional. String of direectory path to save repor to. Default
-is NULL. If NULL, the report is saved to the your desktop.}
 }
 \value{
 A PDF.
@@ -37,5 +39,5 @@ This funciton will render a PDF report from an RMarkdown (Rmd) script.
 }
 \examples{
 # Render a report for Arches National Park for the 2020 water year.
-renderSummary("Arches National Park", 2020, "ARCH", report = "Water Year")
+renderSummary(station_id = "arches", station_name = "Arches National Park", my_year = 2020)
 }

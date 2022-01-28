@@ -2,12 +2,13 @@
 #'
 #' This funciton will render a PDF report from an RMarkdown (Rmd) script.
 #'
-#' @param station_id The station identification name for the weather station of
-#'     interest.
-#' @param station_name Optional. A string to use for the station name. This is
-#'     displayed in several location in the rendered report.Default is NULL. If
-#'     NULL the station name will be pulled using
+#' @param station_id The name of the weather station of interest from
 #'     \code{\link[climateAnalyzeR::stations]{stations}}.
+#' @param station_name Optional. A string to be use for the station name in the
+#'     report. Default is NULL. If NULL the station name will be pulled from
+#'     \code{\link[climateAnalyzeR::stations]{stations}}. This is displayed in
+#'     several location in the report and the default name of the weather
+#'     station can be changed.
 #' @param my_year The four-digit for the year of interest. Default is NULL. The
 #'     current year will be used if default is used.
 #' @param report Type of report to render. Currently the only option is a water
@@ -20,9 +21,13 @@
 #'
 #' @examples
 #' # Render a report for Arches National Park for the 2020 water year.
-#' renderSummary("Arches National Park", 2020, "ARCH", report = "Water Year")
+#' renderSummary(station_id = "arches", station_name = "Arches National Park", my_year = 2020)
 renderSummary = function(station_id, station_name = NULL, my_year = NULL,
                          my_report = "water_year", my_dir = NULL) {
+
+  if(nrow(stations(my_stations = station_id) %>% dplyr::distinct()) == 0){
+    stop("Station ID name not recognized in station_id argument. Find the correct station ID by useing climateAnalyzeR::stations() or by going to ClimateAnalyzer.org.")
+  }
 
   # Create 8-digit date stamp
   date_stamp = paste(stringr::str_split(lubridate::today(), "-")[[1]],
@@ -48,7 +53,7 @@ renderSummary = function(station_id, station_name = NULL, my_year = NULL,
         } else if(my_report == "annual" & !is.null(my_year)){
           my_rmd = "past_annual.Rmd"
           report_name = paste0(date_stamp, "_", station_id, my_year, "_Summary.pdf")
-          } else(stop("Arguments not recognized: 'my_year' or 'my_report'. See help(renderSummary) for options."))
+          } else(stop("Argument not recognized: 'my_year' or 'my_report'. See help(renderSummary) for options."))
 
  # Select directory
   if (is.null(my_dir)){
