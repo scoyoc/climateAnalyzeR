@@ -403,7 +403,7 @@ prcp_condition_text <- if(prcp_text == "dry" & length(prcp_above) == 0){
   } else if(prcp_text == "dry"){
     glue::glue("{glue_mths(prcp_above)} received above average precipitation (Figure 2B) but were not enough to compensate for the {length(prcp_below)} months that were below average ({glue_mths(prcp_below)}; Figure 2C).")
     } else if(prcp_text == "avg"){
-      glue::glue("{glue_mths(prcp_above)}} received above average precipitation (Figure 2B) and {glue_mths(prcp_below)} received below average precipitation. Water year {my_year} finished {ifelse(text_refs$prcp_wy < 0, 'below', 'above')}  the 30-year average (Figure 2C).")
+      glue::glue("{glue_mths(prcp_above)} received above average precipitation (Figure 2B) and {glue_mths(prcp_below)} received below average precipitation. Water year {my_year} finished {ifelse(text_refs$prcp_wy < 0, 'below', 'above')}  the 30-year average (Figure 2C).")
       } else if(prcp_text == "wet" & length(prcp_below) == 0){
         glue::glue("Every month received above average precipitation (Figures 2B 2C).")
         } else if(prcp_text == "wet"){
@@ -422,7 +422,7 @@ cat(
 
 ```{r Insufficient_PRCP, eval=(prcp_text == 'error'), echo=FALSE, results='asis'}
 # Text objects for errors in prcp data sets.
-prcp_error_trend_text <- glue::glue("However, this summary suggests that precipitation is {ifelse(prcp_lm > 0, 'increasing', 'decreasing')} by {abs(as.numeric(format(round(prcp_lm * 10, digits = 1), nsmall = 1)))} inches per decade (Figure 1A).")
+prcp_error_trend_text <- glue::glue("However, this summary suggests that precipitation is {ifelse(prcp_lm > 0, 'increasing', 'decreasing')} by {round_with_zeros(abs(prcp_lm * 10))} inches per decade (Figure 1A).")
 
 # Text for errors in monthly and annual data sets.
 if(prcp_error == "both"){

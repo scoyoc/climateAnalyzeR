@@ -1,6 +1,6 @@
 Package: climateAnalyzeR
 Title: Import Data from ClimateAnalyzer.org into R
-Version: 0.0.1.00
+Version: 0.0.1
 Authors@R: 
     person(given = "Matthew",
            family = "Van Scoyoc",
