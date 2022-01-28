@@ -25,9 +25,9 @@ stations <- function(my_name = NULL, my_stations = NULL, my_id = NULL){
     suppressWarnings(
       readr::read_csv("http://climateanalyzer.science/all_stations.csv",
                       col_names = TRUE, na = "nan",
-                      skip_empty_rows = TRUE) %>%
-        dplyr::select(-dplyr::contains("dir")) %>%
-        dplyr::select(!dplyr::starts_with("X")) %>%
+                      skip_empty_rows = TRUE) |>
+        dplyr::select(-dplyr::contains("dir")) |>
+        dplyr::select(!dplyr::starts_with("X")) |>
         dplyr::left_join(dplyr::filter(climateAnalyzeR::normals()[, 1:2],
                                        id != "COOP" & id != "manual" &
                                          id != "null" & id != "SNOTEL"),

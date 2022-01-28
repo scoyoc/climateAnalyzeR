@@ -25,8 +25,8 @@
 renderSummary = function(station_id, station_name = NULL, my_year = NULL,
                          my_report = "water_year", my_dir = NULL) {
 
-  if(nrow(stations(my_stations = station_id) %>% dplyr::distinct()) == 0){
-    stop("Station ID name not recognized in station_id argument. Find the correct station ID by useing climateAnalyzeR::stations() or by going to ClimateAnalyzer.org.")
+  if(nrow(climateAnalyzeR::stations(my_stations = station_id) |> dplyr::distinct()) == 0){
+    stop("Station ID name not recognized in station_id argument. Find the correct station ID by using climateAnalyzeR::stations() or by going to ClimateAnalyzer.org.")
   }
 
   # Create 8-digit date stamp
