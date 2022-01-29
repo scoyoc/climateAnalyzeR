@@ -4,11 +4,12 @@
 <!-- badges: end -->
 
 The primary function of this R package is to produce brief climate reports using temperature and precipitation data from National Park Service Co-op stations using RMarkdown (*.Rmd). 
-Currently a water year (Oct-Sep) and calendar year (Jan-Dec) reports have been developed. They currently need to be tested more thoroughly. 
+Currently a water year (Oct-Sep) and calendar year (Jan-Dec) reports have been developed. They currently need more thorough testing. 
 
 This package also imports data from [ClimateAnalyzer.org](http://climateanalyzer.org/) into R. 
-Currently  annual, monthly, and daily weather data and water balance models for Co-op stations are available. Again, these functions need some more testing but so far they are working well.
-The plan is to include water balance summaries to the RMarkdown scripts and incorporate more data sets available on ClimateAnalyzer.org in the future.
+Currently  annual, monthly, and daily weather data and water balance models for Co-op stations are available.
+Again, these functions need some more testing but so far they are working well.
+The plan is to include water balance summaries to the RMarkdown scripts in the future.
 
 Version: 0.0.1
 
@@ -30,8 +31,7 @@ Documentation: Just the [Wiki](https://github.com/scoyoc/climateAnalyzeR/wiki) f
 
 ## Installation
 
-Perhaps someday you will be able to install the released version of 
-climateAnalyzeR from [CRAN](https://CRAN.R-project.org). Right now you can 
+Perhaps someday you will be able to install this package from [CRAN](https://CRAN.R-project.org), but for now you can 
 install it form GitHub.
 
 ``` r
@@ -40,7 +40,7 @@ devtools::install_github("scoyoc/climateAnalyzeR")
 
 ## Examples
 
-Here is the function that renders pdf reports using RMarkdown.
+Here is the function that renders *.pdf reports using RMarkdown.
 ```r
 library(climateAnalyzeR)
 
@@ -55,7 +55,7 @@ renderSummary(my_report = "calendar_year", station_id = "canyonlands_theneck",
               my_year = 2018)
 ```
 
-Below are examples of function that import data from ClimateAnalyzer.org.
+Below are examples of function that import data from [ClimateAnalyzer.org](http://climateanalyzer.org/).
 
 ``` r
 #-- Annual data
