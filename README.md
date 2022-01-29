@@ -3,12 +3,12 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The primary function of this package is to produce brief climate reports using temperature and precipitation data from National Park Service Co-op stations using RMarkdown (*.Rmd). 
-Currently a water year (Oct-Sep) and annual (Jan-Dec) reports have been developed and need to be tested more thoroughly. 
+The primary function of this R package is to produce brief climate reports using temperature and precipitation data from National Park Service Co-op stations using RMarkdown (*.Rmd). 
+Currently a water year (Oct-Sep) and calendar year (Jan-Dec) reports have been developed. They currently need to be tested more thoroughly. 
 
 This package also imports data from [ClimateAnalyzer.org](http://climateanalyzer.org/) into R. 
-Currently  annual, monthly, and daily weather data and water balance models for Co-op stations are available. 
-The plan is to incorporate more data sets available on ClimateAnalyzer.org in the future.
+Currently  annual, monthly, and daily weather data and water balance models for Co-op stations are available. Again, these functions need some more testing but so far they are working well.
+The plan is to include water balance summaries to the RMarkdown scripts and incorporate more data sets available on ClimateAnalyzer.org in the future.
 
 Version: 0.0.1
 
