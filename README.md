@@ -26,9 +26,7 @@ License: MIT + file [LICENSE](https://github.com/scoyoc/climateAnalyzeR/blob/mas
 
 URL: [https://github.com/scoyoc/climateAnalyzeR](https://github.com/scoyoc/climateAnalyzeR)
 
-Materials: Coming soon.
-
-Documentation: Coming soon.
+Documentation: Just the [Wiki](https://github.com/scoyoc/climateAnalyzeR/wiki) for now, but a vignette is being developed.
 
 ## Installation
 
