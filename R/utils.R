@@ -36,7 +36,7 @@ climateAnalyzeR_theme <- ggplot2::theme_bw() +
 #-- Convert from imperial to metric
 # PRCP
 convert_prcp <- function(dat){
-  dat = dat %>%
+  dat = dat |>
     dplyr::mutate(dplyr::across(dplyr::contains("prcp"), ~(. * 25.4),
                                 .names = "{.col}_mm"),
                   dplyr::across(dplyr::contains("inches"), ~(. * 25.4),
@@ -45,7 +45,7 @@ convert_prcp <- function(dat){
 }
 # TEMP
 convert_temp <- function(dat){
-  dat = dat %>%
+  dat = dat |>
     dplyr::mutate(dplyr::across(dplyr::contains(c("tmax", "tmin")),
                                 ~(. - 32 * (5/9)), .names = "{.col}_c"))
   return(dat)

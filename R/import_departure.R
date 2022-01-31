@@ -32,9 +32,12 @@
 import_departure <- function(station_id, start_year, end_year,
                              month = 'all', norm_per = '1981-2010',
                              convert = FALSE){
+  station_id = 'natural_bridges_nm'
+  start_year = 2000
+  end_year = 2022
   # Pull montly data and omit NAs
   dat = pull_monthly(station_id, start_year, end_year, month = month,
-                 table_type = "30dep", norm_per = norm_per) |>
+                     table_type = "30dep", norm_per = norm_per) |>
     stats::na.omit()
   # Rename variables
   colnames(dat) = c("year", "month", "prcp_pctavg", "tmax_depart", "tmin_depart")
@@ -42,9 +45,9 @@ import_departure <- function(station_id, start_year, end_year,
   dat = dat  |>
     dplyr::mutate("year" = as.numeric(year),
                   "month" = as.numeric(month)) |>
-    tidyr::gather("var", "value", 3:ncol(.)) |>
+    tidyr::gather("var", "value", c(-1, -2)) |>
     tidyr::spread("month", "value", fill = NA) |>
-    tidyr::gather("month", "value", 3:ncol(.), convert = TRUE) |>
+    tidyr::gather("month", "value", c(-1, -2), convert = TRUE) |>
     tidyr::spread("var", "value", fill = NA) |>
     dplyr::arrange("year", "month")
 
