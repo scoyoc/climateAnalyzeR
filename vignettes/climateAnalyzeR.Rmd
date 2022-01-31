@@ -1,0 +1,23 @@
+---
+title: "climateAnalyzeR"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{climateAnalyzeR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+The primary function of this package is to produce brief climate reports using temperature and precipitation data from National Park Service Co-op stations using RMarkdown (*.Rmd). 
+Currently a water year (Oct-Sep) and annual (Jan-Dec) reports have been developed and need to be tested more thoroughly. 
+This package also imports vectorized data from [ClimateAnalyzer.org](http://climateanalyzer.org/) into R. 
+Currently  annual, monthly, and daily weather data and water balance models for Co-op stations are available.
+
+# Import data into R
+
+```{r setup}
+library(climateAnalyzeR)
+```
