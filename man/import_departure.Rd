@@ -2,7 +2,7 @@
 % Please edit documentation in R/import_departure.R
 \name{import_departure}
 \alias{import_departure}
-\title{Import monthly departure data from ClimateAnalyzer.org into R.}
+\title{Import monthly departure data}
 \usage{
 import_departure(
   station_id,
@@ -39,10 +39,15 @@ This function imports monthly departure data from
 \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 }
 \examples{
-# Import monthly departures and convert values to metric
-import_departure('natural_bridges_nm', 2000, 2010, convert = TRUE)
-# Import departures for the month of July
+# Import departures from 2000-2010
+import_departure('natural_bridges_nm', 2000, 2010)
+
+#' # Import departures for the month of July
 import_departure('natural_bridges_nm', 2000, 2010, month = 7)
+
+#' # Import monthly departures and convert values to metric
+import_departure('natural_bridges_nm', 2000, 2010, convert = TRUE)
+
 }
 \seealso{
 The \code{\link{import_data}} wrapper function.

@@ -2,7 +2,7 @@
 % Please edit documentation in R/stations.R
 \name{stations}
 \alias{stations}
-\title{Import station informaiton from ClimateAnalyzer.org}
+\title{Import station information}
 \usage{
 stations(my_name = NULL, my_stations = NULL, my_id = NULL)
 }

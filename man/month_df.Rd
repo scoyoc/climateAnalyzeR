@@ -7,9 +7,9 @@
 \format{
 A data frame with 12 rows and 4 variables:
 \describe{
-\item{month}{Integer. Calendar year month number where Jan is 1 and Dec is
+\item{month}{Integer. Calendar year month numbers where Jan is 1 and Dec is
 12.}
-\item{water_month}{Ingeger. Water year month number where Oct is 1 and Sep
+\item{water_month}{Integer. Water year month number where Oct is 1 and Sep
 is 12.}
 \item{water_name}{Factor. Abbreviated month name using
 \code{\link[month.abb]{month.abb}}. Factor levels correspond to
@@ -25,6 +25,7 @@ manual code
 month_df
 }
 \description{
-A dataset containing month numbers, 3-letter abbreviations, and season.
+A data set containing month numbers, 3-letter abbreviations, and season. This
+data set is imported into the RMarkdown scripts to produce reports.
 }
 \keyword{datasets}

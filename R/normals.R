@@ -1,12 +1,11 @@
-
-#' Import NOAA calculated normals from ClimateAnalyzer.org
+#' Import NOAA calculated normals
 #'
-#' This function imports 30-year normals from
+#' This function imports 30-year normals calculated by NOAA from
 #'     \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 #'
 #'
 #' @param ref_period The string for 30-year reference period. The user can choose
-#'     "1971-2000" or "1981-2010" Default is "1981-2010".
+#'     "1971-2000" or "1981-2010". Default is "1981-2010".
 #' @param my_stations Optional. A string to filter results by a station name.
 #'     Default is NULL. If NULL, a data frame of 30-year normals for all stations
 #'     on climateAnalyzer.org will be returned.
@@ -27,6 +26,7 @@
 #' normals(my_stations = "arches")
 #' # 1971-2000 normals for Arches National Park
 #' normals(ref_period = "1971-2000", my_stations = "arches")
+#'
 normals <- function(ref_period = "1981-2010", my_stations = NULL, tidy = TRUE){
   if (ref_period == "1971-2000"){
     my_url = "http://climateanalyzer.science/monthly/1971_2000_averages.csv"
@@ -46,11 +46,11 @@ normals <- function(ref_period = "1981-2010", my_stations = NULL, tidy = TRUE){
   names(dat) = janitor::make_clean_names(names(dat))
 
   # Force data type conversion
-  dat = dat[, 1:2] %>%
+  dat = dat[, 1:2] |>
     dplyr::bind_cols(
       suppressWarnings(dplyr::mutate_all(dat[, c(3:43)], as.numeric))
-    ) %>%
-    dplyr::bind_cols(dat[, 44:47]) %>%
+    ) |>
+    dplyr::bind_cols(dat[, 44:47]) |>
     dplyr::bind_cols(
       suppressWarnings(dplyr::mutate_all(dat[, c(48:length(dat))], as.numeric))
     )
@@ -59,22 +59,22 @@ normals <- function(ref_period = "1981-2010", my_stations = NULL, tidy = TRUE){
     # precipitation
     prcp = dplyr::select(dat, dplyr::contains("precip"))
     names(prcp) = c(month.abb, "Annual")
-    prcp = dplyr::bind_cols(dplyr::select(dat, "station_id", "id"), prcp) %>%
+    prcp = dplyr::bind_cols(dplyr::select(dat, "station_id", "id"), prcp) |>
       dplyr::mutate(element = "PRCP")
     # tmax
     tmax = dplyr::select(dat, dplyr::contains("tmax"))
     names(tmax) = c(month.abb, "Annual")
-    tmax = dplyr::bind_cols(dplyr::select(dat, "station_id", "id"), tmax) %>%
+    tmax = dplyr::bind_cols(dplyr::select(dat, "station_id", "id"), tmax) |>
       dplyr::mutate(element = "TMAX")
     # tmin
     tmin = dplyr::select(dat, dplyr::contains("tmin"), "annual")
     names(tmin) = c(month.abb, "Annual")
-    tmin = dplyr::bind_cols(dplyr::select(dat, "station_id", "id"), tmin) %>%
+    tmin = dplyr::bind_cols(dplyr::select(dat, "station_id", "id"), tmin) |>
       dplyr::mutate(element = "TMIN")
     # comgine temp and precp data sets and make tidy
-    dat = dplyr::bind_rows(prcp, tmax, tmin) %>%
-      tidyr::gather(month, value, Jan:Annual) %>%
-      dplyr::mutate(month = factor(month, levels = c(month.abb, "Annual"))) %>%
+    dat = dplyr::bind_rows(prcp, tmax, tmin) |>
+      tidyr::gather(month, value, Jan:Annual) |>
+      dplyr::mutate(month = factor(month, levels = c(month.abb, "Annual"))) |>
       dplyr::arrange(element, station_id, month)
   }
 

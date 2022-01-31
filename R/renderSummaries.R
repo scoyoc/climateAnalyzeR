@@ -19,12 +19,24 @@
 #' @export
 #'
 #' @examples
-#' # Render a report for Arches National Park for the 2020 water year.
+#'library(climateAnalyzeR)
+#'
+#'# Current water year summary for Arches National Park using the default station
+#'# name on ClimateAnalyzer.org
+#'renderSummary(my_report = "water_year", station_id = "arches")
+#'
+#'# Calendar year report for Island in the Sky for 2018 and changing the name used
+#'# in the report.
+#'renderSummary(my_report = "calendar_year", station_id = "canyonlands_theneck",
+#'              station_name = "Island in the Sky, Canyonlands National Park",
+#'              my_year = 2018)
+#'
 #' renderSummary()
 renderSummary = function(my_report, station_id, station_name = NULL,
                          my_year = NULL, my_dir = NULL) {
 
-  if(nrow(climateAnalyzeR::stations(my_stations = station_id) |> dplyr::distinct()) == 0){
+  if(nrow(climateAnalyzeR::stations(my_stations = station_id) |>
+            dplyr::distinct()) == 0){
     stop("Station ID name not recognized in station_id argument. Find the correct station ID by using climateAnalyzeR::stations() or by going to ClimateAnalyzer.org.")
   }
 

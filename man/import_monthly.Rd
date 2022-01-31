@@ -2,8 +2,7 @@
 % Please edit documentation in R/import_monthly.R
 \name{import_monthly}
 \alias{import_monthly}
-\title{Import monthly temperature and precipitation data from ClimateAnalyzer.org
-into R.}
+\title{Import monthly temperature and precipitation data}
 \usage{
 import_monthly(
   station_id,
@@ -36,10 +35,13 @@ This function imports monthly temperature and precipitation data from
 \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 }
 \examples{
-# Import monthly precipitation and temperature data and convert values to metric
-import_monthly('canyonlands_theneedle', 2000, 2010, convert = TRUE)
-# Import monthly precipitation and temperature data for the month of June
-import_monthly('canyonlands_theneedle', 2000, 2010, month = 6)
+# Import monthly precipitation and temperature data
+import_monthly('canyonlands_theneedle', 2000, 2010)
+
+# Import monthly precipitation and temperature data for the month of June and
+# convert values to metric
+import_monthly('canyonlands_theneedle', 2000, 2010, month = 6, convert = TRUE)
+
 }
 \seealso{
 The \code{\link{import_data}} wrapper function.

@@ -1,4 +1,4 @@
-#' Import monthly departure data from ClimateAnalyzer.org into R.
+#' Import monthly departure data
 #'
 #' This function imports monthly departure data from
 #'     \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
@@ -20,27 +20,32 @@
 #' @export
 #'
 #' @examples
-#' # Import monthly departures and convert values to metric
-#' import_departure('natural_bridges_nm', 2000, 2010, convert = TRUE)
-#' # Import departures for the month of July
+#' # Import departures from 2000-2010
+#' import_departure('natural_bridges_nm', 2000, 2010)
+#'
+#' #' # Import departures for the month of July
 #' import_departure('natural_bridges_nm', 2000, 2010, month = 7)
+#'
+#' #' # Import monthly departures and convert values to metric
+#' import_departure('natural_bridges_nm', 2000, 2010, convert = TRUE)
+#'
 import_departure <- function(station_id, start_year, end_year,
                              month = 'all', norm_per = '1981-2010',
                              convert = FALSE){
   # Pull montly data and omit NAs
   dat = pull_monthly(station_id, start_year, end_year, month = month,
-                 table_type = "30dep", norm_per = norm_per) %>%
+                 table_type = "30dep", norm_per = norm_per) |>
     stats::na.omit()
   # Rename variables
   colnames(dat) = c("year", "month", "prcp_pctavg", "tmax_depart", "tmin_depart")
   # Munge data so all months are included with NA's if there are missing data
-  dat = dat  %>%
+  dat = dat  |>
     dplyr::mutate("year" = as.numeric(year),
-                  "month" = as.numeric(month)) %>%
-    tidyr::gather("var", "value", 3:ncol(.)) %>%
-    tidyr::spread("month", "value", fill = NA) %>%
-    tidyr::gather("month", "value", 3:ncol(.), convert = TRUE) %>%
-    tidyr::spread("var", "value", fill = NA) %>%
+                  "month" = as.numeric(month)) |>
+    tidyr::gather("var", "value", 3:ncol(.)) |>
+    tidyr::spread("month", "value", fill = NA) |>
+    tidyr::gather("month", "value", 3:ncol(.), convert = TRUE) |>
+    tidyr::spread("var", "value", fill = NA) |>
     dplyr::arrange("year", "month")
 
   # Convert to metric

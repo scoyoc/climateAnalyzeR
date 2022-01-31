@@ -5,39 +5,49 @@
 \title{Render reports}
 \usage{
 renderSummary(
+  my_report,
   station_id,
   station_name = NULL,
   my_year = NULL,
-  my_report = "water_year",
   my_dir = NULL
 )
 }
 \arguments{
-\item{station_id}{The name of the weather station of interest from
-\code{\link[climateAnalyzeR::stations]{stations}}.}
+\item{my_report}{Type of report to render. The options are a calendar
+year ("calendar_year") and a water year ("water_year") report.}
+
+\item{station_id}{The "station_id" field for the weather station of interest
+from \code{\link[climateAnalyzeR::stations]{stations}}.}
 
 \item{station_name}{Optional. A string to be use for the station name in the
 report. Default is NULL. If NULL the station name will be pulled from
 \code{\link[climateAnalyzeR::stations]{stations}}. This is displayed in
-several location in the report and the default name of the weather
-station can be changed.}
+several location in the report and the default name can be changed.}
 
-\item{my_year}{The four-digit for the year of interest. Default is NULL. The
-current year will be used if default is used.}
+\item{my_year}{Optional. The four-digit year of interest. Default is NULL. The
+current year will be used if left as NULL.}
 
 \item{my_dir}{Optional. String of directory path to save report to. Default
 is NULL. If NULL, the report is saved to the your desktop.}
-
-\item{report}{Type of report to render. Currently the only option is a water
-year ("water_year") report.}
 }
 \value{
 A PDF.
 }
 \description{
-This funciton will render a PDF report from an RMarkdown (Rmd) script.
+This function will render a PDF report from an RMarkdown (Rmd) script.
 }
 \examples{
-# Render a report for Arches National Park for the 2020 water year.
-renderSummary(station_id = "arches", station_name = "Arches National Park", my_year = 2020)
+library(climateAnalyzeR)
+
+# Current water year summary for Arches National Park using the default station
+# name on ClimateAnalyzer.org
+renderSummary(my_report = "water_year", station_id = "arches")
+
+# Calendar year report for Island in the Sky for 2018 and changing the name used
+# in the report.
+renderSummary(my_report = "calendar_year", station_id = "canyonlands_theneck",
+             station_name = "Island in the Sky, Canyonlands National Park",
+             my_year = 2018)
+
+renderSummary()
 }

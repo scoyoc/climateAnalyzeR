@@ -2,13 +2,13 @@
 % Please edit documentation in R/normals.R
 \name{normals}
 \alias{normals}
-\title{Import NOAA calculated normals from ClimateAnalyzer.org}
+\title{Import NOAA calculated normals}
 \usage{
 normals(ref_period = "1981-2010", my_stations = NULL, tidy = TRUE)
 }
 \arguments{
 \item{ref_period}{The string for 30-year reference period. The user can choose
-"1971-2000" or "1981-2010" Default is "1981-2010".}
+"1971-2000" or "1981-2010". Default is "1981-2010".}
 
 \item{my_stations}{Optional. A string to filter results by a station name.
 Default is NULL. If NULL, a data frame of 30-year normals for all stations
@@ -27,7 +27,7 @@ temperatures.}
 A \code{\link[tibble:tibble]{tibble}}.
 }
 \description{
-This function imports 30-year normals from
+This function imports 30-year normals calculated by NOAA from
 \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 }
 \examples{
@@ -35,4 +35,5 @@ This function imports 30-year normals from
 normals(my_stations = "arches")
 # 1971-2000 normals for Arches National Park
 normals(ref_period = "1971-2000", my_stations = "arches")
+
 }

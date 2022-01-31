@@ -1,4 +1,4 @@
-#' Import station informaiton from ClimateAnalyzer.org
+#' Import station information
 #'
 #' This function imports weather station information from
 #'     \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
@@ -44,7 +44,7 @@ stations <- function(my_name = NULL, my_stations = NULL, my_id = NULL){
       dat = dplyr::filter(dat, station_id %in% my_stations)
       } else if(!is.null(my_id)){
         dat = dplyr::filter(dat, id %in% my_id)
-        }
+        } else (message("Station ID name not recognized in station_id argument. Find the correct station ID by using climateAnalyzeR::stations() or by going to ClimateAnalyzer.org."))
 
   return(dplyr::select(dat, "name", "station_id", "id", "type", "lat", "lon",
                 "elev_m", "years_avail", "years_segments", "data_url"))

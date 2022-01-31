@@ -1,4 +1,4 @@
-#' Import daily weather data from ClimateAnalyzer.org into R.
+#' Import daily weather data
 #'
 #' This function imports daily temperature and precipitation data from
 #'     \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
@@ -20,7 +20,9 @@
 #' import_daily("hans_flat_rs", 2010, 2020)
 #' # Import daily temperature and precipitation data and convert values to metric
 #' import_daily("hans_flat_rs", 2010, 2020, convert = TRUE)
+#'
 import_daily <- function(station_id, start_year, end_year, convert = FALSE){
+
   my_url = paste0("http://climateanalyzer.science/python/u_thresh.py?station=",
                   station_id, "&year1=", start_year, "&year2=", end_year, "&title=",
                   station_id, "&lowerthresh=daily&upperthresh=70&station_type=GHCN&csv=true&param=temperature&time_mode=year&first_month=01&last_month=12&ann_sum=False&screen_blanks=False")

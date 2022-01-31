@@ -2,7 +2,7 @@
 % Please edit documentation in R/import_daily.R
 \name{import_daily}
 \alias{import_daily}
-\title{Import daily weather data from ClimateAnalyzer.org into R.}
+\title{Import daily weather data}
 \usage{
 import_daily(station_id, start_year, end_year, convert = FALSE)
 }
@@ -30,6 +30,7 @@ This function imports daily temperature and precipitation data from
 import_daily("hans_flat_rs", 2010, 2020)
 # Import daily temperature and precipitation data and convert values to metric
 import_daily("hans_flat_rs", 2010, 2020, convert = TRUE)
+
 }
 \seealso{
 The \code{\link{import_data}} wrapper function.

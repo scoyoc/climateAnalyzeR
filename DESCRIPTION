@@ -12,8 +12,7 @@ Description: This package creates a brief climate report for National Park
     Data abailable to import are temperature, precipitation, and soil water 
     balance models.
 Depends: 
-    R (>= 4.0),
-    tidyr (>= 1.1.2)
+    R (>= 4.0)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -36,6 +35,8 @@ Imports:
     stats,
     stringr,
     tibble,
+    tidyr,
     XML
 Suggests: 
     tidyverse
+VignetteBuilder: knitr

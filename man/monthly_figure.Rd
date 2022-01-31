@@ -2,7 +2,7 @@
 % Please edit documentation in R/monthly_figure.R
 \name{monthly_figure}
 \alias{monthly_figure}
-\title{Grouped Line Figure}
+\title{Monthly Figure}
 \usage{
 monthly_figure(
   x_var,
@@ -16,7 +16,7 @@ monthly_figure(
 )
 }
 \arguments{
-\item{x_var}{A vector of hte x-variable.}
+\item{x_var}{A vector of the x-variable.}
 
 \item{y_var}{A vector of the y-variable.}
 
@@ -40,9 +40,22 @@ the figure.}
 A ggplot object.
 }
 \description{
-This function produces a standardized line graph the is grouped by year. This
-figure is used in RMarkdown scrips.
+This function produces a standardized line graph with colored area under the
+line and a trend line. This figure is used for monthly measurements (e.g.,
+precipitation or temperature) in RMarkdown scrips to produce reports.
 }
 \examples{
+# Import monthly departures and convert values to metric
+dat <- import_data("departure", 'natural_bridges_nm', 2000, 2020) \%>\%
+  # Create month data frame to make x axis lables
+  dplyr::left_join(data.frame('month' = 1:12,
+                              'month_abb' = factor(month.abb,
+                                                   levels = month.abb)))
+# Plot data
+monthly_figure(x_var = dat$month_abb, y_var = dat$tmax_depart,
+               year_group = dat$year, y_intercept = 0, my_year = 2020,
+               line_color = "red3",
+               my_title = "Daily Maximum Temperature Montly Departure, Natural Bridges National Monument",
+               my_ylab = "Departure (°F)")
 
 }

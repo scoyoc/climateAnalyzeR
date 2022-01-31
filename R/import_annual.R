@@ -1,4 +1,4 @@
-#' Import annual temperature and precipitation data from ClimateAnalyzer.org into R.
+#' Import annual temperature and precipitation data
 #'
 #' This function imports annual temperature and precipitation data from
 #'     \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
@@ -22,13 +22,17 @@
 #' @export
 #'
 #' @examples
-#' # Import annual temperature and precipitation data and convert values to metric
-#' import_annual("canyonlands_theneck", 1980, 2020, convert = TRUE)
-#' # Import annual temperature and precipitation data and remove columns of missing
-#' # values tally.
+#' # Import annual temperature and precipitation data and remove columns of
+#' # missing values.
 #' import_annual("canyonlands_theneck", 1980, 2020, remove_missing = FALSE)
+#'
+#' # Same as above and convert values to metric
+#' import_annual("canyonlands_theneck", 1980, 2020, remove_missing = FALSE,
+#'               convert = TRUE)
+#'
 import_annual = function(station_id, start_year, end_year, screen_blanks = 'true',
                          remove_missing = TRUE, convert = FALSE){
+
   my_url = paste0("http://climateanalyzer.science/python/u_thresh.py?station=",
                   station_id, "&year1=", end_year, "&year2=", start_year,
                   "&title=", station_id,

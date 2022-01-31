@@ -2,7 +2,7 @@
 % Please edit documentation in R/import_annual.R
 \name{import_annual}
 \alias{import_annual}
-\title{Import annual temperature and precipitation data from ClimateAnalyzer.org into R.}
+\title{Import annual temperature and precipitation data}
 \usage{
 import_annual(
   station_id,
@@ -41,11 +41,14 @@ This function imports annual temperature and precipitation data from
 \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 }
 \examples{
-# Import annual temperature and precipitation data and convert values to metric
-import_annual("canyonlands_theneck", 1980, 2020, convert = TRUE)
-# Import annual temperature and precipitation data and remove columns of missing
-# values tally.
+# Import annual temperature and precipitation data and remove columns of
+# missing values.
 import_annual("canyonlands_theneck", 1980, 2020, remove_missing = FALSE)
+
+# Same as above and convert values to metric
+import_annual("canyonlands_theneck", 1980, 2020, remove_missing = FALSE,
+              convert = TRUE)
+
 }
 \seealso{
 The \code{\link{import_data}} wrapper function.
