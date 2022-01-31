@@ -33,6 +33,7 @@
 #'
 import_water_balance <- function(station_id, start_year, end_year, table_type,
                                  pet_type, soil_water, forgiving){
+
   my_url = paste0("http://www.climateanalyzer.science/python/wb.py?station=",
                   station_id, "&title=", station_id, "&pet_type=", pet_type,
                   "&max_soil_water=", soil_water, "&graph_table=table&",
@@ -60,7 +61,7 @@ import_water_balance <- function(station_id, start_year, end_year, table_type,
                     "water_input_to_soil_mm", "runoff_mm", "soil_water_mm",
                     "tmax_c", "tmin_c", "tmean_c",
                     "accum_growing_deg_days_c", "pet_mm", "aet_mm") |>
-      dplyr::mutate_at(c(3:ncol(.)), as.numeric)
+      dplyr::mutate_at(c(3:17), as.numeric)
     return(tibble::as_tibble(dat))
   }
 
@@ -75,7 +76,7 @@ import_water_balance <- function(station_id, start_year, end_year, table_type,
                     "water_input_to_soil_mm", "runoff_mm", "soil_water_mm",
                     "tmax_c", "tmin_c", "tmean_c",
                     "accum_growing_deg_days_c", "pet_mm", "aet_mm") |>
-      dplyr::mutate_at(c(2:ncol(.)), as.numeric)
+      dplyr::mutate_at(c(2:16), as.numeric)
     return(tibble::as_tibble(dat))
   }
 }

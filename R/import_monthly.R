@@ -37,9 +37,9 @@ import_monthly <- function(station_id, start_year, end_year, month = 'all',
   dat = dat  |>
     dplyr::mutate("year" = as.numeric(year),
                   "month" = as.numeric(month)) |>
-    tidyr::gather("var", "value", 3:ncol(.)) |>
+    tidyr::gather("var", "value", c(-1, -2)) |>
     tidyr::spread("month", "value", fill = NA) |>
-    tidyr::gather("month", "value", 3:ncol(.), convert = TRUE) |>
+    tidyr::gather("month", "value", c(-1, -2), convert = TRUE) |>
     tidyr::spread("var", "value", fill = NA) |>
     dplyr::arrange("year", "month")
 
