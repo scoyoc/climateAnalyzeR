@@ -37,8 +37,8 @@ normals <- function(ref_period = "1981-2010", my_stations = NULL, tidy = TRUE){
   dat = suppressMessages(
     suppressWarnings(
       readr::read_csv(my_url, col_names = TRUE, na = "N/A",
-                      skip_empty_rows = TRUE) %>%
-        dplyr::select(!dplyr::starts_with("X")) %>%
+                      skip_empty_rows = TRUE) |>
+        dplyr::select(!dplyr::starts_with("X")) |>
         dplyr::rename("station_id" = 'Station Name',
                       "id" = 'Station ID')
     )

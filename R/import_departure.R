@@ -32,9 +32,6 @@
 import_departure <- function(station_id, start_year, end_year,
                              month = 'all', norm_per = '1981-2010',
                              convert = FALSE){
-  station_id = 'natural_bridges_nm'
-  start_year = 2000
-  end_year = 2022
   # Pull montly data and omit NAs
   dat = pull_monthly(station_id, start_year, end_year, month = month,
                      table_type = "30dep", norm_per = norm_per) |>
