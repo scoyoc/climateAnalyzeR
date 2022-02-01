@@ -13,9 +13,9 @@ The plan is to include water balance summaries to the RMarkdown scripts in the f
 
 Version: 0.1.0
 
-Depends: R (>= 4.0), tidyr (>= 1.1.2)
+Depends: R (>= 4.0)
 
-Imports: cowplot, dplyr, ggplot2, glue, grid, gridExtra, knitr, janitor, lubridate, readr, rmarkdown, shadowtext, stats, stringr, tibble, XML
+Imports: cowplot, dplyr, ggplot2, glue, grid, gridExtra, knitr, janitor, lubridate, readr, rmarkdown, shadowtext, stats, stringr, tidyr, tibble, XML
 
 Suggests: ggmap, tidyverse, qpdf
 
