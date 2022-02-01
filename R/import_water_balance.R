@@ -3,9 +3,11 @@
 #' This function imports daily or monthly water balance data from
 #'     \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 #'
-#' @param station_id The character string of the station ID.
+#' @param station_id The character string of the \emph{station_id} field from
+#'     \code{\link{stations}}.
 #' @param start_year The four digit number of the first year of interest.
-#' @param end_year The four digit number of the last year of interest.
+#' @param end_year The four digit number of the last year of interest. Default
+#'     is NULL. If NULL, current year will be used.
 #' @param table_type A character string for 'daily' or 'monthly' data.
 #' @param pet_type A character string for the model type. Options are 'hamon' or
 #'     'Penman_Montieth'.
@@ -14,7 +16,7 @@
 #' @param forgiving A string for the tolerance of the model. Options are 'no',
 #'     'mild' and 'very'. Default is 'very'.
 #'
-#' @return A \code{\link[tibble:tibble]{tibble}}.
+#' @return A \code{\link[tibble:tibble]{name}}.
 #' @seealso The \code{\link{import_data}} wrapper function.
 #' @export
 #'
@@ -22,18 +24,19 @@
 #' library(climateAnalyzeR)
 #'
 #' # Import monthly water balance data using the Hamon model
-#' import_water_balance("bryce_canyon_np", 2015, 2020, table_type = "monthly",
-#'                      soil_water = 100, pet_type = "hamon",
-#'                      forgiving = "very")
+#' import_water_balance(station_id = "bryce_canyon_np", start_year = 2015,
+#'                      end_year = 2020, table_type = "monthly", soil_water = 100,
+#'                      pet_type = "hamon", forgiving = "very")
 #'
 #' # Import daily water balance data using the Penman Montieth model
-#' import_water_balance("bryce_canyon_np", 2015, 2020, table_type = "daily",
-#'                      soil_water = 100, pet_type = "Penman_Montieth",
-#'                      forgiving = "very")
+#' import_water_balance(station_id = "pipe_springs_nm", start_year = 2015,
+#'                      end_year = 2020, table_type = "daily", soil_water = 100,
+#'                      pet_type = "Penman_Montieth", forgiving = "very")
 #'
-import_water_balance <- function(station_id, start_year, end_year, table_type,
-                                 pet_type, soil_water = 100, forgiving = 'very'){
+import_water_balance <- function(station_id, start_year, end_year = NULL,
+                                 table_type, pet_type, soil_water = 100, forgiving = 'very'){
 
+  if(is.null(end_year)){end_year = lubridate::year(lubridate::today())}
   my_url = paste0("http://www.climateanalyzer.science/python/wb.py?station=",
                   station_id, "&title=", station_id, "&pet_type=", pet_type,
                   "&max_soil_water=", soil_water, "&graph_table=table&",

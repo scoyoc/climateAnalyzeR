@@ -67,7 +67,7 @@ r_ver <- paste(info$R.version$major, info$R.version$minor, sep=".")
 
 ```{r Data, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
 #-- Retrieve station metadata
-my_station <- stations(my_stations = station_id) %>%
+my_station <- stations(station_id = station_id) %>%
   dplyr::distinct()
 yrs_avail <- as.numeric(stringr::str_split(my_station$years_avail,
                                            pattern = ";", simplify = T))
@@ -78,7 +78,7 @@ my_station <- my_station %>%
                 "name" = station_name)
 
 #-- 30-year Normals
-normals_30yr <- normals(my_stations = station_id) %>%
+normals_30yr <- normals(station_id = station_id) %>%
   tidyr::spread("element", "value")
 annual_30yr <- normals_30yr %>%
   dplyr::filter(month == "Annual") %>%

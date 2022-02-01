@@ -6,9 +6,9 @@
 #'
 #' @param ref_period The string for 30-year reference period. The user can choose
 #'     "1971-2000" or "1981-2010". Default is "1981-2010".
-#' @param my_stations Optional. A string to filter results by a station name.
-#'     Default is NULL. If NULL, a data frame of 30-year normals for all stations
-#'     on climateAnalyzer.org will be returned.
+#' @param station_id Optional. The character string of the \emph{station_id}
+#'     field from \code{\link{stations}}. Default is NULL. If NULL, a data frame
+#'     of 30-year normals for all stations will be returned.
 #' @param tidy Logical. Returns tidy data. Default is TRUE.
 #'     \describe{
 #'         \item{TRUE}{Returns a tidy data frame of temperature (tmax and tmin)
@@ -18,20 +18,23 @@
 #'         \item{FALSE}{Returns the raw dat from ClimateAnalyzer.org.}
 #'     }
 #'
-#' @return A \code{\link[tibble:tibble]{tibble}}.
+#' @return A \code{\link[tibble:tibble]{name}}.
 #' @export
 #'
 #' @examples
 #' library(climateAnalyzeR)
 #'
 #' # Import 1981-2010 normals. Default.
-#' normals(my_stations = "capitol_reef_np")
+#' normals(station_id = "capitol_reef_np")
 #'
-#' # Import 1971-2000 normals for multiple stations.
-#' normals(ref_period = "1971-2000", my_stations = c("blue_mesa_lake", "cimarron",
-#'                                                   "black_canyon_of_the_gunnison"))
+#' # Import 1971-2000 normals for multiple stations
+#' normals(ref_period = "1971-2000",
+#'         station_id = c("dinosaur_nm", "dinosaur_quarry_area"))
 #'
-normals <- function(ref_period = "1981-2010", my_stations = NULL, tidy = TRUE){
+normals <- function(ref_period = "1981-2010", station_id = NULL, tidy = TRUE){
+
+  my_stations = station_id
+
   if (ref_period == "1971-2000"){
     my_url = "http://climateanalyzer.science/monthly/1971_2000_averages.csv"
   } else if (ref_period == "1981-2010"){

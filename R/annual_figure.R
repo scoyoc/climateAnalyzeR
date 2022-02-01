@@ -10,11 +10,11 @@
 #'     vector of measurements (e.g., PRCP or TEMP).
 #' @param my_year A number for the your of interest.
 #' @param normal A number for the annual normal temperature or precipitation.
-#'     Typically from \code{\link[climateAnalyzeR::normals]{normals}}.
+#'     Typically from \code{\link{normals}}.
 #' @param reference_period Character string for the reference period used for
 #'     normals (e.g., "1981-2010").
 #' @param area_color A character string for the color of the area. See
-#'     \code{\link[grDevices::colors]{colors}} for a list of color names.
+#'     \code{\link[grDevices::colors]{name}} for a list of color names.
 #' @param line_color A character string for the line color.
 #' @param my_title A character string for the title.
 #' @param my_ylab A character string from the y-axis.
@@ -25,13 +25,15 @@
 #' @examples
 #' library(climateAnalyzeR)
 #'
-#' # Import annual data from ClimateAnalyzer.org
+#' # Set my station
 #' my_station <- "colorado_nm"
-#' dat <-  import_data("annual_wx", my_station, 1980, 2020,
-#'                     remove_missing = FALSE)
+#'
+#' # Import annual data from ClimateAnalyzer.org
+#' dat <-  import_data(data_type = "annual_wx", station_id =  my_station,
+#'                     start_year = 1980, end_year = 2020)
 #'
 #' # Import NOAA calculated normals
-#' dat.30yr.prcp <- normals(my_stations = my_station) |>
+#' dat.30yr.prcp <- normals(station_id = my_station) |>
 #'   dplyr::filter(element == "PRCP" & month == "Annual")
 #'
 #' # Plot data
@@ -58,9 +60,12 @@ annual_figure <- function(x_var, y_var, my_year, normal, reference_period,
                        fill = area_color, alpha = 0.5, na.rm = TRUE) +
     ggplot2::geom_hline(ggplot2::aes(yintercept = normal),
                         linetype = "dashed", size = 0.5, color = "black") +
-    ggplot2::geom_line(stat = "identity", color = line_color, size = 1) +
-    ggplot2::geom_point(stat = "identity", color = line_color, size = 2) +
-    ggplot2::geom_smooth(method = "lm", se = FALSE, color = "blue") +
+    ggplot2::geom_line(stat = "identity", color = line_color, size = 1,
+                       na.rm = TRUE) +
+    ggplot2::geom_point(stat = "identity", color = line_color, size = 2,
+                        na.rm = TRUE) +
+    ggplot2::geom_smooth(method = "lm", se = FALSE, color = "blue",
+                         na.rm = TRUE) +
     ggplot2::geom_point(data = dplyr::filter(dat, x == my_year),
                         stat = "identity", shape = 21, color = "black",
                         fill = line_color, size = 4) +
@@ -74,6 +79,7 @@ annual_figure <- function(x_var, y_var, my_year, normal, reference_period,
                                       ceiling(max(y_var, na.rm = T)))) +
     ggplot2::labs(title = my_title, y = my_ylab) +
     climateAnalyzeR_theme
+
   return(gg)
 }
 

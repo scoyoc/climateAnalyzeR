@@ -3,9 +3,11 @@
 #' This function imports monthly temperature and precipitation data from
 #'     \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 #'
-#' @param station_id The character string of the station ID.
+#' @param station_id The character string of the \emph{station_id} field from
+#'     \code{\link{stations}}.
 #' @param start_year The four digit number of the first year of interest.
-#' @param end_year The four digit number of the last year of interest.
+#' @param end_year The four digit number of the last year of interest. Default
+#'     is NULL. If NULL, current year will be used.
 #' @param month A number for the month, 1 for January through 12 for December
 #'     or 'all' for all months. Default is 'all'.
 #' @param convert Logical. If TRUE, data are precipitation and temperature
@@ -13,7 +15,7 @@
 #'     additional columns in the data frame denoted by "_mm" or "_C". Default is
 #'     FALSE.
 #'
-#' @return A \code{\link[tibble:tibble]{tibble}}.
+#' @return A \code{\link[tibble:tibble]{name}}.
 #' @seealso The \code{\link{import_data}} wrapper function.
 #' @export
 #'
@@ -21,14 +23,18 @@
 #' library(climateAnalyzeR)
 #'
 #' # Import monthly precipitation and temperature data
-#' import_monthly('canyonlands_theneedle', 2000, 2010)
+#' import_monthly(station_id = 'canyonlands_theneedle', start_year = 2000,
+#'                end_year = 2010)
 #'
 #' # Import monthly precipitation and temperature data for the month of June and
 #' # convert values to metric
-#' import_monthly('canyonlands_theneedle', 2000, 2010, month = 6, convert = TRUE)
+#' import_monthly(station_id = 'canyonlands_theneedle', start_year = 2000,
+#'                end_year = 2010, month = 6, convert = TRUE)
 #'
-import_monthly <- function(station_id, start_year, end_year, month = 'all',
-                             convert = FALSE){
+import_monthly <- function(station_id, start_year, end_year = NULL,
+                           month = 'all', convert = FALSE){
+
+  if(is.null(end_year)){end_year = lubridate::year(lubridate::today())}
   # Pull monthly data and omit NAs
   dat = pull_monthly(station_id, start_year, end_year, month,
                        table_type = "straight", norm_per = 'null') |>
