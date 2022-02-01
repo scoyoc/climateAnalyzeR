@@ -46,6 +46,8 @@ stations <- function(my_name = NULL, my_stations = NULL, my_id = NULL){
         dat = dplyr::filter(dat, id %in% my_id)
         } else (message("Station ID name not recognized in station_id argument. Find the correct station ID by using climateAnalyzeR::stations() or by going to ClimateAnalyzer.org."))
 
-  return(dplyr::select(dat, "name", "station_id", "id", "type", "lat", "lon",
-                "elev_m", "years_avail", "years_segments", "data_url"))
+  dat <- dplyr::select(dat, "name", "station_id", "id", "type", "lat", "lon",
+                "elev_m", "years_avail", "years_segments", "data_url") |>
+    unique()
+  return(dat)
 }
