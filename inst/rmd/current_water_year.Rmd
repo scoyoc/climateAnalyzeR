@@ -17,6 +17,7 @@ urlcolor: blue
 #-- Packages
 # devtools::install_github("scoyoc/climateAnalyzeR")
 library("climateAnalyzeR")
+library("tidyr")
 
 #-- Functions
 # Number Contraction --
