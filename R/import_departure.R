@@ -6,8 +6,8 @@
 #' @param station_id The character string of the station ID.
 #' @param start_year The four digit number of the first year of interest.
 #' @param end_year The four digit number of the last year of interest.
-#' @param month The month number (i.e., 1 for January through 12 for December)
-#'     or 'all' for all months. Dafault is 'all'.
+#' @param month A number for the month, 1 for January through 12 for December
+#'     or 'all' for all months. Default is 'all'.
 #' @param norm_per A character string for the 30-year normalization period.
 #'     Either '1971-2000' or '1981-2010'. Default is '1981-2010'.
 #' @param convert Logical. If TRUE, data are precipitation and temperature
@@ -20,14 +20,13 @@
 #' @export
 #'
 #' @examples
-#' # Import departures from 2000-2010
+#' library(climateAnalyzeR)
+#'
+#' # Import monthly departures
 #' import_departure('natural_bridges_nm', 2000, 2010)
 #'
-#' #' # Import departures for the month of July
-#' import_departure('natural_bridges_nm', 2000, 2010, month = 7)
-#'
-#' #' # Import monthly departures and convert values to metric
-#' import_departure('natural_bridges_nm', 2000, 2010, convert = TRUE)
+#' # Import departures for the month of July  and convert values to metric
+#' import_departure('natural_bridges_nm', 2000, 2010, month = 7, convert = TRUE)
 #'
 import_departure <- function(station_id, start_year, end_year,
                              month = 'all', norm_per = '1981-2010',

@@ -7,32 +7,32 @@
 #' @param start_year The four digit number of the first year of interest.
 #' @param end_year The four digit number of the last year of interest.
 #' @param table_type A character string for 'daily' or 'monthly' data.
-#' @param pet_type A character string for the model type. Options are 'Hamon' or
+#' @param pet_type A character string for the model type. Options are 'hamon' or
 #'     'Penman_Montieth'.
-#' @param soil_water a number (integer) for the soil depth in millimeter. If you
-#'     are not sure use 100.
+#' @param soil_water a number (integer) for the soil depth in millimeter.
+#'     Default is 100cm. If you are not sure use the default.
 #' @param forgiving A string for the tolerance of the model. Options are 'no',
-#'     'mild' and 'very'.
+#'     'mild' and 'very'. Default is 'very'.
 #'
 #' @return A \code{\link[tibble:tibble]{tibble}}.
 #' @seealso The \code{\link{import_data}} wrapper function.
 #' @export
 #'
 #' @examples
-#' # Import monthly water balance data using the Hamon model with soil water
-#' # capacity set to 100.
-#' import_water_balance("arches", 2015, 2020, table_type = "monthly",
+#' library(climateAnalyzeR)
+#'
+#' # Import monthly water balance data using the Hamon model
+#' import_water_balance("bryce_canyon_np", 2015, 2020, table_type = "monthly",
 #'                      soil_water = 100, pet_type = "hamon",
 #'                      forgiving = "very")
 #'
-#' # Import daily water balance data using the Hamon model with soil water
-#' # capacity set to 50
-#' import_water_balance("arches", 2015, 2020, table_type = "daily",
+#' # Import daily water balance data using the Penman Montieth model
+#' import_water_balance("bryce_canyon_np", 2015, 2020, table_type = "daily",
 #'                      soil_water = 100, pet_type = "Penman_Montieth",
 #'                      forgiving = "very")
 #'
 import_water_balance <- function(station_id, start_year, end_year, table_type,
-                                 pet_type, soil_water, forgiving){
+                                 pet_type, soil_water = 100, forgiving = 'very'){
 
   my_url = paste0("http://www.climateanalyzer.science/python/wb.py?station=",
                   station_id, "&title=", station_id, "&pet_type=", pet_type,

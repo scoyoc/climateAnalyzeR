@@ -12,8 +12,8 @@
 #' @param tidy Logical. Returns tidy data. Default is TRUE.
 #'     \describe{
 #'         \item{TRUE}{Returns a tidy data frame of temperature (tmax and tmin)
-#'             and precipitation data. This option dropps seasonl earlies/last
-#'             dates for temperatures and number of days above of below
+#'             and precipitation data. This option drops seasonal earliest/last
+#'             dates for temperatures and number of days above/below
 #'             temperatures.}
 #'         \item{FALSE}{Returns the raw dat from ClimateAnalyzer.org.}
 #'     }
@@ -22,10 +22,14 @@
 #' @export
 #'
 #' @examples
-#' # 1981-2010 normals for Arches National Park
-#' normals(my_stations = "arches")
-#' # 1971-2000 normals for Arches National Park
-#' normals(ref_period = "1971-2000", my_stations = "arches")
+#' library(climateAnalyzeR)
+#'
+#' # Import 1981-2010 normals. Default.
+#' normals(my_stations = "capitol_reef_np")
+#'
+#' # Import 1971-2000 normals for multiple stations.
+#' normals(ref_period = "1971-2000", my_stations = c("blue_mesa_lake", "cimarron",
+#'                                                   "black_canyon_of_the_gunnison"))
 #'
 normals <- function(ref_period = "1981-2010", my_stations = NULL, tidy = TRUE){
   if (ref_period == "1971-2000"){

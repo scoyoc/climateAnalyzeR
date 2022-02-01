@@ -14,12 +14,15 @@
 #' @export
 #'
 #' @examples
+#' library(climateAnalyzeR)
+#'
 #' # Import all information for all stations.
 #' stations()
 #'
 #' # Filter station by name
 #' stations(my_stations = "arches")
 #' stations(my_id = c("426053", "424100"))
+#'
 stations <- function(my_name = NULL, my_stations = NULL, my_id = NULL){
   dat = suppressMessages(
     suppressWarnings(

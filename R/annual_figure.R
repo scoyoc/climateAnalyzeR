@@ -23,17 +23,22 @@
 #' @export
 #'
 #' @examples
+#' library(climateAnalyzeR)
+#'
 #' # Import annual data from ClimateAnalyzer.org
-#' dat <-  import_data("annual_wx", "canyonlands_theneck", 1980, 2020,
+#' my_station <- "colorado_nm"
+#' dat <-  import_data("annual_wx", my_station, 1980, 2020,
 #'                     remove_missing = FALSE)
+#'
 #' # Import NOAA calculated normals
-#' dat.30yr.prcp <- normals(my_stations = "canyonlands_theneck") %>%
+#' dat.30yr.prcp <- normals(my_stations = my_station) |>
 #'   dplyr::filter(element == "PRCP" & month == "Annual")
+#'
 #' # Plot data
-#' annual_figure(x_var = dat$year, y_var = dat$prcp_wy, my_year = 2018,
+#' annual_figure(x_var = dat$year, y_var = dat$prcp_wy, my_year = 2019,
 #'               normal = dat.30yr.prcp$value, reference_period = "1981-2010",
 #'               area_color = "green3", line_color = "darkgreen",
-#'               my_title = "Annual Precipitation, Island in the Sky, Canyonlands NP",
+#'               my_title = "Annual Precipitation, Colorado National Monument",
 #'               my_ylab = "PRCP (inches)")
 #'
 annual_figure <- function(x_var, y_var, my_year, normal, reference_period,

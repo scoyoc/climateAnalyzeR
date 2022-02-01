@@ -6,8 +6,8 @@
 #' @param station_id The character string of the station ID.
 #' @param start_year The four digit number of the first year of interest.
 #' @param end_year The four digit number of the last year of interest.
-#' @param month The month number (i.e., 1 for January through 12 for December)
-#'     or 'all' for all months.
+#' @param month A number for the month, 1 for January through 12 for December
+#'     or 'all' for all months. Default is 'all'.
 #' @param convert Logical. If TRUE, data are precipitation and temperature
 #'     values are converted to metric. These converted values are included as
 #'     additional columns in the data frame denoted by "_mm" or "_C". Default is
@@ -18,6 +18,8 @@
 #' @export
 #'
 #' @examples
+#' library(climateAnalyzeR)
+#'
 #' # Import monthly precipitation and temperature data
 #' import_monthly('canyonlands_theneedle', 2000, 2010)
 #'

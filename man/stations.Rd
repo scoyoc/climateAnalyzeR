@@ -24,10 +24,13 @@ This function imports weather station information from
 \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 }
 \examples{
+library(climateAnalyzeR)
+
 # Import all information for all stations.
 stations()
 
 # Filter station by name
 stations(my_stations = "arches")
 stations(my_id = c("426053", "424100"))
+
 }

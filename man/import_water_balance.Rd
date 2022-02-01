@@ -10,8 +10,8 @@ import_water_balance(
   end_year,
   table_type,
   pet_type,
-  soil_water,
-  forgiving
+  soil_water = 100,
+  forgiving = "very"
 )
 }
 \arguments{
@@ -23,14 +23,14 @@ import_water_balance(
 
 \item{table_type}{A character string for 'daily' or 'monthly' data.}
 
-\item{pet_type}{A character string for the model type. Options are 'Hamon' or
+\item{pet_type}{A character string for the model type. Options are 'hamon' or
 'Penman_Montieth'.}
 
-\item{soil_water}{a number (integer) for the soil depth in millimeter. If you
-are not sure use 100.}
+\item{soil_water}{a number (integer) for the soil depth in millimeter.
+Default is 100cm. If you are not sure use the default.}
 
 \item{forgiving}{A string for the tolerance of the model. Options are 'no',
-'mild' and 'very'.}
+'mild' and 'very'. Default is 'very'.}
 }
 \value{
 A \code{\link[tibble:tibble]{tibble}}.
@@ -40,14 +40,14 @@ This function imports daily or monthly water balance data from
 \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 }
 \examples{
-# Import monthly water balance data using the Hamon model with soil water
-# capacity set to 100.
+library(climateAnalyzeR)
+
+# Import monthly water balance data using the Hamon model
 import_water_balance("arches", 2015, 2020, table_type = "monthly",
                      soil_water = 100, pet_type = "hamon",
                      forgiving = "very")
 
-# Import daily water balance data using the Hamon model with soil water
-# capacity set to 50
+# Import daily water balance data using the Penman Montieth model
 import_water_balance("arches", 2015, 2020, table_type = "daily",
                      soil_water = 100, pet_type = "Penman_Montieth",
                      forgiving = "very")

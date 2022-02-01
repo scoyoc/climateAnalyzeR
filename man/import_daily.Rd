@@ -26,8 +26,11 @@ This function imports daily temperature and precipitation data from
 \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 }
 \examples{
+library(climateAnalyzeR)
+
 # Import daily temperature and precipitation data
 import_daily("hans_flat_rs", 2010, 2020)
+
 # Import daily temperature and precipitation data and convert values to metric
 import_daily("hans_flat_rs", 2010, 2020, convert = TRUE)
 

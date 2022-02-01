@@ -22,7 +22,9 @@ import_annual(
 
 \item{screen_blanks}{A character string stating if years with 15 or more
 missing values will be screened out and the data replaced with NA.
-Options are 'true' or 'false'.}
+Options are 'true' or 'false', in lower case not upper case. This object
+is included directly into the URL to retreive the data from
+ClimateAnalyzer.org.}
 
 \item{remove_missing}{Logical. If TRUE, columns that tally missing values are
 excluded from result. If FALSE, these columns are included in the result.
@@ -41,13 +43,13 @@ This function imports annual temperature and precipitation data from
 \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 }
 \examples{
-# Import annual temperature and precipitation data and remove columns of
-# missing values.
-import_annual("canyonlands_theneck", 1980, 2020, remove_missing = FALSE)
+library(climateAnalyzeR)
 
-# Same as above and convert values to metric
-import_annual("canyonlands_theneck", 1980, 2020, remove_missing = FALSE,
-              convert = TRUE)
+# Import annual temperature and precipitation data
+import_annual("canyonlands_theneck", 1980, 2020)
+
+# Import annual temperature and precipitation data and convert values to metric
+import_annual("canyonlands_theneck", 1980, 2020, convert = TRUE)
 
 }
 \seealso{

@@ -19,24 +19,23 @@
 #' @export
 #'
 #' @examples
-#'library(climateAnalyzeR)
+#' library(climateAnalyzeR)
 #'
-#'# Current water year summary for Arches National Park using the default station
-#'# name on ClimateAnalyzer.org
-#'renderSummary(my_report = "water_year", station_id = "arches")
+#' # Render water year report for current water year
+#' renderSummary(my_report = "water_year", station_id = "arches")
 #'
-#'# Calendar year report for Island in the Sky for 2018 and changing the name used
-#'# in the report.
-#'renderSummary(my_report = "calendar_year", station_id = "canyonlands_theneck",
-#'              station_name = "Island in the Sky, Canyonlands National Park",
-#'              my_year = 2018)
+#' # Render calendar year report for 2018 with custom station name
+#' renderSummary(my_report = "calendar_year", station_id = "canyonlands_theneck",
+#'               station_name = "Island in the Sky, Canyonlands National Park",
+#'               my_year = 2018)
 #'
-#' renderSummary()
 renderSummary = function(my_report, station_id, station_name = NULL,
                          my_year = NULL, my_dir = NULL) {
 
+  #-- Validataion routine
+  # Check station name
   if(nrow(climateAnalyzeR::stations(my_stations = station_id) |>
-            dplyr::distinct()) == 0){
+         dplyr::distinct()) == 0){
     stop("Station ID name not recognized in station_id argument. Find the correct station ID by using climateAnalyzeR::stations() or by going to ClimateAnalyzer.org.")
   }
 
@@ -51,6 +50,11 @@ renderSummary = function(my_report, station_id, station_name = NULL,
 
   # Select report
   if(my_report == "water_year" & is.null(my_year)){
+    # Check date
+    if(lubridate::today() > lubridate::date(paste(lubridate::year(lubridate::today()), 10, 01, sep = "-")) &
+       lubridate::today() < lubridate::date(paste(lubridate::year(lubridate::today()), 11, 15, sep = "-"))){
+      stop(glue::glue("Cannot render summary. Data are not currently available for water year {my_year}."))
+    }
     my_year = lubridate::year(lubridate::today())
     my_rmd = "current_water_year.Rmd"
     report_name = paste0(date_stamp, "_", station_id, "_WY", my_year, "_Summary.pdf")
@@ -58,6 +62,11 @@ renderSummary = function(my_report, station_id, station_name = NULL,
       my_rmd = "past_water_year.Rmd"
       report_name = paste0(date_stamp, "_", station_id, "_WY", my_year, "_Summary.pdf")
       } else if(my_report == "calendar_year" & is.null(my_year)){
+        # Check date
+        if(lubridate::today() < lubridate::date(paste(lubridate::year(lubridate::today()),
+                                                      02, 15, sep = "-"))){
+          stop(glue::glue("Cannot render summary. Data are not currently available for {my_year}."))
+        }
         my_year = lubridate::year(lubridate::today())
         my_rmd = "current_annual.Rmd"
         report_name = paste0(date_stamp, "_", station_id, "_", my_year, "_Summary.pdf")
@@ -72,13 +81,11 @@ renderSummary = function(my_report, station_id, station_name = NULL,
   }
 
   # Render report
-  rmarkdown::render(
-    system.file("rmd", my_rmd, package = "climateAnalyzeR"),
-    params = list(
-      station_id = station_id,
-      station_name = station_name,
-      my_year = my_year
-    ),
-    output_file = paste(my_dir, report_name, sep = "/")
-  )
+  suppressWarnings(
+    rmarkdown::render(system.file("rmd", my_rmd, package = "climateAnalyzeR"),
+                      params = list(station_id = station_id,
+                                    station_name = station_name,
+                                    my_year = my_year),
+                      output_file = paste(my_dir, report_name, sep = "/"))
+    )
 }

@@ -21,17 +21,21 @@
 #' @export
 #'
 #' @examples
-#' # Import monthly departures and convert values to metric
-#' dat <- import_data("departure", 'natural_bridges_nm', 2000, 2020) %>%
+#' library(climateAnalyzeR)
+#'
+#' Import monthly departures
+#' dat <- import_data("departure", 'hovenweep_utah', 2000, 2020) |>
 #'   # Create month data frame to make x axis lables
 #'   dplyr::left_join(data.frame('month' = 1:12,
 #'                               'month_abb' = factor(month.abb,
 #'                                                    levels = month.abb)))
+#'
 #' # Plot data
 #' monthly_figure(x_var = dat$month_abb, y_var = dat$tmax_depart,
 #'                year_group = dat$year, y_intercept = 0, my_year = 2020,
 #'                line_color = "red3",
-#'                my_title = "Daily Maximum Temperature Montly Departure, Natural Bridges National Monument",
+#'                my_title = "Daily Maximum Temperature Montly Departure
+#' Hovenweep National Monument",
 #'                my_ylab = "Departure (°F)")
 #'
 monthly_figure <- function(x_var, y_var, year_group, y_intercept, my_year,

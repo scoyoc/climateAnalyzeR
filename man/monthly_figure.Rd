@@ -45,12 +45,15 @@ line and a trend line. This figure is used for monthly measurements (e.g.,
 precipitation or temperature) in RMarkdown scrips to produce reports.
 }
 \examples{
-# Import monthly departures and convert values to metric
-dat <- import_data("departure", 'natural_bridges_nm', 2000, 2020) \%>\%
+library(climateAnalyzeR)
+
+Import monthly departures
+dat <- import_data("departure", 'hovenweep_utah', 2000, 2020) |>
   # Create month data frame to make x axis lables
   dplyr::left_join(data.frame('month' = 1:12,
                               'month_abb' = factor(month.abb,
                                                    levels = month.abb)))
+
 # Plot data
 monthly_figure(x_var = dat$month_abb, y_var = dat$tmax_depart,
                year_group = dat$year, y_intercept = 0, my_year = 2020,

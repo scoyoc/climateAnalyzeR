@@ -19,8 +19,8 @@ import_monthly(
 
 \item{end_year}{The four digit number of the last year of interest.}
 
-\item{month}{The month number (i.e., 1 for January through 12 for December)
-or 'all' for all months.}
+\item{month}{A number for the month, 1 for January through 12 for December
+or 'all' for all months. Default is 'all'.}
 
 \item{convert}{Logical. If TRUE, data are precipitation and temperature
 values are converted to metric. These converted values are included as
@@ -35,6 +35,8 @@ This function imports monthly temperature and precipitation data from
 \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 }
 \examples{
+library(climateAnalyzeR)
+
 # Import monthly precipitation and temperature data
 import_monthly('canyonlands_theneedle', 2000, 2010)
 

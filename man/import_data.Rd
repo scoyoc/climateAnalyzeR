@@ -27,7 +27,7 @@ See \code{\link{import_water_balance}} for details.
 
 \item{end_year}{The four digit number of the last year of interest.}
 
-\item{...}{Other arguments to pass to the child functions.}
+\item{...}{Other arguments to pass to the import functions.}
 }
 \value{
 A \code{\link[tibble:tibble]{tibble}}.
@@ -36,27 +36,25 @@ A \code{\link[tibble:tibble]{tibble}}.
 This is a wrapper for data import functions in in the climateAnalyzeR package.
 }
 \examples{
-#-- Annual data
-# Import annual temperature and precipitation data and convert values to metric
-import_data("annual_wx", "canyonlands_theneck", 1980, 2020, remove_missing = TRUE)
+library(climateAnalyzeR)
 
-#-- Daily data
-# Import daily temperature and precipitation data and convert to metric
-import_data("daily_wx", "hans_flat_rs", 2010, 2020, convert = TRUE)
+# Import annual temperature and precipitation data
+import_data("annual_wx", "canyonlands_theneck", 1980, 2020)
 
-#-- Monthly departures
-# Import departures for the month of July
-import_data("departure", 'natural_bridges_nm', 2000, 2021, month = 7)
+# Import daily temperature and precipitation data
+import_data("daily_wx", "hans_flat_rs", 2010, 2020)
 
-#-- Monthly data
+# Import monthly departures
+import_data("departure", 'natural_bridges_nm', 2000, 2010)
+
 # Import monthly precipitation and temperature data
 import_data("monthly_wx", 'canyonlands_theneedle', 2000, 2010)
 
-#-- Water balance data
 # Import monthly water balance data using the Hamon model with soil water
 # capacity set to 100.
 import_data("water_balance", "arches", 2015, 2020, table_type = "monthly",
             soil_water = 100, pet_type = "hamon", forgiving = "very")
+
 
 }
 \seealso{
