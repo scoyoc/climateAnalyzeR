@@ -4,17 +4,17 @@
 \alias{stations}
 \title{Import station information}
 \usage{
-stations(my_name = NULL, my_stations = NULL, my_id = NULL)
+stations(station_name = NULL, station_id = NULL, id = NULL)
 }
 \arguments{
-\item{my_name}{A string of the station name. This is used to reduce the data
-frame using \code{\link[dplyr::filter]{filter}}. Default is NULL.}
+\item{station_name}{A string of the station \emph{name}. This is used to reduce
+the data frame using \code{\link[dplyr]{filter}}. Default is NULL.}
 
-\item{my_stations}{A string of the station id. This is used to reduce the data
-frame using \code{\link[dplyr::filter]{filter}}. Default is NULL.}
+\item{station_id}{A string of the \emph{station_id}. This is used to reduce
+the data frame using \code{\link[dplyr]{filter}}. Default is NULL.}
 
-\item{my_id}{A string of the station Id. This is used to reduce the data
-frame using \code{\link[dplyr::filter]{filter}}. Default is NULL.}
+\item{id}{A string of the station \emph{id}. This is used to reduce the
+data frame using \code{\link[dplyr]{filter}}. Default is NULL.}
 }
 \value{
 A \code{\link[tibble:tibble]{tibble}}.
@@ -29,8 +29,13 @@ library(climateAnalyzeR)
 # Import all information for all stations.
 stations()
 
-# Filter station by name
-stations(my_stations = "arches")
-stations(my_id = c("426053", "424100"))
+# Import station inforation using the name of the station
+stations(station_name = "Black Canyon of the Gunnison")
+
+# Import information for multiple stations using station_id
+stations(station_id = c("blue_mesa_lake", "black_canyon_of_the_gunnison"))
+
+# Import information for multiple stations using id numbers
+stations(id = c(50754, 50797))
 
 }

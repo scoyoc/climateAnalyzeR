@@ -7,7 +7,7 @@
 import_water_balance(
   station_id,
   start_year,
-  end_year,
+  end_year = NULL,
   table_type,
   pet_type,
   soil_water = 100,
@@ -15,11 +15,13 @@ import_water_balance(
 )
 }
 \arguments{
-\item{station_id}{The character string of the station ID.}
+\item{station_id}{The character string of the \emph{station_id} field from
+\code{\link{stations}}.}
 
 \item{start_year}{The four digit number of the first year of interest.}
 
-\item{end_year}{The four digit number of the last year of interest.}
+\item{end_year}{The four digit number of the last year of interest. Default
+is NULL. If NULL, current year will be used.}
 
 \item{table_type}{A character string for 'daily' or 'monthly' data.}
 
@@ -33,7 +35,7 @@ Default is 100cm. If you are not sure use the default.}
 'mild' and 'very'. Default is 'very'.}
 }
 \value{
-A \code{\link[tibble:tibble]{tibble}}.
+A \code{\link[tibble:tibble]{name}}.
 }
 \description{
 This function imports daily or monthly water balance data from
@@ -43,14 +45,14 @@ This function imports daily or monthly water balance data from
 library(climateAnalyzeR)
 
 # Import monthly water balance data using the Hamon model
-import_water_balance("arches", 2015, 2020, table_type = "monthly",
-                     soil_water = 100, pet_type = "hamon",
-                     forgiving = "very")
+import_water_balance(station_id = "bryce_canyon_np", start_year = 2015,
+                     end_year = 2020, table_type = "monthly", soil_water = 100,
+                     pet_type = "hamon", forgiving = "very")
 
 # Import daily water balance data using the Penman Montieth model
-import_water_balance("arches", 2015, 2020, table_type = "daily",
-                     soil_water = 100, pet_type = "Penman_Montieth",
-                     forgiving = "very")
+import_water_balance(station_id = "pipe_springs_nm", start_year = 2015,
+                     end_year = 2020, table_type = "daily", soil_water = 100,
+                     pet_type = "Penman_Montieth", forgiving = "very")
 
 }
 \seealso{

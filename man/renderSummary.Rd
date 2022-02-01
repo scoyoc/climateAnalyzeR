@@ -16,13 +16,13 @@ renderSummary(
 \item{my_report}{Type of report to render. The options are a calendar
 year ("calendar_year") and a water year ("water_year") report.}
 
-\item{station_id}{The "station_id" field for the weather station of interest
-from \code{\link[climateAnalyzeR::stations]{stations}}.}
+\item{station_id}{The character string of the \emph{station_id} field from
+\code{\link{stations}}..}
 
 \item{station_name}{Optional. A string to be use for the station name in the
 report. Default is NULL. If NULL the station name will be pulled from
-\code{\link[climateAnalyzeR::stations]{stations}}. This is displayed in
-several location in the report and the default name can be changed.}
+\code{\link{stations}}. This is displayed in several location in the
+report and the default name can be changed.}
 
 \item{my_year}{Optional. The four-digit year of interest. Default is NULL. The
 current year will be used if left as NULL.}
@@ -40,7 +40,7 @@ This function will render a PDF report from an RMarkdown (Rmd) script.
 library(climateAnalyzeR)
 
 # Render water year report for current water year
-renderSummary(my_report = "water_year", station_id = "arches")
+renderSummary(my_report = "water_year", station_id = "hans_flat_rs")
 
 # Render calendar year report for 2018 with custom station name
 renderSummary(my_report = "calendar_year", station_id = "canyonlands_theneck",

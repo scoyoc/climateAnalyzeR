@@ -3,12 +3,12 @@
 #' This function imports weather station information from
 #'     \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 #'
-#' @param my_name A string of the station name. This is used to reduce the data
-#'     frame using \code{\link[dplyr::filter]{filter}}. Default is NULL.
-#' @param my_stations A string of the station id. This is used to reduce the data
-#'     frame using \code{\link[dplyr::filter]{filter}}. Default is NULL.
-#' @param my_id A string of the station Id. This is used to reduce the data
-#'     frame using \code{\link[dplyr::filter]{filter}}. Default is NULL.
+#' @param station_name A string of the station \emph{name}. This is used to reduce
+#'     the data frame using \code{\link[dplyr]{filter}}. Default is NULL.
+#' @param station_id A string of the \emph{station_id}. This is used to reduce
+#'     the data frame using \code{\link[dplyr]{filter}}. Default is NULL.
+#' @param id A string of the station \emph{id}. This is used to reduce the
+#'     data frame using \code{\link[dplyr]{filter}}. Default is NULL.
 #'
 #' @return A \code{\link[tibble:tibble]{tibble}}.
 #' @export
@@ -19,12 +19,20 @@
 #' # Import all information for all stations.
 #' stations()
 #'
-#' # Filter station by name
-#' stations(my_stations = "arches")
-#' stations(my_id = c("426053", "424100"))
+#' # Import station inforation using the name of the station
+#' stations(station_name = "Black Canyon of the Gunnison")
 #'
-stations <- function(my_name = NULL, my_stations = NULL, my_id = NULL){
-  dat = suppressMessages(
+#' # Import information for multiple stations using station_id
+#' stations(station_id = c("blue_mesa_lake", "black_canyon_of_the_gunnison"))
+#'
+#' # Import information for multiple stations using id numbers
+#' stations(id = c(50754, 50797))
+#'
+stations <- function(station_name = NULL, station_id = NULL, id = NULL){
+  if(!is.null(station_id)){my_station = station_id} else my_station = NULL
+  if(!is.null(id)){my_id = id} else my_id = NULL
+
+    dat = suppressMessages(
     suppressWarnings(
       readr::read_csv("http://climateanalyzer.science/all_stations.csv",
                       col_names = TRUE, na = "nan",
@@ -41,13 +49,13 @@ stations <- function(my_name = NULL, my_stations = NULL, my_id = NULL){
 
   # Reduce data frame
   # Filter by station name
-  if(!is.null(my_name)){
-    dat = dplyr::filter(dat, name %in% my_name)
-    } else if(!is.null(my_stations)){
-      dat = dplyr::filter(dat, station_id %in% my_stations)
+  if(!is.null(station_name)){
+    dat = dplyr::filter(dat, name %in% station_name)
+    } else if(!is.null(my_station)){
+      dat = dplyr::filter(dat, station_id %in% my_station)
       } else if(!is.null(my_id)){
         dat = dplyr::filter(dat, id %in% my_id)
-        } else (message("Station ID name not recognized in station_id argument. Find the correct station ID by using climateAnalyzeR::stations() or by going to ClimateAnalyzer.org."))
+        }
 
   dat <- dplyr::select(dat, "name", "station_id", "id", "type", "lat", "lon",
                 "elev_m", "years_avail", "years_segments", "data_url") |>

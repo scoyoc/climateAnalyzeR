@@ -4,7 +4,7 @@
 \alias{import_data}
 \title{Read data from ClimateAnalyzer.org into R.}
 \usage{
-import_data(data_type, station_id, start_year, end_year, ...)
+import_data(data_type, station_id, start_year, end_year = NULL, ...)
 }
 \arguments{
 \item{data_type}{A character string for the type of data to import.
@@ -21,16 +21,18 @@ See \code{\link{import_monthly}} for details.
 See \code{\link{import_water_balance}} for details.
 }}
 
-\item{station_id}{The character string of the station ID.}
+\item{station_id}{The character string of the \emph{station_id} field from
+\code{\link{stations}}.}
 
 \item{start_year}{The four digit number of the first year of interest.}
 
-\item{end_year}{The four digit number of the last year of interest.}
+\item{end_year}{The four digit number of the last year of interest. Default
+is NULL. If NULL, current year will be used.}
 
 \item{...}{Other arguments to pass to the import functions.}
 }
 \value{
-A \code{\link[tibble:tibble]{tibble}}.
+A \code{\link[tibble:tibble]{name}}.
 }
 \description{
 This is a wrapper for data import functions in in the climateAnalyzeR package.
@@ -38,22 +40,25 @@ This is a wrapper for data import functions in in the climateAnalyzeR package.
 \examples{
 library(climateAnalyzeR)
 
+#-- Wrapper Function
 # Import annual temperature and precipitation data
-import_data("annual_wx", "canyonlands_theneck", 1980, 2020)
+import_data("annual_wx", station_id = "zion_np", start_year = 1980)
 
 # Import daily temperature and precipitation data
-import_data("daily_wx", "hans_flat_rs", 2010, 2020)
+import_data("daily_wx", station_id = "arches", start_year = 2010)
 
 # Import monthly departures
-import_data("departure", 'natural_bridges_nm', 2000, 2010)
+import_data("departure", station_id = "natural_bridges_nm", start_year = 2000)
 
 # Import monthly precipitation and temperature data
-import_data("monthly_wx", 'canyonlands_theneedle', 2000, 2010)
+import_data("monthly_wx", station_id = "canyonlands_theneedle",
+            start_year = 2000)
 
 # Import monthly water balance data using the Hamon model with soil water
 # capacity set to 100.
-import_data("water_balance", "arches", 2015, 2020, table_type = "monthly",
-            soil_water = 100, pet_type = "hamon", forgiving = "very")
+import_data("water_balance", station_id = "bryce_canyon_np", start_year = 2015,
+            end_year = 2020, table_type = "monthly", soil_water = 100,
+            pet_type = "hamon", forgiving = "very")
 
 
 }

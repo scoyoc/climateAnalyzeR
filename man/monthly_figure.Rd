@@ -30,7 +30,7 @@ provided by x_var, y_var, and year_group for plotting, and as a label on
 the figure.}
 
 \item{line_color}{A character string for the line color.See
-\code{\link[grDevices::colors]{colors}} for a list of color names.}
+\code{\link[grDevices]{colors}} for a list of color names.}
 
 \item{my_title}{A character string for the title.}
 
@@ -47,8 +47,8 @@ precipitation or temperature) in RMarkdown scrips to produce reports.
 \examples{
 library(climateAnalyzeR)
 
-Import monthly departures
-dat <- import_data("departure", 'hovenweep_utah', 2000, 2020) |>
+# Import monthly departures
+dat <- import_data("departure", 'hovenweep_utah', 2000, 2021) |>
   # Create month data frame to make x axis lables
   dplyr::left_join(data.frame('month' = 1:12,
                               'month_abb' = factor(month.abb,
@@ -58,7 +58,7 @@ dat <- import_data("departure", 'hovenweep_utah', 2000, 2020) |>
 monthly_figure(x_var = dat$month_abb, y_var = dat$tmax_depart,
                year_group = dat$year, y_intercept = 0, my_year = 2020,
                line_color = "red3",
-               my_title = "Daily Maximum Temperature Montly Departure, Natural Bridges National Monument",
-               my_ylab = "Departure (°F)")
+               my_title = "TMAX Montly Departure, Hovenweep National Monument",
+               my_ylab = "Departure (deg F)")
 
 }

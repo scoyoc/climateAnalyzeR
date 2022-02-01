@@ -3,13 +3,15 @@
 #' This function imports annual temperature and precipitation data from
 #'     \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 #'
-#' @param station_id The character string of the station ID.
+#' @param station_id The character string of the \emph{station_id} field from
+#'     \code{\link{stations}}.
 #' @param start_year The four digit number of the first year of interest.
-#' @param end_year The four digit number of the last year of interest.
+#' @param end_year The four digit number of the last year of interest. Default
+#'     is NULL. If NULL, current year will be used.
 #' @param screen_blanks A character string stating if years with 15 or more
 #'     missing values will be screened out and the data replaced with NA.
 #'     Options are 'true' or 'false', in lower case not upper case. This object
-#'     is included directly into the URL to retreive the data from
+#'     is included directly into the URL to retrieve the data from
 #'     ClimateAnalyzer.org.
 #' @param remove_missing Logical. If TRUE, columns that tally missing values are
 #'     excluded from result. If FALSE, these columns are included in the result.
@@ -19,7 +21,7 @@
 #'     additional columns in the data frame denoted by "_mm" or "_C". Default is
 #'     FALSE.
 #'
-#' @return A \code{\link[tibble:tibble]{tibble}}.
+#' @return A \code{\link[tibble:tibble]{name}}.
 #' @seealso The \code{\link{import_data}} wrapper function.
 #' @export
 #'
@@ -27,14 +29,17 @@
 #' library(climateAnalyzeR)
 #'
 #' # Import annual temperature and precipitation data
-#' import_annual("zion_np", 1980, 2020)
+#' import_annual(station_id = "zion_np", start_year = 1980)
 #'
 #' # Import annual temperature and precipitation data and convert values to metric
-#' import_annual("zion_np", 1980, 2020, convert = TRUE)
+#' import_annual(station_id = "zion_np", start_year = 1980, end_year = 2020,
+#'               convert = TRUE)
 #'
-import_annual = function(station_id, start_year, end_year, screen_blanks = 'true',
-                         remove_missing = TRUE, convert = FALSE){
+import_annual = function(station_id, start_year, end_year = NULL,
+                         screen_blanks = 'true', remove_missing = TRUE,
+                         convert = FALSE){
 
+  if(is.null(end_year)){end_year = lubridate::year(lubridate::today())}
   my_url = paste0("http://climateanalyzer.science/python/u_thresh.py?station=",
                   station_id, "&year1=", end_year, "&year2=", start_year,
                   "&title=", station_id,

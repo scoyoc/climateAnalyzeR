@@ -7,17 +7,19 @@
 import_monthly(
   station_id,
   start_year,
-  end_year,
+  end_year = NULL,
   month = "all",
   convert = FALSE
 )
 }
 \arguments{
-\item{station_id}{The character string of the station ID.}
+\item{station_id}{The character string of the \emph{station_id} field from
+\code{\link{stations}}.}
 
 \item{start_year}{The four digit number of the first year of interest.}
 
-\item{end_year}{The four digit number of the last year of interest.}
+\item{end_year}{The four digit number of the last year of interest. Default
+is NULL. If NULL, current year will be used.}
 
 \item{month}{A number for the month, 1 for January through 12 for December
 or 'all' for all months. Default is 'all'.}
@@ -28,7 +30,7 @@ additional columns in the data frame denoted by "_mm" or "_C". Default is
 FALSE.}
 }
 \value{
-A \code{\link[tibble:tibble]{tibble}}.
+A \code{\link[tibble:tibble]{name}}.
 }
 \description{
 This function imports monthly temperature and precipitation data from
@@ -38,11 +40,13 @@ This function imports monthly temperature and precipitation data from
 library(climateAnalyzeR)
 
 # Import monthly precipitation and temperature data
-import_monthly('canyonlands_theneedle', 2000, 2010)
+import_monthly(station_id = 'canyonlands_theneedle', start_year = 2000,
+               end_year = 2010)
 
 # Import monthly precipitation and temperature data for the month of June and
 # convert values to metric
-import_monthly('canyonlands_theneedle', 2000, 2010, month = 6, convert = TRUE)
+import_monthly(station_id = 'canyonlands_theneedle', start_year = 2000,
+               end_year = 2010, month = 6, convert = TRUE)
 
 }
 \seealso{

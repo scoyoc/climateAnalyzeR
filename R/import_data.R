@@ -15,12 +15,14 @@
 #'         \item \emph{water_balance}: Water balance data.
 #'             See \code{\link{import_water_balance}} for details.
 #'     }
-#' @param station_id The character string of the station ID.
+#' @param station_id The character string of the \emph{station_id} field from
+#'     \code{\link{stations}}.
 #' @param start_year The four digit number of the first year of interest.
-#' @param end_year The four digit number of the last year of interest.
+#' @param end_year The four digit number of the last year of interest. Default
+#'     is NULL. If NULL, current year will be used.
 #' @param ... Other arguments to pass to the import functions.
 #'
-#' @return A \code{\link[tibble:tibble]{tibble}}.
+#' @return A \code{\link[tibble:tibble]{name}}.
 #' @seealso
 #' See \code{\link{import_annual}}, \code{\link{import_daily}},
 #'     \code{\link{import_departure}}, \code{\link{import_monthly}}, and
@@ -30,26 +32,28 @@
 #' @examples
 #' library(climateAnalyzeR)
 #'
+#' #-- Wrapper Function
 #' # Import annual temperature and precipitation data
-#' import_data("annual_wx", "zion_np", 1980, 2020)
+#' import_data("annual_wx", station_id = "zion_np", start_year = 1980)
 #'
 #' # Import daily temperature and precipitation data
-#' import_data("daily_wx", "hans_flat_rs", 2010, 2020)
+#' import_data("daily_wx", station_id = "arches", start_year = 2010)
 #'
 #' # Import monthly departures
-#' import_data("departure", 'natural_bridges_nm', 2000, 2010)
+#' import_data("departure", station_id = "natural_bridges_nm", start_year = 2000)
 #'
 #' # Import monthly precipitation and temperature data
-#' import_data("monthly_wx", 'canyonlands_theneedle', 2000, 2010)
+#' import_data("monthly_wx", station_id = "canyonlands_theneedle",
+#'             start_year = 2000)
 #'
 #' # Import monthly water balance data using the Hamon model with soil water
 #' # capacity set to 100.
-#' import_data("water_balance", "bryce_canyon_np", 2015, 2020,
-#'             table_type = "monthly", soil_water = 100, pet_type = "hamon",
-#'             forgiving = "very")
+#' import_data("water_balance", station_id = "bryce_canyon_np", start_year = 2015,
+#'             end_year = 2020, table_type = "monthly", soil_water = 100,
+#'             pet_type = "hamon", forgiving = "very")
 #'
 #'
-import_data <- function(data_type, station_id, start_year, end_year, ...){
+import_data <- function(data_type, station_id, start_year, end_year = NULL, ...){
   if(data_type == 'annual_wx'){
     dat = import_annual(station_id, start_year, end_year, ...)
 

@@ -7,23 +7,25 @@
 import_annual(
   station_id,
   start_year,
-  end_year,
+  end_year = NULL,
   screen_blanks = "true",
   remove_missing = TRUE,
   convert = FALSE
 )
 }
 \arguments{
-\item{station_id}{The character string of the station ID.}
+\item{station_id}{The character string of the \emph{station_id} field from
+\code{\link{stations}}.}
 
 \item{start_year}{The four digit number of the first year of interest.}
 
-\item{end_year}{The four digit number of the last year of interest.}
+\item{end_year}{The four digit number of the last year of interest. Default
+is NULL. If NULL, current year will be used.}
 
 \item{screen_blanks}{A character string stating if years with 15 or more
 missing values will be screened out and the data replaced with NA.
 Options are 'true' or 'false', in lower case not upper case. This object
-is included directly into the URL to retreive the data from
+is included directly into the URL to retrieve the data from
 ClimateAnalyzer.org.}
 
 \item{remove_missing}{Logical. If TRUE, columns that tally missing values are
@@ -36,7 +38,7 @@ additional columns in the data frame denoted by "_mm" or "_C". Default is
 FALSE.}
 }
 \value{
-A \code{\link[tibble:tibble]{tibble}}.
+A \code{\link[tibble:tibble]{name}}.
 }
 \description{
 This function imports annual temperature and precipitation data from
@@ -46,10 +48,11 @@ This function imports annual temperature and precipitation data from
 library(climateAnalyzeR)
 
 # Import annual temperature and precipitation data
-import_annual("canyonlands_theneck", 1980, 2020)
+import_annual(station_id = "zion_np", start_year = 1980)
 
 # Import annual temperature and precipitation data and convert values to metric
-import_annual("canyonlands_theneck", 1980, 2020, convert = TRUE)
+import_annual(station_id = "zion_np", start_year = 1980, end_year = 2020,
+              convert = TRUE)
 
 }
 \seealso{

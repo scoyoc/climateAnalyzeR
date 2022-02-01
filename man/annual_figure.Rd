@@ -26,13 +26,13 @@ vector of measurements (e.g., PRCP or TEMP).}
 \item{my_year}{A number for the your of interest.}
 
 \item{normal}{A number for the annual normal temperature or precipitation.
-Typically from \code{\link[climateAnalyzeR::normals]{normals}}.}
+Typically from \code{\link{normals}}.}
 
 \item{reference_period}{Character string for the reference period used for
 normals (e.g., "1981-2010").}
 
 \item{area_color}{A character string for the color of the area. See
-\code{\link[grDevices::colors]{colors}} for a list of color names.}
+\code{\link[grDevices]{colors}} for a list of color names.}
 
 \item{line_color}{A character string for the line color.}
 
@@ -51,20 +51,22 @@ precipitation or temperature) in RMarkdown scrips to produce reports.
 \examples{
 library(climateAnalyzeR)
 
-# Import annual data from ClimateAnalyzer.org
+# Set my station
 my_station <- "colorado_nm"
-dat <-  import_data("annual_wx", my_station, 1980, 2020,
-                    remove_missing = FALSE)
+
+# Import annual data from ClimateAnalyzer.org
+dat <-  import_data(data_type = "annual_wx", station_id =  my_station,
+                    start_year = 1980, end_year = 2020)
 
 # Import NOAA calculated normals
-dat.30yr.prcp <- normals(my_stations = my_station) |>
+dat.30yr.prcp <- normals(station_id = my_station) |>
   dplyr::filter(element == "PRCP" & month == "Annual")
 
 # Plot data
 annual_figure(x_var = dat$year, y_var = dat$prcp_wy, my_year = 2019,
               normal = dat.30yr.prcp$value, reference_period = "1981-2010",
               area_color = "green3", line_color = "darkgreen",
-              my_title = "Annual Precipitation, Island in the Sky, Canyonlands NP",
+              my_title = "Annual Precipitation, Colorado National Monument",
               my_ylab = "PRCP (inches)")
 
 }

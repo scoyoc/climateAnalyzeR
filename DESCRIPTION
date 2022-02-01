@@ -22,7 +22,6 @@ Imports:
     cowplot, 
     dplyr,
     ggplot2,
-    ggmap,
     glue,
     grid,
     gridExtra,
@@ -38,5 +37,7 @@ Imports:
     tidyr,
     XML
 Suggests: 
-    tidyverse
+    ggmap,
+    tidyverse, 
+    qpdf
 VignetteBuilder: knitr

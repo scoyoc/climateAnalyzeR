@@ -4,12 +4,12 @@
 #'
 #' @param my_report Type of report to render. The options are a calendar
 #'     year ("calendar_year") and a water year ("water_year") report.
-#' @param station_id The "station_id" field for the weather station of interest
-#'     from \code{\link[climateAnalyzeR::stations]{stations}}.
+#' @param station_id The character string of the \emph{station_id} field from
+#'     \code{\link{stations}}..
 #' @param station_name Optional. A string to be use for the station name in the
 #'     report. Default is NULL. If NULL the station name will be pulled from
-#'     \code{\link[climateAnalyzeR::stations]{stations}}. This is displayed in
-#'     several location in the report and the default name can be changed.
+#'     \code{\link{stations}}. This is displayed in several location in the
+#'     report and the default name can be changed.
 #' @param my_year Optional. The four-digit year of interest. Default is NULL. The
 #'     current year will be used if left as NULL.
 #' @param my_dir Optional. String of directory path to save report to. Default
@@ -22,7 +22,7 @@
 #' library(climateAnalyzeR)
 #'
 #' # Render water year report for current water year
-#' renderSummary(my_report = "water_year", station_id = "arches")
+#' renderSummary(my_report = "water_year", station_id = "hans_flat_rs")
 #'
 #' # Render calendar year report for 2018 with custom station name
 #' renderSummary(my_report = "calendar_year", station_id = "canyonlands_theneck",
@@ -31,10 +31,10 @@
 #'
 renderSummary = function(my_report, station_id, station_name = NULL,
                          my_year = NULL, my_dir = NULL) {
-
+  my_station = station_id
   #-- Validataion routine
   # Check station name
-  if(nrow(climateAnalyzeR::stations(my_stations = station_id) |>
+  if(nrow(climateAnalyzeR::stations(station_id = my_station) |>
          dplyr::distinct()) == 0){
     stop("Station ID name not recognized in station_id argument. Find the correct station ID by using climateAnalyzeR::stations() or by going to ClimateAnalyzer.org.")
   }
@@ -45,7 +45,7 @@ renderSummary = function(my_report, station_id, station_name = NULL,
 
   # Select station name
   if(is.null(station_name)){
-    station_name = stations(my_stations = station_id)$name[1]
+    station_name = stations(station_id = my_station)$name[1]
   }
 
   # Select report
@@ -75,7 +75,7 @@ renderSummary = function(my_report, station_id, station_name = NULL,
           report_name = paste0(date_stamp, "_", station_id, "_", my_year, "_Summary.pdf")
           } else(stop("Argument not recognized: 'my_report' or 'my_year'. See help(renderSummary) for options."))
 
- # Select directory
+  # Select directory
   if (is.null(my_dir)){
     my_dir <- paste(Sys.getenv("USERPROFILE"), "Desktop", sep = "/")
   }
@@ -83,7 +83,7 @@ renderSummary = function(my_report, station_id, station_name = NULL,
   # Render report
   suppressWarnings(
     rmarkdown::render(system.file("rmd", my_rmd, package = "climateAnalyzeR"),
-                      params = list(station_id = station_id,
+                      params = list(station_id = my_station,
                                     station_name = station_name,
                                     my_year = my_year),
                       output_file = paste(my_dir, report_name, sep = "/"))

@@ -4,15 +4,15 @@
 \alias{normals}
 \title{Import NOAA calculated normals}
 \usage{
-normals(ref_period = "1981-2010", my_stations = NULL, tidy = TRUE)
+normals(ref_period = "1981-2010", station_id = NULL, tidy = TRUE)
 }
 \arguments{
 \item{ref_period}{The string for 30-year reference period. The user can choose
 "1971-2000" or "1981-2010". Default is "1981-2010".}
 
-\item{my_stations}{Optional. A string to filter results by a station name.
-Default is NULL. If NULL, a data frame of 30-year normals for all stations
-on climateAnalyzer.org will be returned.}
+\item{station_id}{Optional. The character string of the \emph{station_id}
+field from \code{\link{stations}}. Default is NULL. If NULL, a data frame
+of 30-year normals for all stations will be returned.}
 
 \item{tidy}{Logical. Returns tidy data. Default is TRUE.
 \describe{
@@ -24,7 +24,7 @@ temperatures.}
 }}
 }
 \value{
-A \code{\link[tibble:tibble]{tibble}}.
+A \code{\link[tibble:tibble]{name}}.
 }
 \description{
 This function imports 30-year normals calculated by NOAA from
@@ -34,10 +34,10 @@ This function imports 30-year normals calculated by NOAA from
 library(climateAnalyzeR)
 
 # Import 1981-2010 normals. Default.
-normals(my_stations = "capitol_reef_np")
+normals(station_id = "capitol_reef_np")
 
-# Import 1971-2000 normals for multiple stations.
-normals(ref_period = "1971-2000", my_stations = c("blue_mesa_lake", "cimarron",
-                                                  "black_canyon_of_the_gunnison"))
+# Import 1971-2000 normals for multiple stations
+normals(ref_period = "1971-2000",
+        station_id = c("dinosaur_nm", "dinosaur_quarry_area"))
 
 }
