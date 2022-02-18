@@ -14,11 +14,7 @@
 #' @param reference_period Character string for the reference period used for
 #'     normals (e.g., "1981-2010").
 #' @param area_color A character string for the color of the area. See
-<<<<<<< HEAD
-#'     \code{\link[grDevices]{colors}} for a list of color names.
-=======
 #'     \code{\link[grDevices::colors]{name}} for a list of color names.
->>>>>>> d396400a3150037ef8887dbf137ff33fefcd851a
 #' @param line_color A character string for the line color.
 #' @param my_title A character string for the title.
 #' @param my_ylab A character string from the y-axis.
