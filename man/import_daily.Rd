@@ -4,16 +4,25 @@
 \alias{import_daily}
 \title{Import daily weather data}
 \usage{
-import_daily(station_id, start_year, end_year = NULL, convert = FALSE)
+import_daily(
+  station_id,
+  start_year,
+  end_year = NULL,
+  station_type,
+  convert = FALSE
+)
 }
 \arguments{
 \item{station_id}{The character string of the \emph{station_id} field from
 \code{\link{stations}}.}
 
-\item{start_year}{The four digit number of the last year of interest. Default
+\item{start_year}{The four digit number of the last year of interest.}
+
+\item{end_year}{The four digit number of the last year of interest. Default
 is NULL. If NULL, current year will be used.}
 
-\item{end_year}{The four digit number of the last year of interest.}
+\item{station_type}{A character string for the type of weather station the
+data are being pulled from. Options include "GHCN" and "SNOTEL".}
 
 \item{convert}{Logical. If TRUE, data are precipitation and temperature
 values are converted to metric. These converted values are included as
@@ -31,11 +40,11 @@ This function imports daily temperature and precipitation data from
 library(climateAnalyzeR)
 
 # Import daily temperature and precipitation data
-import_daily(station_id = "arches", start_year = 2010)
+import_daily(station_id = "arches", start_year = 2010, station_type = "GHCN")
 
 # Import daily temperature and precipitation data and convert values to metric
 import_daily(station_id = "arches", start_year = 2010, end_year = 2020,
-             convert = TRUE)
+             station_type = "GHCN", convert = TRUE)
 
 }
 \seealso{

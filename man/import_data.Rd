@@ -45,7 +45,8 @@ library(climateAnalyzeR)
 import_data("annual_wx", station_id = "zion_np", start_year = 1980)
 
 # Import daily temperature and precipitation data
-import_data("daily_wx", station_id = "arches", start_year = 2010)
+import_data("daily_wx", station_id = "arches", start_year = 2010,
+            station_type = "GHCN")
 
 # Import monthly departures
 import_data("departure", station_id = "natural_bridges_nm", start_year = 2000)

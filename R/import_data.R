@@ -37,7 +37,8 @@
 #' import_data("annual_wx", station_id = "zion_np", start_year = 1980)
 #'
 #' # Import daily temperature and precipitation data
-#' import_data("daily_wx", station_id = "arches", start_year = 2010)
+#' import_data("daily_wx", station_id = "arches", start_year = 2010,
+#'             station_type = "GHCN")
 #'
 #' # Import monthly departures
 #' import_data("departure", station_id = "natural_bridges_nm", start_year = 2000)
@@ -58,7 +59,7 @@ import_data <- function(data_type, station_id, start_year, end_year = NULL, ...)
     dat = import_annual(station_id, start_year, end_year, ...)
 
   } else if(data_type == 'daily_wx'){
-    dat = import_daily(station_id, start_year, end_year)
+    dat = import_daily(station_id, start_year, end_year, ...)
 
   } else if(data_type == "departure"){
     dat = import_departure(station_id, start_year, end_year, ...)
