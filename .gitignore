@@ -27,3 +27,6 @@
 .Renviron
 # Intermediate RMarkdownd Notebook files
 *.nb.html
+
+# Directories
+/exec
