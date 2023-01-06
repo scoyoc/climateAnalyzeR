@@ -31,25 +31,27 @@
 #'
 renderSummary = function(my_report, station_id, station_name = NULL,
                          my_year = NULL, my_dir = NULL) {
-  my_station = station_id
-  #-- Validataion routine
+  #-- Validation routine
   # Check station name
-  if(nrow(climateAnalyzeR::stations(station_id = my_station) |>
+  if(nrow(climateAnalyzeR::stations(station_id = station_id) |>
          dplyr::distinct()) == 0){
     stop("Station ID name not recognized in station_id argument. Find the correct station ID by using climateAnalyzeR::stations() or by going to ClimateAnalyzer.org.")
+  }
+
+  # Select station name
+  if(is.null(station_name)){
+    station_name = stations(station_id = station_id)$name[1]
+  }
+
+  # Verify year - convert to NULL if current year is used
+  if(!is.null(my_year)){
+    if(my_year == lubridate::year(Sys.Date())) my_year = NULL
   }
 
   # Create 8-digit date stamp
   date_stamp = paste(stringr::str_split(lubridate::today(), "-")[[1]],
                      collapse = "")
 
-  # Select station name
-  if(is.null(station_name)){
-    station_name = stations(station_id = my_station)$name[1]
-  }
-
-  # Verify year
-  if(!is.null(my_year) & my_year == lubridate::year(Sys.Date())){my_year = NULL}
 
   # Select report
   if(my_report == "water_year" & is.null(my_year)){
@@ -87,7 +89,7 @@ renderSummary = function(my_report, station_id, station_name = NULL,
   # Render report
   suppressWarnings(
     rmarkdown::render(system.file("rmd", my_rmd, package = "climateAnalyzeR"),
-                      params = list(station_id = my_station,
+                      params = list(station_id = station_id,
                                     station_name = station_name,
                                     my_year = my_year),
                       output_file = paste(my_dir, report_name, sep = "/"))
