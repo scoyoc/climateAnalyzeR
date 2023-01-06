@@ -11,13 +11,13 @@ Currently  annual, monthly, and daily weather data and water balance models for 
 Again, these functions need some more testing but so far they are working well.
 The plan is to include water balance summaries to the RMarkdown scripts in the future.
 
-Version: 0.1.0
+Version: 0.9.0
 
 Depends: R (>= 4.0)
 
-Imports: cowplot, dplyr, ggplot2, glue, grid, gridExtra, knitr, janitor, lubridate, readr, rmarkdown, shadowtext, stats, stringr, tidyr, tibble, XML
+Imports: cowplot, dplyr, ggplot2, glue, ggmap, grid, gridExtra, knitr, janitor, lubridate, readr, rmarkdown, shadowtext, stats, stringr, tidyr, tibble, XML
 
-Suggests: ggmap, tidyverse, qpdf
+Suggests: tidyverse
 
 Author: Matthew Van Scoyoc
 

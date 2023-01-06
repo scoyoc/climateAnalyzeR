@@ -60,10 +60,6 @@ round_with_zeros <- function(x, d = 2){
 #-- Load data frame of months
 data(month_df)
 month_df$month_name <- factor(month_df$month_name, month.abb)
-
-#-- Session information (for text)
-info <- sessionInfo()
-r_ver <- paste(info$R.version$major, info$R.version$minor, sep=".")
 ```
 
 ```{r Data, eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
@@ -256,7 +252,7 @@ temp_text <- if(error_eval$temp_midpt >= 2 | is.na(my_mth_temp$value)){
 ```
 
 This document summarizes temperature and precipitation anomalies relative to 30-year (1981-2010) averages for `r my_station$name` for calendar year `r my_year` through `r month.name[match(my_mth$month_name, month.abb)]`.
-The data used in these analyses are from the NOAA Global Historical Climatology Network (GHCN) Cooperative Observer Network (COOP) and were downloaded from [ClimateAnalyzer.org](http://www.climateanalyzer.org/) on `r format(as.Date(lubridate::today(), format = "%Y-%m-%d"), "%d %B %Y")` using R (ver. `r r_ver`, R Core Team, `r info$R.version$year`) and the climateAnalyzeR package (ver  `r info$otherPkgs$climateAnalyzeR$Version`, Van Scoyoc, `r lubridate::year(stringr::str_split(info$otherPkgs$climateAnalyzeR$Built, pattern = ";")[[1]][3])`).
+The data used in these analyses are from the NOAA Global Historical Climatology Network (GHCN) Cooperative Observer Network (COOP) and were downloaded from [ClimateAnalyzer.org](http://www.climateanalyzer.org/) on `r format(as.Date(lubridate::today(), format = "%Y-%m-%d"), "%d %B, %Y")` using R (version `r paste(R.version$major, R.version$minor, sep = ".")`, R Core Team, `r R.version$year`) and the climateAnalyzeR package (ver  `r packageVersion("climateAnalyzeR")`, Van Scoyoc, `r lubridate::year(packageDate("climateAnalyzeR"))`).
 The data used for these analyses include the daily high temperature (TMAX), daily low temperature (TMIN), and daily precipitation totals (PRCP).
 This is an automated summary, and all results are provisional.
 
@@ -270,8 +266,9 @@ extent[3, ] <- c(extent[1, 1] - 0.04, extent[1, 2] - 0.025)
 # Create box to pull basemap from Google
 my_box <- ggmap::make_bbox(lon = extent$lon, lat = extent$lat, f = 0.1)
 # Pull basemap from Google
-my_map <- ggmap::get_map(location = my_box, maptype = "terrain", source = "google",
-                         zoom = 13, force = TRUE, messaging = TRUE)
+my_map <- ggmap::get_map(location = my_box, maptype = "terrain", 
+                         source = "stamen", zoom = 13, force = TRUE,
+                         messaging = FALSE)
 # Finish Map
 my_map <- ggmap::ggmap(my_map) +
   ggplot2::geom_point(data = my_station, ggplot2::aes(x = lon, y = lat),

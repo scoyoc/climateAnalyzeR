@@ -1,6 +1,6 @@
 Package: climateAnalyzeR
 Title: Import Data from ClimateAnalyzer.org into R
-Version: 0.0.1
+Version: 0.9.0
 Authors@R: 
     person(given = "Matthew",
            family = "Van Scoyoc",
@@ -23,6 +23,7 @@ Imports:
     dplyr,
     ggplot2,
     glue,
+    ggmap,
     grid,
     gridExtra,
     knitr,
@@ -37,7 +38,4 @@ Imports:
     tidyr,
     XML
 Suggests: 
-    ggmap,
-    tidyverse, 
-    qpdf
 VignetteBuilder: knitr
