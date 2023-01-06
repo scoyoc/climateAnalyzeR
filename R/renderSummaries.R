@@ -66,13 +66,10 @@ renderSummary = function(my_report, station_id, station_name = NULL,
       report_name = paste0(date_stamp, "_", station_id, "_WY", my_year, "_Summary.pdf")
       } else if(my_report == "calendar_year" & is.null(my_year)){
         # Check date
-        if(lubridate::today() < lubridate::date(paste(lubridate::year(lubridate::today()),
-                                                      02, 15, sep = "-"))){
-<<<<<<< HEAD
+        if(lubridate::today() < lubridate::date(
+          paste(lubridate::year(lubridate::today()), 02, 15, sep = "-")
+          )){
           stop(glue::glue("Cannot render summary. Data are not currently available."))
-=======
-          stop(glue::glue("Cannot render summary. Data are not currently available for {lubridate::year(lubridate::today())}."))
->>>>>>> 9db6ce2f604f9670a7833f0435ec49d8c1d12b20
         }
         my_year = lubridate::year(lubridate::today())
         my_rmd = "current_annual.Rmd"
