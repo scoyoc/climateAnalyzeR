@@ -48,6 +48,9 @@ renderSummary = function(my_report, station_id, station_name = NULL,
     station_name = stations(station_id = my_station)$name[1]
   }
 
+  # Verify year
+  if(!is.null(my_year) & my_year == lubridate::year(Sys.Date())){my_year = NULL}
+
   # Select report
   if(my_report == "water_year" & is.null(my_year)){
     # Check date
