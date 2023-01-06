@@ -56,7 +56,7 @@ renderSummary = function(my_report, station_id, station_name = NULL,
     # Check date
     if(lubridate::today() > lubridate::date(paste(lubridate::year(lubridate::today()), 10, 01, sep = "-")) &
        lubridate::today() < lubridate::date(paste(lubridate::year(lubridate::today()), 11, 15, sep = "-"))){
-      stop(glue::glue("Cannot render summary. Data are not currently available for water year {my_year}."))
+      stop(glue::glue("Cannot render summary. Data are not currently available."))
     }
     my_year = lubridate::year(lubridate::today())
     my_rmd = "current_water_year.Rmd"
@@ -68,7 +68,7 @@ renderSummary = function(my_report, station_id, station_name = NULL,
         # Check date
         if(lubridate::today() < lubridate::date(paste(lubridate::year(lubridate::today()),
                                                       02, 15, sep = "-"))){
-          stop(glue::glue("Cannot render summary. Data are not currently available for {my_year}."))
+          stop(glue::glue("Cannot render summary. Data are not currently available."))
         }
         my_year = lubridate::year(lubridate::today())
         my_rmd = "current_annual.Rmd"
