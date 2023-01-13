@@ -4,7 +4,7 @@
 <!-- badges: end -->
 
 The primary function of this R package is to produce brief climate reports using temperature and precipitation data from National Park Service Co-op stations using RMarkdown. 
-Currently awater year (Oct-Sep) and calendar year (Jan-Dec) reports have been developed. 
+Currently water year (Oct-Sep) and calendar year (Jan-Dec) reports are available. 
 The plan is to include water balance summaries to the RMarkdown scripts in the future.
 
 This package also imports data from [ClimateAnalyzer.org](http://climateanalyzer.org/) into R. 
