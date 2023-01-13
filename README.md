@@ -41,7 +41,7 @@ devtools::install_github("scoyoc/climateAnalyzeR")
 
 ## Examples
 
-Below is an example code to produce PDF reports.
+Below are examples that produce PDF reports.
 ```r
 library(climateAnalyzeR)
 
@@ -56,7 +56,7 @@ renderSummary(my_report = "calendar_year", station_id = "canyonlands_theneck",
               my_year = 2018)
 ```
 
-Below are examples of function that import data from [ClimateAnalyzer.org](http://climateanalyzer.org/).
+Below are examples of functions that import data from [ClimateAnalyzer.org](http://climateanalyzer.org/).
 
 ``` r
 #-- Annual data
