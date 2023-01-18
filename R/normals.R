@@ -5,7 +5,7 @@
 #'
 #'
 #' @param ref_period The string for 30-year reference period. The user can choose
-#'     "1971-2000" or "1981-2010". Default is "1981-2010".
+#'     "1971-2000", "1981-2010", or "1991-2020". Default is "1991-2020".
 #' @param station_id Optional. The character string of the \emph{station_id}
 #'     field from \code{\link{stations}}. Default is NULL. If NULL, a data frame
 #'     of 30-year normals for all stations will be returned.
@@ -31,7 +31,7 @@
 #' normals(ref_period = "1971-2000",
 #'         station_id = c("dinosaur_nm", "dinosaur_quarry_area"))
 #'
-normals <- function(ref_period = "1981-2010", station_id = NULL, tidy = TRUE){
+normals <- function(ref_period = "1991-2020", station_id = NULL, tidy = TRUE){
 
   my_stations = station_id
 
@@ -39,7 +39,9 @@ normals <- function(ref_period = "1981-2010", station_id = NULL, tidy = TRUE){
     my_url = "http://climateanalyzer.science/monthly/1971_2000_averages.csv"
   } else if (ref_period == "1981-2010"){
     my_url = "http://climateanalyzer.science/monthly/1981_2010_averages.csv"
-  } else (message('Reference period not recogized. Use "1971-2000" or "1981-2010".'))
+  } else if (ref_period == "1991-2020"){
+    my_url = "http://climateanalyzer.science/monthly/1981_2010_averages.csv"
+  }else (message('Reference period not recogized.'))
 
   dat = suppressMessages(
     suppressWarnings(

@@ -10,7 +10,7 @@ The plan is to include water balance summaries to the RMarkdown scripts in the f
 This package also imports data from [ClimateAnalyzer.org](http://climateanalyzer.org/) into R. 
 Currently  annual, monthly, and daily weather data and water balance models for Co-op stations are available.
 
-Version: 0.9.0
+Version: 0.9.1
 
 Depends: R (>= 4.0)
 
