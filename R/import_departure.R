@@ -11,7 +11,7 @@
 #' @param month A number for the month, 1 for January through 12 for December
 #'     or 'all' for all months. Default is 'all'.
 #' @param norm_per A character string for the 30-year normalization period.
-#'     Either '1971-2000' or '1981-2010'. Default is '1981-2010'.
+#'     Either '1971-2000', '1981-2010', or '1991-2020'. Default is '1981-2010'.
 #' @param convert Logical. If TRUE, data are precipitation and temperature
 #'     values are converted to metric. These converted values are included as
 #'     additional columns in the data frame denoted by "_mm" or "_C". Default is
