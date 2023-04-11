@@ -40,7 +40,7 @@ normals <- function(ref_period = "1991-2020", station_id = NULL, tidy = TRUE){
   } else if (ref_period == "1981-2010"){
     my_url = "http://climateanalyzer.science/monthly/1981_2010_averages.csv"
   } else if (ref_period == "1991-2020"){
-    my_url = "http://climateanalyzer.science/monthly/1981_2010_averages.csv"
+    my_url = "http://climateanalyzer.science/monthly/1981_2020_averages.csv"
   }else (message('Reference period not recogized.'))
 
   dat = suppressMessages(
