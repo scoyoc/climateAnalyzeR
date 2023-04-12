@@ -37,12 +37,11 @@ for calendar year and "water_year". Default is "year". If using
 interest.}
 }
 \value{
-A \code{\link[tibble:tibble]{name}}.
+A \code{\link[tibble]{tibble}}.
 }
 \description{
-This function imports number of days annually with minimum and maximum daily
-temperatures below and above user set temperatures.
-column names.
+This function imports the number of days per year that are below a user set
+minimum temperature and above a user set maximum temperatures from
 \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 }
 \examples{

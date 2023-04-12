@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{pull_xml}
 \alias{pull_xml}
-\title{Child function to scrape HTML tables}
+\title{pull_xml: Child function to scrape HTML tables}
 \usage{
 pull_xml(my_url, skip)
 }
@@ -11,6 +11,9 @@ pull_xml(my_url, skip)
 
 \item{skip}{rows to skip}
 }
+\value{
+dataframe
+}
 \description{
-Child function to scrape HTML tables
+pull_xml: Child function to scrape HTML tables
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{pull_monthly}
 \alias{pull_monthly}
-\title{Child function to import monthly data}
+\title{pull_monthly: Child function to import monthly data}
 \usage{
 pull_monthly(station_id, start_year, end_year, month, table_type, norm_per)
 }
@@ -19,6 +19,9 @@ pull_monthly(station_id, start_year, end_year, month, table_type, norm_per)
 
 \item{norm_per}{normal period (e.g., "1991-2010")}
 }
+\value{
+dataframe
+}
 \description{
-Child function to import monthly data
+pull_monthly: Child function to import monthly data
 }

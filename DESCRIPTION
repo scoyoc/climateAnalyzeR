@@ -38,5 +38,5 @@ Imports:
     tidyr,
     utils,
     XML
-Suggests: 
+Suggests: tidyverse
 VignetteBuilder: knitr

@@ -3,12 +3,12 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The primary function of this R package is to produce brief climate reports using temperature and precipitation data from National Park Service Co-op stations using RMarkdown. 
+This package imports data from [ClimateAnalyzer.org](http://climateanalyzer.org/) into R. 
+Currently  annual, monthly, daily weather data, temperatures above/below a specified temperature, and water balance models for Co-op stations are available.
+
+This R package can also produce brief climate reports using temperature and precipitation data from Co-op stations using RMarkdown. 
 Currently water year (Oct-Sep) and calendar year (Jan-Dec) reports are available. 
 The plan is to include water balance summaries to the RMarkdown scripts in the future.
-
-This package also imports data from [ClimateAnalyzer.org](http://climateanalyzer.org/) into R. 
-Currently  annual, monthly, daily weather data, temperatures above/below a specified temperature, and water balance models for Co-op stations are available.
 
 Version: 0.9.2
 
@@ -30,7 +30,7 @@ License: MIT + file [LICENSE](https://github.com/scoyoc/climateAnalyzeR/blob/mas
 
 URL: [https://github.com/scoyoc/climateAnalyzeR](https://github.com/scoyoc/climateAnalyzeR)
 
-Documentation: Just the man pages for now. A vignette is being developed.
+Documentation: Just the man pages for now. A vignette is planned for development.
 
 ## Installation
 
@@ -43,27 +43,12 @@ devtools::install_github("scoyoc/climateAnalyzeR")
 
 ## Examples
 
-Below are examples that produce PDF reports.
-```r
-library(climateAnalyzeR)
-
-# Current water year summary for Arches National Park using the default station 
-# name on ClimateAnalyzer.org
-renderSummary(my_report = "water_year", station_id = "arches")
-
-# Calendar year report for Island in the Sky for 2018 and changing the name used 
-# in the report.
-renderSummary(my_report = "calendar_year", station_id = "canyonlands_theneck", 
-              station_name = "Island in the Sky, Canyonlands National Park", 
-              my_year = 2018)
-```
-
 Below are examples of functions that import data from [ClimateAnalyzer.org](http://climateanalyzer.org/).
 
 ``` r
 #-- Annual data
 # Import annual temperature and precipitation data and remove columns of missing
-# values.
+#     values.
 import_data("annual_wx", "canyonlands_theneck", 1980, 2020, 
             remove_missing = FALSE)
 
@@ -84,21 +69,36 @@ import_data("departure", 'natural_bridges_nm', 2000, 2010, month = 7)
 
 #-- Water balance data
 # Import monthly water balance data using the Hamon model with soil water
-# capacity set to 100.
+#     capacity set to 100.
 import_data("water_balance", "arches", 2015, 2020, table_type = "monthly",
             soil_water = 100, pet_type = "hamon", forgiving = "very")
 
-#-- Count of days under the 5th percentile and above the 95th percentile
-# Import number of days annually with minimum temperatures below the 5th
-# percentile temperature and number of days above the 95th percentile
-import_extreme_temp(station_id = "tumacacori", start_year = 1991, 
-                    end_year = 2020, station_type = "GHCN", year = "year")
-
 #-- Number of days per year above/below user set temperature
-# Imports number of days annually with minimum and maximum daily
-# temperatures below and above user set temperatures
+# Import the number of days per year that are below a user set minimum 
+#     temperature and above a user set maximum temperatures.
 import_below_above_temp(station_id = "tumacacori", start_year = 1991,
                         end_year = 2020, tmin_temp = 20, tmax_temp = 100,
                         station_type = "GHCN", year = "year")
+
+#-- Count of days under the 5th percentile and above the 95th percentile
+# Import the number of days per year that temperatures were below the 5th
+#     percentile and above the 95th percentile.
+import_extreme_temp(station_id = "tumacacori", start_year = 1991, 
+                    end_year = 2020, station_type = "GHCN", year = "year")
 ```
 
+Below are examples that produce PDF reports.
+
+```r
+library(climateAnalyzeR)
+
+# Current water year summary for Arches National Park using the default station 
+# name on ClimateAnalyzer.org
+renderSummary(my_report = "water_year", station_id = "arches")
+
+# Calendar year report for Island in the Sky for 2018 and changing the name used 
+# in the report.
+renderSummary(my_report = "calendar_year", station_id = "canyonlands_theneck", 
+              station_name = "Island in the Sky, Canyonlands National Park", 
+              my_year = 2018)
+```

@@ -1,9 +1,22 @@
-#-- Global Variables
+# Global Variables ----
 utils::globalVariables(c("x", "y", "label", "year", "month", "g", "value",
                          "Jan", "Annual", "element", "name"))
 
-#-- Number Contraction
-# Prints the appropriate number contraction for a given number.
+# ggplot Theme Settings ----
+climateAnalyzeR_theme <- ggplot2::theme_bw() +
+  ggplot2::theme(strip.background = ggplot2::element_rect(fill = "white"),
+                 strip.text = ggplot2::element_text(hjust = 0.1),
+                 axis.title.x = ggplot2::element_blank())
+
+# Functions ----
+
+#' number_contraction: Number Contraction.
+#'
+#' Prints the appropriate number contraction for a given number.
+#'
+#' @param x vector of numbers
+#'
+#' @return string
 number_contraction <- function(x) {
   if (is.na(x)){
     y = FALSE
@@ -21,8 +34,13 @@ number_contraction <- function(x) {
   return(y)
 }
 
-#-- Glue Months
-# Returns a string of months with comma's between each month.
+#' glue_mths: Glue Months
+#'
+#' Returns a string of months with comma's between each month.
+#'
+#' @param mths Vector of month names or abbreviations
+#'
+#' @return string
 glue_mths <- function(mths) {
   if (length(mths) == 2){
     glue::glue("{mths[1]} and {mths[2]}")
@@ -31,31 +49,9 @@ glue_mths <- function(mths) {
   }
 }
 
-#-- ggplot Theme settings
-climateAnalyzeR_theme <- ggplot2::theme_bw() +
-  ggplot2::theme(strip.background = ggplot2::element_rect(fill = "white"),
-                 strip.text = ggplot2::element_text(hjust = 0.1),
-                 axis.title.x = ggplot2::element_blank())
-
-#-- Convert from imperial to metric
-# PRCP
-convert_prcp <- function(dat){
-  dat = dat |>
-    dplyr::mutate(dplyr::across(dplyr::contains("prcp"), ~(.x * 25.4),
-                                .names = "{.col}_mm"),
-                  dplyr::across(dplyr::contains("inches"), ~(.x * 25.4),
-                                .names = "{.col}_mm"))
-  return(dat)
-}
-# TEMP
-convert_temp <- function(dat){
-  dat = dat |>
-    dplyr::mutate(dplyr::across(dplyr::contains(c("tmax", "tmin")),
-                                ~((.x - 32) * (5/9)), .names = "{.col}_c"))
-  return(dat)
-}
-
-#-- Rename variables
+#' rename_vars: Rename variables
+#'
+#' @param dat data frame or tibble
 rename_vars <- function(dat){
   new_names = janitor::make_clean_names(names(dat))
   new_names = gsub("accum_snowpack", "snowpack", new_names)
@@ -76,7 +72,10 @@ rename_vars <- function(dat){
   return(dat)
 }
 
-#-- Create error messages
+#' missing_arg: Simple function to create an error message when arguments are missing
+#'
+#' @param my_arg Function arguments
+#' @param my_mess Error message
 missing_arg <- function(my_arg, my_mess) {
   if(missing(my_arg)){
     message(my_mess)
@@ -84,8 +83,43 @@ missing_arg <- function(my_arg, my_mess) {
   }
 }
 
-#-- Functions to pull data from http://www.climateanalyzer.org/
-# comma delimited data
+## Convert from imperial to metric ----
+
+#' convert_prcp: Convert precipitation data from imperial to metric
+#'
+#' @param dat data frame or tibble
+#'
+#' @return dataframe
+convert_prcp <- function(dat){
+  dat = dat |>
+    dplyr::mutate(dplyr::across(dplyr::contains("prcp"), ~(.x * 25.4),
+                                .names = "{.col}_mm"),
+                  dplyr::across(dplyr::contains("inches"), ~(.x * 25.4),
+                                .names = "{.col}_mm"))
+  return(dat)
+}
+
+#' convert_temp: Convert temperature data from imperial to metric
+#'
+#' @param dat data frame or tibble
+#'
+#' @return dataframe
+convert_temp <- function(dat){
+  dat = dat |>
+    dplyr::mutate(dplyr::across(dplyr::contains(c("tmax", "tmin")),
+                                ~((.x - 32) * (5/9)), .names = "{.col}_c"))
+  return(dat)
+}
+
+## Functions to Pull Data ----
+# From http://www.climateanalyzer.org/
+
+#' pull_csv: Pull comma delimited data
+#'
+#' @param my_url URL
+#' @param skip Lines to skip
+#'
+#' @return dataframe
 pull_csv <- function(my_url, skip){
   dat = suppressMessages(
     suppressWarnings(
@@ -98,10 +132,12 @@ pull_csv <- function(my_url, skip){
   return(dat)
 }
 
-#' Child function to scrape HTML tables
+#' pull_xml: Child function to scrape HTML tables
 #'
 #' @param my_url URL
 #' @param skip   rows to skip
+#'
+#' @return dataframe
 pull_xml <- function(my_url, skip){
   dat = XML::readHTMLTable(my_url, header = FALSE, skip.rows = skip,
                            as.data.frame = TRUE, which = 1)
@@ -111,7 +147,7 @@ pull_xml <- function(my_url, skip){
   return(tibble::as_tibble(dat))
 }
 
-#' Child function to import monthly data
+#' pull_monthly: Child function to import monthly data
 #'
 #' @param station_id weather station id
 #' @param start_year start year, YYYY
@@ -119,6 +155,8 @@ pull_xml <- function(my_url, skip){
 #' @param month      month number
 #' @param table_type type of table, designated in parent function
 #' @param norm_per   normal period (e.g., "1991-2010")
+#'
+#' @return dataframe
 pull_monthly <- function(station_id, start_year, end_year, month, table_type,
                            norm_per){
   my_url = paste0("http://climateanalyzer.science/python/make_tables.py?station=",
@@ -130,4 +168,3 @@ pull_monthly <- function(station_id, start_year, end_year, month, table_type,
   names(dat) = janitor::make_clean_names(names(dat))
   return(tibble::as_tibble(dat))
 }
-
