@@ -24,7 +24,7 @@ temperatures.}
 }}
 }
 \value{
-A \code{\link[tibble:tibble]{name}}.
+A \code{\link[tibble]{tibble}}.
 }
 \description{
 This function imports 30-year normals calculated by NOAA from

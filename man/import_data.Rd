@@ -36,10 +36,10 @@ is NULL. If NULL, current year will be used.}
 \item{...}{Other arguments to pass to the import functions.}
 }
 \value{
-A \code{\link[tibble:tibble]{name}}.
+A \code{\link[tibble]{tibble}}.
 }
 \description{
-This is a wrapper for data import functions in in the climateAnalyzeR package.
+This is a wrapper for data import functions in the climateAnalyzeR package.
 }
 \examples{
 library(climateAnalyzeR)

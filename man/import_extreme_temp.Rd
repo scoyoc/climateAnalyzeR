@@ -29,14 +29,11 @@ for calendar year and "water_year". Default is "year". If using
 interest.}
 }
 \value{
-A \code{\link[tibble:tibble]{name}}.
+A \code{\link[tibble]{tibble}}.
 }
 \description{
-This function imports number of days annually with minimum temperatures below
-the 5th percentile temperature and number of days above the 95th percentile,
-mean consecutive days and max consecutive days of each. The 5th and 95th
-percentile temps are relative to the time period chosen and are found in the
-column names.
+This function imports the number of days per year that temperatures were
+below the 5th percentile and above the 95th percentile from
 \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 }
 \examples{

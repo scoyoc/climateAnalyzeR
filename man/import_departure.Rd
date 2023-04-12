@@ -34,7 +34,7 @@ additional columns in the data frame denoted by "_mm" or "_C". Default is
 FALSE.}
 }
 \value{
-A \code{\link[tibble:tibble]{name}}.
+A \code{\link[tibble]{tibble}}.
 }
 \description{
 This function imports monthly departure data from

@@ -1,6 +1,6 @@
 #' Read data from ClimateAnalyzer.org into R.
 #'
-#' This is a wrapper for data import functions in in the climateAnalyzeR package.
+#' This is a wrapper for data import functions in the climateAnalyzeR package.
 #'
 #' @param data_type A character string for the type of data to import.
 #'     \itemize{

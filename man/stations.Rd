@@ -17,7 +17,7 @@ the data frame using \code{\link[dplyr]{filter}}. Default is NULL.}
 data frame using \code{\link[dplyr]{filter}}. Default is NULL.}
 }
 \value{
-A \code{\link[tibble:tibble]{tibble}}.
+A \code{\link[tibble]{tibble}}.
 }
 \description{
 This function imports weather station information from

@@ -35,7 +35,7 @@ Default is 100cm. If you are not sure use the default.}
 'mild' and 'very'. Default is 'very'.}
 }
 \value{
-A \code{\link[tibble:tibble]{name}}.
+A \code{\link[tibble]{tibble}}.
 }
 \description{
 This function imports daily or monthly water balance data from
