@@ -10,5 +10,5 @@ rename_vars(dat)
 \item{dat}{data frame or tibble}
 }
 \description{
-rename_vars: Rename variables
+Rename variables from ClimateAnalyzer.org
 }

@@ -15,5 +15,5 @@ pull_csv(my_url, skip)
 dataframe
 }
 \description{
-pull_csv: Pull comma delimited data
+Pull csv data from ClimateAnalyzer.org
 }

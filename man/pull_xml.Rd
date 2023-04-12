@@ -15,5 +15,5 @@ pull_xml(my_url, skip)
 dataframe
 }
 \description{
-pull_xml: Child function to scrape HTML tables
+Scrape data from HTML tables on ClimateAnalyzer.org and convert to dataframe
 }

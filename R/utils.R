@@ -51,6 +51,8 @@ glue_mths <- function(mths) {
 
 #' rename_vars: Rename variables
 #'
+#' Rename variables from ClimateAnalyzer.org
+#'
 #' @param dat data frame or tibble
 rename_vars <- function(dat){
   new_names = janitor::make_clean_names(names(dat))
@@ -116,6 +118,8 @@ convert_temp <- function(dat){
 
 #' pull_csv: Pull comma delimited data
 #'
+#' Pull csv data from ClimateAnalyzer.org
+#'
 #' @param my_url URL
 #' @param skip Lines to skip
 #'
@@ -133,6 +137,8 @@ pull_csv <- function(my_url, skip){
 }
 
 #' pull_xml: Child function to scrape HTML tables
+#'
+#' Scrape data from HTML tables on ClimateAnalyzer.org and convert to dataframe
 #'
 #' @param my_url URL
 #' @param skip   rows to skip
