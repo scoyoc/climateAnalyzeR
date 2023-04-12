@@ -32,7 +32,7 @@ Typically from \code{\link{normals}}.}
 normals (e.g., "1981-2010").}
 
 \item{area_color}{A character string for the color of the area. See
-\code{\link[grDevices::colors]{name}} for a list of color names.}
+\code{\link[grDevices]{colors}} for a list of color names.}
 
 \item{line_color}{A character string for the line color.}
 

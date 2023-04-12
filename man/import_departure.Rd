@@ -26,7 +26,7 @@ is NULL. If NULL, current year will be used.}
 or 'all' for all months. Default is 'all'.}
 
 \item{norm_per}{A character string for the 30-year normalization period.
-Either '1971-2000' or '1981-2010'. Default is '1981-2010'.}
+Either '1971-2000', '1981-2010', or '1991-2020'. Default is '1981-2010'.}
 
 \item{convert}{Logical. If TRUE, data are precipitation and temperature
 values are converted to metric. These converted values are included as

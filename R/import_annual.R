@@ -21,7 +21,7 @@
 #'     additional columns in the data frame denoted by "_mm" or "_C". Default is
 #'     FALSE.
 #'
-#' @return A \code{\link[tibble:tibble]{name}}.
+#' @return A \code{\link[tibble]{tibble}}.
 #' @seealso The \code{\link{import_data}} wrapper function.
 #' @export
 #'

@@ -3,8 +3,8 @@
 month_df <- data.frame(month = 1:12,
                        water_month = c(4:12, 1:3),
                        month_name = factor(month.abb,
-                                        levels = c(month.abb[10:12],
-                                                   month.abb[1:9])),
+                                        levels = c(base::month.abb[10:12],
+                                                   base::month.abb[1:9])),
                        season = c("Wi", "Wi", "Sp", "Sp", "Sp", "Su", "Su",
                                   "Su", "Fa", "Fa", "Fa", "Wi"))
 

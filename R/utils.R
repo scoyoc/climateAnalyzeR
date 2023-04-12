@@ -1,3 +1,7 @@
+#-- Global Variables
+utils::globalVariables(c("x", "y", "label", "year", "month", "g", "value",
+                         "Jan", "Annual", "element", "name"))
+
 #-- Number Contraction
 # Prints the appropriate number contraction for a given number.
 number_contraction <- function(x) {
@@ -94,7 +98,10 @@ pull_csv <- function(my_url, skip){
   return(dat)
 }
 
-# scrape HTML tables
+#' Child function to scrape HTML tables
+#'
+#' @param my_url URL
+#' @param skip   rows to skip
 pull_xml <- function(my_url, skip){
   dat = XML::readHTMLTable(my_url, header = FALSE, skip.rows = skip,
                            as.data.frame = TRUE, which = 1)
@@ -104,7 +111,14 @@ pull_xml <- function(my_url, skip){
   return(tibble::as_tibble(dat))
 }
 
-#' Function to import monthly data
+#' Child function to import monthly data
+#'
+#' @param station_id weather station id
+#' @param start_year start year, YYYY
+#' @param end_year   end year, YYYY
+#' @param month      month number
+#' @param table_type type of table, designated in parent function
+#' @param norm_per   normal period (e.g., "1991-2010")
 pull_monthly <- function(station_id, start_year, end_year, month, table_type,
                            norm_per){
   my_url = paste0("http://climateanalyzer.science/python/make_tables.py?station=",

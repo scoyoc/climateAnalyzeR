@@ -4,13 +4,13 @@
 #'     \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 #'
 #' @param station_name A string of the station \emph{name}. This is used to reduce
-#'     the data frame using \code{\link[dplyr::filter]{name}}. Default is NULL.
+#'     the data frame using \code{\link[dplyr]{filter}}. Default is NULL.
 #' @param station_id A string of the \emph{station_id}. This is used to reduce
-#'     the data frame using \code{\link[dplyr::filter]{name}}. Default is NULL.
+#'     the data frame using \code{\link[dplyr]{filter}}. Default is NULL.
 #' @param id A string of the station \emph{id}. This is used to reduce the
-#'     data frame using \code{\link[dplyr::filter]{name}}. Default is NULL.
+#'     data frame using \code{\link[dplyr]{filter}}. Default is NULL.
 #'
-#' @return A \code{\link[tibble:tibble]{tibble}}.
+#' @return A \code{\link[tibble]{tibble}}.
 #' @export
 #'
 #' @examples

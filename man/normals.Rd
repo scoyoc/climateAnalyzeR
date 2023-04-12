@@ -4,11 +4,11 @@
 \alias{normals}
 \title{Import NOAA calculated normals}
 \usage{
-normals(ref_period = "1981-2010", station_id = NULL, tidy = TRUE)
+normals(ref_period = "1991-2020", station_id = NULL, tidy = TRUE)
 }
 \arguments{
 \item{ref_period}{The string for 30-year reference period. The user can choose
-"1971-2000" or "1981-2010". Default is "1981-2010".}
+"1971-2000", "1981-2010", or "1991-2020". Default is "1991-2020".}
 
 \item{station_id}{Optional. The character string of the \emph{station_id}
 field from \code{\link{stations}}. Default is NULL. If NULL, a data frame

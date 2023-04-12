@@ -37,7 +37,8 @@ A PDF.
 This function will render a PDF report from an RMarkdown (Rmd) script.
 }
 \examples{
-library(climateAnalyzeR)
+\dontrun{
+#' library(climateAnalyzeR)
 
 # Render water year report for current water year
 renderSummary(my_report = "water_year", station_id = "hans_flat_rs")
@@ -46,5 +47,5 @@ renderSummary(my_report = "water_year", station_id = "hans_flat_rs")
 renderSummary(my_report = "calendar_year", station_id = "canyonlands_theneck",
               station_name = "Island in the Sky, Canyonlands National Park",
               my_year = 2018)
-
+}
 }

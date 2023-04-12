@@ -2,10 +2,23 @@
 % Please edit documentation in R/utils.R
 \name{pull_monthly}
 \alias{pull_monthly}
-\title{Function to import monthly data}
+\title{Child function to import monthly data}
 \usage{
 pull_monthly(station_id, start_year, end_year, month, table_type, norm_per)
 }
+\arguments{
+\item{station_id}{weather station id}
+
+\item{start_year}{start year, YYYY}
+
+\item{end_year}{end year, YYYY}
+
+\item{month}{month number}
+
+\item{table_type}{type of table, designated in parent function}
+
+\item{norm_per}{normal period (e.g., "1991-2010")}
+}
 \description{
-Function to import monthly data
+Child function to import monthly data
 }

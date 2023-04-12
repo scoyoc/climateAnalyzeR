@@ -15,9 +15,9 @@
 #'         \item \emph{water_balance}: Water balance data.
 #'             See \code{\link{import_water_balance}} for details.
 #'         \item \emph{extreme_temp}: Days below and above percentile temp data.
-#'             See \code{\link{import_temp_extreme}} for details.
+#'             See \code{\link{import_extreme_temp}} for details.
 #'         \item \emph{below_above_tempe}: Days below and above user set temp data.
-#'             See \code{\link{mport_below_above_temp}} for details.
+#'             See \code{\link{import_below_above_temp}} for details.
 #'     }
 #' @param station_id The character string of the \emph{station_id} field from
 #'     \code{\link{stations}}.
@@ -26,11 +26,12 @@
 #'     is NULL. If NULL, current year will be used.
 #' @param ... Other arguments to pass to the import functions.
 #'
-#' @return A \code{\link[tibble:tibble]{name}}.
+#' @return A \code{\link[tibble]{tibble}}.
 #' @seealso
 #' See \code{\link{import_annual}}, \code{\link{import_daily}},
-#'     \code{\link{import_departure}}, \code{\link{import_monthly}}, and
-#'     \code{\link{import_water_balance}} for details.
+#'     \code{\link{import_departure}}, \code{\link{import_monthly}},
+#'     \code{\link{import_extreme_temp}}, \code{\link{import_below_above_temp}},
+#'     and \code{\link{import_water_balance}} for details.
 #' @export
 #'
 #' @examples
@@ -56,16 +57,16 @@
 #' import_data("water_balance", station_id = "bryce_canyon_np", start_year = 2015,
 #'             end_year = 2020, table_type = "monthly", soil_water = 100,
 #'             pet_type = "hamon", forgiving = "very")
-#'             
-#'  # Import number of days annually with minimum temperatures below the 5th 
+#'
+#'  # Import number of days annually with minimum temperatures below the 5th
 #'  # percentile temperature and number of days above the 95th percentile
-#'  import_temp_extreme (station_id = "tumacacori", start_year = 1991, end_year =
+#'  import_extreme_temp(station_id = "tumacacori", start_year = 1991, end_year =
 #'                      2020, station_type = "GHCN", year = "year")
-#'                      
-#'  # Imports number of days annually with minimum and maximum daily 
+#'
+#'  # Imports number of days annually with minimum and maximum daily
 #'  # temperatures below and above user set temperatures
-#'  import_below_above_temp(station_id = "tumacacori", start_year = 1991, 
-#'                          end_year =2020, tmin_temp = 20, tmax_temp = 100, 
+#'  import_below_above_temp(station_id = "tumacacori", start_year = 1991,
+#'                          end_year =2020, tmin_temp = 20, tmax_temp = 100,
 #'                          station_type = "GHCN", year = "year")
 #'
 #'

@@ -13,7 +13,7 @@
 #'     provided by x_var, y_var, and year_group for plotting, and as a label on
 #'     the figure.
 #' @param line_color A character string for the line color.See
-#'     \code{\link[grDevices::colors]{name}} for a list of color names.
+#'     \code{\link[grDevices]{colors}} for a list of color names.
 #' @param my_title A character string for the title.
 #' @param my_ylab A character string from the y-axis.
 #'

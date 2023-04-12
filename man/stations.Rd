@@ -8,13 +8,13 @@ stations(station_name = NULL, station_id = NULL, id = NULL)
 }
 \arguments{
 \item{station_name}{A string of the station \emph{name}. This is used to reduce
-the data frame using \code{\link[dplyr::filter]{name}}. Default is NULL.}
+the data frame using \code{\link[dplyr]{filter}}. Default is NULL.}
 
 \item{station_id}{A string of the \emph{station_id}. This is used to reduce
-the data frame using \code{\link[dplyr::filter]{name}}. Default is NULL.}
+the data frame using \code{\link[dplyr]{filter}}. Default is NULL.}
 
 \item{id}{A string of the station \emph{id}. This is used to reduce the
-data frame using \code{\link[dplyr::filter]{name}}. Default is NULL.}
+data frame using \code{\link[dplyr]{filter}}. Default is NULL.}
 }
 \value{
 A \code{\link[tibble:tibble]{tibble}}.

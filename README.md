@@ -8,17 +8,19 @@ Currently water year (Oct-Sep) and calendar year (Jan-Dec) reports are available
 The plan is to include water balance summaries to the RMarkdown scripts in the future.
 
 This package also imports data from [ClimateAnalyzer.org](http://climateanalyzer.org/) into R. 
-Currently  annual, monthly, and daily weather data and water balance models for Co-op stations are available.
+Currently  annual, monthly, daily weather data, temperatures above/below a specified temperature, and water balance models for Co-op stations are available.
 
-Version: 0.9.1
+Version: 0.9.2
 
 Depends: R (>= 4.0)
 
-Imports: cowplot, dplyr, ggplot2, glue, ggmap, grid, gridExtra, knitr, janitor, lubridate, readr, rmarkdown, shadowtext, stats, stringr, tidyr, tibble, XML
+Imports: cowplot, dplyr, ggplot2, glue, ggmap, grid, gridExtra, knitr, janitor, lubridate, readr, rmarkdown, shadowtext, stats, stringr, tidyr, tibble, utils, XML
 
 Suggests: tidyverse
 
 Author: Matthew Van Scoyoc
+
+Contributors: Kara Raymond
 
 Maintainer: Matthew Van Scoyoc
 
@@ -85,5 +87,18 @@ import_data("departure", 'natural_bridges_nm', 2000, 2010, month = 7)
 # capacity set to 100.
 import_data("water_balance", "arches", 2015, 2020, table_type = "monthly",
             soil_water = 100, pet_type = "hamon", forgiving = "very")
+
+#-- Count of days under the 5th percentile and above the 95th percentile
+# Import number of days annually with minimum temperatures below the 5th
+# percentile temperature and number of days above the 95th percentile
+import_extreme_temp(station_id = "tumacacori", start_year = 1991, 
+                    end_year = 2020, station_type = "GHCN", year = "year")
+
+#-- Number of days per year above/below user set temperature
+# Imports number of days annually with minimum and maximum daily
+# temperatures below and above user set temperatures
+import_below_above_temp(station_id = "tumacacori", start_year = 1991,
+                        end_year = 2020, tmin_temp = 20, tmax_temp = 100,
+                        station_type = "GHCN", year = "year")
 ```
 

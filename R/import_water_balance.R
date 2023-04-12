@@ -16,7 +16,7 @@
 #' @param forgiving A string for the tolerance of the model. Options are 'no',
 #'     'mild' and 'very'. Default is 'very'.
 #'
-#' @return A \code{\link[tibble:tibble]{name}}.
+#' @return A \code{\link[tibble]{tibble}}.
 #' @seealso The \code{\link{import_data}} wrapper function.
 #' @export
 #'

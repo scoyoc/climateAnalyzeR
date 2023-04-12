@@ -12,7 +12,7 @@ A data frame with 12 rows and 4 variables:
 \item{water_month}{Integer. Water year month number where Oct is 1 and Sep
 is 12.}
 \item{month_name}{Factor. Abbreviated month name using
-\code{\link[month.abb]{month.abb}}. Factor levels correspond to
+\code{\link[base]{month.abb}}. Factor levels correspond to
 water_month.}
 \item{season}{Character. 2-letter season abbreviation for winter (Wi),
 spring (Sp), summer (Su), and fall (Fa).}
