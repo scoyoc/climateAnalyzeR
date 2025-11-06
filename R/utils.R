@@ -8,7 +8,9 @@ climateAnalyzeR_theme <- ggplot2::theme_bw() +
                  strip.text = ggplot2::element_text(hjust = 0.1),
                  axis.title.x = ggplot2::element_blank())
 
+
 # Functions ----
+
 
 #' number_contraction: Number Contraction.
 #'
@@ -34,6 +36,7 @@ number_contraction <- function(x) {
   return(y)
 }
 
+
 #' glue_mths: Glue Months
 #'
 #' Returns a string of months with comma's between each month.
@@ -48,6 +51,7 @@ glue_mths <- function(mths) {
     glue::glue("{paste(mths[1:length(mths) - 1], collapse = ', ')}, and {mths[length(mths)]}")
   }
 }
+
 
 #' rename_vars: Rename variables
 #'
@@ -73,6 +77,7 @@ rename_vars <- function(dat){
   colnames(dat) = new_names
   return(dat)
 }
+
 
 #' missing_arg: Simple function to create an error message when arguments are missing
 #'
@@ -101,6 +106,7 @@ convert_prcp <- function(dat){
   return(dat)
 }
 
+
 #' convert_temp: Convert temperature data from imperial to metric
 #'
 #' @param dat data frame or tibble
@@ -112,6 +118,7 @@ convert_temp <- function(dat){
                                 ~((.x - 32) * (5/9)), .names = "{.col}_c"))
   return(dat)
 }
+
 
 ## Functions to Pull Data ----
 # From http://www.climateanalyzer.org/
@@ -136,6 +143,7 @@ pull_csv <- function(my_url, skip){
   return(dat)
 }
 
+
 #' pull_xml: Child function to scrape HTML tables
 #'
 #' Scrape data from HTML tables on ClimateAnalyzer.org and convert to dataframe
@@ -152,6 +160,7 @@ pull_xml <- function(my_url, skip){
   names(dat) = janitor::make_clean_names(names(dat))
   return(tibble::as_tibble(dat))
 }
+
 
 #' pull_monthly: Child function to import monthly data
 #'

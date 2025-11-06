@@ -1,8 +1,8 @@
 #' Import count of days with temperatures below and above user set temps
 #'
-#' This function imports the number of days per year that are below a user set
-#'     minimum temperature and above a user set maximum temperatures from
-#'     \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
+#' This function imports the number of days per year that are below a user
+#'     defined minimum temperature and above a user defined maximum temperature
+#'     from \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 #'
 #' @param station_id The character string of the \emph{station_id} field from
 #'     \code{\link{stations}}.

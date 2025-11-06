@@ -40,9 +40,9 @@ interest.}
 A \code{\link[tibble]{tibble}}.
 }
 \description{
-This function imports the number of days per year that are below a user set
-minimum temperature and above a user set maximum temperatures from
-\href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
+This function imports the number of days per year that are below a user
+defined minimum temperature and above a user defined maximum temperature
+from \href{http://www.climateanalyzer.org/}{ClimateAnalyzer.org} into R.
 }
 \examples{
 library(climateAnalyzeR)

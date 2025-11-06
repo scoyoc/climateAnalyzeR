@@ -1,41 +1,38 @@
 # climateAnalyzeR
 
-<!-- badges: start -->
-<!-- badges: end -->
+This R package imports data from [ClimateAnalyzer.org](http://climateanalyzer.org/) into R. Currently annual, monthly, daily weather data, temperatures above and below a specified temperature, and water balance models for Co-op stations are available.
 
-This package imports data from [ClimateAnalyzer.org](http://climateanalyzer.org/) into R. 
-Currently  annual, monthly, daily weather data, temperatures above/below a specified temperature, and water balance models for Co-op stations are available.
+This R package can also produce brief climate reports using temperature and precipitation data from Co-op stations using RMarkdown. Currently water year (Oct-Sep) and calendar year (Jan-Dec) reports are available.
 
-This R package can also produce brief climate reports using temperature and precipitation data from Co-op stations using RMarkdown. 
-Currently water year (Oct-Sep) and calendar year (Jan-Dec) reports are available. 
-The plan is to include water balance summaries to the RMarkdown scripts in the future.
+**Version:** 0.9.2
 
-Version: 0.9.2
+**Depends:** R (\>= 4.0)
 
-Depends: R (>= 4.0)
+**Imports:** cowplot, dplyr, ggplot2, glue, ggmap, grid, gridExtra, knitr, janitor, lubridate, readr, rmarkdown, shadowtext, stats, stringr, tidyr, tibble, utils, XML
 
-Imports: cowplot, dplyr, ggplot2, glue, ggmap, grid, gridExtra, knitr, janitor, lubridate, readr, rmarkdown, shadowtext, stats, stringr, tidyr, tibble, utils, XML
+**Suggests:** tidyverse
 
-Suggests: tidyverse
+**Author:** [Matthew Van Scoyoc](https://github.com/scoyoc)
 
-Author: Matthew Van Scoyoc
+**Contributors:** [Kara Raymond](https://github.com/kararaymond)
 
-Contributors: Kara Raymond
+**Maintainer:** [Matthew Van Scoyoc](https://github.com/scoyoc)
 
-Maintainer: Matthew Van Scoyoc
+**Issues:** As of November 06, 2025, most functions worked. Please continue to report issues to <https://github.com/scoyoc/climateAnalyzeR/issues>. Below are the known issues.
 
-Issues: [https://github.com/scoyoc/climateAnalyzeR/issues](https://github.com/scoyoc/climateAnalyzeR/issues)
+-   Rendering PDF reports is broken. This is a known [issue](https://github.com/scoyoc/climateAnalyzeR/issues/5).
 
-License: MIT + file [LICENSE](https://github.com/scoyoc/climateAnalyzeR/blob/master/LICENSE.md)
+-   Importing water balance data is broken. This is a known [issue](https://github.com/scoyoc/climateAnalyzeR/issues/4).
 
-URL: [https://github.com/scoyoc/climateAnalyzeR](https://github.com/scoyoc/climateAnalyzeR)
+-   Importing daily data using the `import_data()` function is broken. This is a known [issue](https://github.com/scoyoc/climateAnalyzeR/issues/6).
 
-Documentation: Just the man pages for now. A vignette is planned for development.
+**License:** MIT + file [LICENSE](https://github.com/scoyoc/climateAnalyzeR/blob/master/LICENSE.md)
+
+**URL:** <https://github.com/scoyoc/climateAnalyzeR>
+
+**Documentation:** Just the man pages for now.
 
 ## Installation
-
-Perhaps someday you will be able to install this package from [CRAN](https://CRAN.R-project.org), but for now you can 
-install it form GitHub.
 
 ``` r
 devtools::install_github("scoyoc/climateAnalyzeR")
@@ -89,7 +86,7 @@ import_extreme_temp(station_id = "tumacacori", start_year = 1991,
 
 Below are examples that produce PDF reports.
 
-```r
+``` r
 library(climateAnalyzeR)
 
 # Current water year summary for Arches National Park using the default station 
@@ -102,3 +99,37 @@ renderSummary(my_report = "calendar_year", station_id = "canyonlands_theneck",
               station_name = "Island in the Sky, Canyonlands National Park", 
               my_year = 2018)
 ```
+
+## List of Functions
+
+-   `annual_figure`: produces a standardized line graph for annual data.
+
+-   `import_annual`: imports annual temperature and precipitation data from ClimateAnalyzer.org into R.
+
+-   `import_below_above_temp`: imports the number of days per year that are below a user \#' defined minimum temperature and above a user defined maximum temperature.
+
+-   `import_daily`: imports daily temperature and precipitation data.
+
+-   `import_data`: a wrapper for data import functions in this package. Importing daily data using this function is broken.
+
+-   `import_departure`: imports monthly departure data.
+
+-   `import_extreme_temp`: imports the number of days per year that temperatures were below the 5th percentile and above the 95th percentile.
+
+-   `import_monthly`: imports monthly temperature and precipitation data.
+
+-   `import_water_balance`: **Broken**. Imports daily or monthly water balance data.
+
+-   `monthly_figure`: produces a standardized line graph for monthly data.
+
+-   `normals`: imports 30-year normals calculated by NOAA.
+
+-   `renderSummary`: **Broken**. Render a PDF report.
+
+-   `stations`: imports weather station information.
+
+-   
+
+## List of Data
+
+-   `month_df`: month numbers, 3-letter abbreviations, and season.

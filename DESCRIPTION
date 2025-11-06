@@ -5,7 +5,7 @@ Authors@R:
     person(given = "Matthew",
            family = "Van Scoyoc",
            role = c("aut", "cre"),
-           email = "matthew_vanscoyoc@nps.org",
+           email = "scoyoc@gmail.com",
            comment = c(ORCID = "0000-0001-6821-4476"))
 Description: This package creates a brief climate report for National Park 
     Service Co-op Stations and imports data from ClimateAnalyzer.org into R. 
@@ -17,7 +17,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.3
 Imports: 
     cowplot, 
     dplyr,
