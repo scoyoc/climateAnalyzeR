@@ -128,8 +128,6 @@ renderSummary(my_report = "calendar_year", station_id = "canyonlands_theneck",
 
 -   `stations`: imports weather station information.
 
--   
-
 ## List of Data
 
 -   `month_df`: month numbers, 3-letter abbreviations, and season.
