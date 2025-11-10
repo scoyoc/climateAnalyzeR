@@ -1,6 +1,6 @@
 # MIT License
 
-Copyright (c) 2021 Southeast Utah Group, National Park Service, DOI
+Copyright (c) 2025 climateAnalyzeR authors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

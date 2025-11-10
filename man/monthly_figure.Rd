@@ -48,7 +48,7 @@ precipitation or temperature) in RMarkdown scrips to produce reports.
 library(climateAnalyzeR)
 
 # Import monthly departures
-dat <- import_data("departure", 'hovenweep_utah', 2000, 2021) |>
+dat <- import_departure('hovenweep_utah', 2000, 2021) |>
   # Create month data frame to make x axis lables
   dplyr::left_join(data.frame('month' = 1:12,
                               'month_abb' = factor(month.abb,

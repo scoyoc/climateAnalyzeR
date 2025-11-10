@@ -9,8 +9,7 @@ Authors@R:
            comment = c(ORCID = "0000-0001-6821-4476"))
 Description: This package creates a brief climate report for National Park 
     Service Co-op Stations and imports data from ClimateAnalyzer.org into R. 
-    Data abailable to import are temperature, precipitation, and soil water 
-    balance models.
+    Data abailable to import are temperature, precipitation, and departure data.
 Depends: 
     R (>= 4.0)
 License: MIT + file LICENSE

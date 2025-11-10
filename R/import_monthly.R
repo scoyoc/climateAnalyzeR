@@ -16,7 +16,6 @@
 #'     FALSE.
 #'
 #' @return A \code{\link[tibble]{tibble}}.
-#' @seealso The \code{\link{import_data}} wrapper function.
 #' @export
 #'
 #' @examples

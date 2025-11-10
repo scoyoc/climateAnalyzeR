@@ -29,16 +29,16 @@
 #' my_station <- "colorado_nm"
 #'
 #' # Import annual data from ClimateAnalyzer.org
-#' dat <-  import_data(data_type = "annual_wx", station_id =  my_station,
-#'                     start_year = 1980, end_year = 2020)
+#' dat <-  import_annual(station_id =  my_station, start_year = 1980,
+#'                       end_year = 2020)
 #'
 #' # Import NOAA calculated normals
-#' dat.30yr.prcp <- normals(station_id = my_station) |>
+#' prcp_30yr <- normals(station_id = my_station) |>
 #'   dplyr::filter(element == "PRCP" & month == "Annual")
 #'
 #' # Plot data
 #' annual_figure(x_var = dat$year, y_var = dat$prcp_wy, my_year = 2019,
-#'               normal = dat.30yr.prcp$value, reference_period = "1981-2010",
+#'               normal = prcp_30yr$value, reference_period = "1981-2010",
 #'               area_color = "green3", line_color = "darkgreen",
 #'               my_title = "Annual Precipitation, Colorado National Monument",
 #'               my_ylab = "PRCP (inches)")

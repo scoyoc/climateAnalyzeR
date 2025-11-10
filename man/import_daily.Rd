@@ -8,7 +8,7 @@ import_daily(
   station_id,
   start_year,
   end_year = NULL,
-  station_type,
+  station_type = "GHCN",
   convert = FALSE
 )
 }
@@ -22,7 +22,8 @@ import_daily(
 is NULL. If NULL, current year will be used.}
 
 \item{station_type}{A character string for the type of weather station the
-data are being pulled from. Options include "GHCN" and "SNOTEL".}
+data are being pulled from. Options include "GHCN" and "SNOTEL". Default
+is "GHCN".}
 
 \item{convert}{Logical. If TRUE, data are precipitation and temperature
 values are converted to metric. These converted values are included as
@@ -46,7 +47,4 @@ import_daily(station_id = "arches", start_year = 2010, station_type = "GHCN")
 import_daily(station_id = "arches", start_year = 2010, end_year = 2020,
              station_type = "GHCN", convert = TRUE)
 
-}
-\seealso{
-The \code{\link{import_data}} wrapper function.
 }

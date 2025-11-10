@@ -9,14 +9,14 @@
 #' @param end_year The four digit number of the last year of interest. Default
 #'     is NULL. If NULL, current year will be used.
 #' @param station_type A character string for the type of weather station the
-#'     data are being pulled from. Options include "GHCN" and "SNOTEL".
+#'     data are being pulled from. Options include "GHCN" and "SNOTEL". Default
+#'     is "GHCN".
 #' @param convert Logical. If TRUE, data are precipitation and temperature
 #'     values are converted to metric. These converted values are included as
 #'     additional columns in the data frame denoted by "_mm" or "_C". Default is
 #'     FALSE.
 #'
 #' @return A \code{\link[tibble]{tibble}}.
-#' @seealso The \code{\link{import_data}} wrapper function.
 #' @export
 #'
 #' @examples
@@ -29,8 +29,8 @@
 #' import_daily(station_id = "arches", start_year = 2010, end_year = 2020,
 #'              station_type = "GHCN", convert = TRUE)
 #'
-import_daily <- function(station_id, start_year, end_year = NULL, station_type,
-                         convert = FALSE){
+import_daily <- function(station_id, start_year, end_year = NULL,
+                         station_type = 'GHCN', convert = FALSE){
 
   if(is.null(end_year)){end_year = lubridate::year(lubridate::today())}
   my_url = paste0("http://climateanalyzer.science/python/u_thresh.py?station=",

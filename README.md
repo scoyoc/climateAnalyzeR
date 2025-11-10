@@ -1,6 +1,6 @@
 # climateAnalyzeR
 
-This R package imports data from [ClimateAnalyzer.org](http://climateanalyzer.org/) into R. Currently annual, monthly, daily weather data, temperatures above and below a specified temperature, and water balance models for Co-op stations are available.
+This R package imports data from [ClimateAnalyzer.org](http://climateanalyzer.org/) into R. Currently annual, monthly, and daily weather data from [Global Historical Climatology Network](https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily) Co-op stations are available.
 
 This R package can also produce brief climate reports using temperature and precipitation data from Co-op stations using RMarkdown. Currently water year (Oct-Sep) and calendar year (Jan-Dec) reports are available.
 
@@ -22,10 +22,6 @@ This R package can also produce brief climate reports using temperature and prec
 
 -   Rendering PDF reports is broken. This is a known [issue](https://github.com/scoyoc/climateAnalyzeR/issues/5).
 
--   Importing water balance data is broken. This is a known [issue](https://github.com/scoyoc/climateAnalyzeR/issues/4).
-
--   Importing daily data using the `import_data()` function is broken. This is a known [issue](https://github.com/scoyoc/climateAnalyzeR/issues/6).
-
 **License:** MIT + file [LICENSE](https://github.com/scoyoc/climateAnalyzeR/blob/master/LICENSE.md)
 
 **URL:** <https://github.com/scoyoc/climateAnalyzeR>
@@ -43,32 +39,24 @@ devtools::install_github("scoyoc/climateAnalyzeR")
 Below are examples of functions that import data from [ClimateAnalyzer.org](http://climateanalyzer.org/).
 
 ``` r
+library('climateAnalyzeR')
+
 #-- Annual data
 # Import annual temperature and precipitation data and remove columns of missing
 #     values.
-import_data("annual_wx", "canyonlands_theneck", 1980, 2020, 
-            remove_missing = FALSE)
-
-# Import annual temperature and precipitation data and convert values to metric
-import_data("annual_wx", "canyonlands_theneck", 1980, 2020, convert = TRUE)
-
-#-- Daily data
-# Import daily temperature and precipitation data
-import_data("daily_wx", "hans_flat_rs", 2010, 2020)
+import_annual("canyonlands_theneck", 1980, 2020, convert = TRUE)
 
 #-- Monthly data
 # Import monthly precipitation and temperature data for the month of June
-import_data("monthly_wx", 'canyonlands_theneedle', 2000, 2010, month = 6)
+import_monthly('canyonlands_theneedle', 2000, 2010)
+
+#-- Daily data
+# Import daily temperature and precipitation data
+import_daily("hans_flat_rs", 2010, 2020)
 
 #-- Monthly departures
 # Import departures for the month of July
-import_data("departure", 'natural_bridges_nm', 2000, 2010, month = 7)
-
-#-- Water balance data
-# Import monthly water balance data using the Hamon model with soil water
-#     capacity set to 100.
-import_data("water_balance", "arches", 2015, 2020, table_type = "monthly",
-            soil_water = 100, pet_type = "hamon", forgiving = "very")
+import_departure('natural_bridges_nm', 2000, 2010)
 
 #-- Number of days per year above/below user set temperature
 # Import the number of days per year that are below a user set minimum 
@@ -87,8 +75,6 @@ import_extreme_temp(station_id = "tumacacori", start_year = 1991,
 Below are examples that produce PDF reports.
 
 ``` r
-library(climateAnalyzeR)
-
 # Current water year summary for Arches National Park using the default station 
 # name on ClimateAnalyzer.org
 renderSummary(my_report = "water_year", station_id = "arches")
@@ -110,15 +96,11 @@ renderSummary(my_report = "calendar_year", station_id = "canyonlands_theneck",
 
 -   `import_daily`: imports daily temperature and precipitation data.
 
--   `import_data`: a wrapper for data import functions in this package. Importing daily data using this function is broken.
-
 -   `import_departure`: imports monthly departure data.
 
 -   `import_extreme_temp`: imports the number of days per year that temperatures were below the 5th percentile and above the 95th percentile.
 
 -   `import_monthly`: imports monthly temperature and precipitation data.
-
--   `import_water_balance`: **Broken**. Imports daily or monthly water balance data.
 
 -   `monthly_figure`: produces a standardized line graph for monthly data.
 

@@ -55,6 +55,3 @@ import_annual(station_id = "zion_np", start_year = 1980, end_year = 2020,
               convert = TRUE)
 
 }
-\seealso{
-The \code{\link{import_data}} wrapper function.
-}

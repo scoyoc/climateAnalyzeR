@@ -51,6 +51,3 @@ import_departure(station_id = 'natural_bridges_nm', start_year = 2000,
                  end_year = 2020, month = 7, convert = TRUE)
 
 }
-\seealso{
-The \code{\link{import_data}} wrapper function.
-}

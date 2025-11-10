@@ -49,6 +49,3 @@ import_monthly(station_id = 'canyonlands_theneedle', start_year = 2000,
                end_year = 2010, month = 6, convert = TRUE)
 
 }
-\seealso{
-The \code{\link{import_data}} wrapper function.
-}

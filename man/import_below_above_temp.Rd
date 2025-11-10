@@ -51,6 +51,3 @@ import_below_above_temp(station_id = "tumacacori", start_year = 1991, end_year =
 2020, tmin_temp = 20, tmax_temp = 100, station_type = "GHCN", year = "year")
 
 }
-\seealso{
-The \code{\link{import_data}} wrapper function.
-}
