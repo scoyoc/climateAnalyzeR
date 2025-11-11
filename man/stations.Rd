@@ -4,17 +4,40 @@
 \alias{stations}
 \title{Import station information}
 \usage{
-stations(station_name = NULL, station_id = NULL, id = NULL)
+stations(type = NULL, station_name = NULL, station_id = NULL, id = NULL)
 }
 \arguments{
-\item{station_name}{A string of the station \emph{name}. This is used to reduce
-the data frame using \code{\link[dplyr]{filter}}. Default is NULL.}
+\item{type}{A string to filter the returned data frame by station type.
+Default is NULL. If NULL, the entire data frame is returned. Station
+types include:
+- "buoy" = NOAA National Bouy Center data
+- "Canadian" = Canadian Historical Climate Data station
+- "CHIS" = California weather stations
+- "COOP" = NOAA Global Historical Climatology Network Co-op station
+- "findu" = Arizona weather stations
+- "HADS" = NOAA Hydrometeorological Automated Data System (HADS)
+- "Manual" = Manually entered data
+- "RAWS" = NIFC Remote Automatic Weather Station (RAWS)
+- "snotel" = NRCS SNOTEL station
+- "stream" = USGS Stream gauge
+- "USBR" = US Bureau of Reclamation
+- "USDA" = US Department of Agriculture
+- "ventura" = Ventura County, California weather station
+- "PIMA" = Pima County, Arizona weather station
+- "MET" = Other NOAA weather stations, e.g., airports and municipalities
+- "co_stream" = Great Sand Dunes National Park stream gauges}
 
-\item{station_id}{A string of the \emph{station_id}. This is used to reduce
-the data frame using \code{\link[dplyr]{filter}}. Default is NULL.}
+\item{station_name}{A string of the station \emph{name}. This is used to
+filter the returned data frame using \code{\link[dplyr]{filter}}. Default
+is NULL. If NULL, the entire data frame is returned.}
 
-\item{id}{A string of the station \emph{id}. This is used to reduce the
-data frame using \code{\link[dplyr]{filter}}. Default is NULL.}
+\item{station_id}{A string of the \emph{station_id}. This is used to filter
+the data frame using \code{\link[dplyr]{filter}}. Default is NULL. If
+NULL, the entire data frame is returned.}
+
+\item{id}{A string of the station \emph{id}. This is used to filter the
+data frame using \code{\link[dplyr]{filter}}. Default is NULL. If NULL,
+the entire data frame is returned.}
 }
 \value{
 A \code{\link[tibble]{tibble}}.
@@ -28,6 +51,9 @@ library(climateAnalyzeR)
 
 # Import all information for all stations.
 stations()
+
+# Import all GHCN Co-op stations.
+stations(type = "COOP")
 
 # Import station inforation using the name of the station
 stations(station_name = "Black Canyon of the Gunnison")

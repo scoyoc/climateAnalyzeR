@@ -52,14 +52,14 @@ annual_figure <- function(x_var, y_var, my_year, normal, reference_period,
   # Label data
   lab_dat <- tibble::tibble(normal = normal,
                             label = paste0(reference_period, " Avg: ",
-                                           round(normal, 1), "deg F"))
+                                           round(normal, 1), " deg F"))
 
   gg <- ggplot2::ggplot(dat, ggplot2::aes(x = x, y = y)) +
     ggplot2::geom_area(ggplot2::aes(x = x, y = y), stat = "identity",
                        fill = area_color, alpha = 0.5, na.rm = TRUE) +
     ggplot2::geom_hline(ggplot2::aes(yintercept = normal),
-                        linetype = "dashed", size = 0.5, color = "black") +
-    ggplot2::geom_line(stat = "identity", color = line_color, size = 1,
+                        linetype = "dashed", linewidth = 0.5, color = "black") +
+    ggplot2::geom_line(stat = "identity", color = line_color, linewidth = 1,
                        na.rm = TRUE) +
     ggplot2::geom_point(stat = "identity", color = line_color, size = 2,
                         na.rm = TRUE) +

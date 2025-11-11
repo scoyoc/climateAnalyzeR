@@ -1,8 +1,6 @@
 # climateAnalyzeR
 
-This R package imports data from [ClimateAnalyzer.org](http://climateanalyzer.org/) into R. Currently annual, monthly, and daily weather data from [Global Historical Climatology Network](https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily) Co-op stations are available.
-
-This R package can also produce brief climate reports using temperature and precipitation data from Co-op stations using RMarkdown. Currently water year (Oct-Sep) and calendar year (Jan-Dec) reports are available.
+This R package imports data from [ClimateAnalyzer.org](http://climateanalyzer.org/) into R. Currently annual, monthly, and daily weather data from [Global Historical Climatology Network](https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily) Co-op stations are available. This R package can also produce brief climate reports using temperature and precipitation data from Co-op stations using RMarkdown. Currently water year (Oct-Sep) and calendar year (Jan-Dec) reports are available.
 
 **Version:** 0.9.2
 

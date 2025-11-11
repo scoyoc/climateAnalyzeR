@@ -8,16 +8,171 @@ vignette: >
 ---
 
 ```{r, include = FALSE}
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+knitr::opts_chunk$set(eval = TRUE, echo = TRUE, results = 'as-is', 
+                      collapse = TRUE, comment = "#>")
 ```
 
-The primary function of this package is to produce brief climate reports using temperature and precipitation data from National Park Service Co-op stations using RMarkdown (*.Rmd). 
-Currently a water year (Oct-Sep) and annual (Jan-Dec) reports have been developed and need to be tested more thoroughly. 
-This package also imports vectorized data from [ClimateAnalyzer.org](http://climateanalyzer.org/) into R. 
-Currently  annual, monthly, and daily weather data and water balance models for Co-op stations are available.
+This package imports annual, monthly, and daily weather data from [ClimateAnalyzer.org](http://climateanalyzer.org/), hereafter The Climate Analyzer, into R.
+This package can also produce brief water year (Oct-Sep) and annual (Jan-Dec) climate reports using temperature and precipitation data from [Global Historical Climatology Network](https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily) (GHCN) Co-op stations using RMarkdown.
 
-# Import data into R
+# Download pacakge
 
-```{r setup}
-library(climateAnalyzeR)
+This package is currently hosted on GitHub. 
+You can use the `devtools` package to download `climateAnalyzeR` into your library.
+
+```{r setup, message=FALSE, warning=FALSE}
+# List of packages used in this vignette
+pkgs <- c('arcgislayers', 
+          'devtools', 
+          'dplyr', 
+          'ggplot2',
+          'janitor', 
+          'maptiles',
+          'sf', 
+          'tmap')
+
+# Install packages if it's not already in your library
+inst_pkgs <- pkgs %in% rownames(installed.packages())
+if (any(inst_pkgs == FALSE)) {
+  install.packages(pkgs[!inst_pkgs], 
+                   lib =  .libPaths()[1], 
+                   repos = "https://cloud.r-project.org",
+                   type = 'source', 
+                   dependencies = TRUE, 
+                   quiet = TRUE)
+  }
+
+# Load packages
+invisible(lapply(pkgs, library, character.only = TRUE))
+
+# Install climateAnalyzeR from GitHub
+devtools::install_github("scoyoc/climateAnalyzeR")
+
+# Load climateAnalyzeR 
+library('climateAnalyzeR')
 ```
+
+
+# Read data into R
+
+Several functions read data from The Climate Analyzer into R.
+
+## Find GHCN Co-op weather station
+
+something
+
+```{r stations}
+ghcn_stations <- stations(type = "COOP")
+
+dplyr::glimpse(ghcn_stations)
+```
+
+There are `r nrow(ghcn_stations)` GHCN Co-op station hosted on The Climate Analyzer.
+Lets filter this down to a more focused area, like Canyonlands National Park, Utah.
+
+```{r spatial_data}
+rest_url = "https://services1.arcgis.com/fBc8EJBxQRMcHlei/arcgis/rest/services/NPS_Land_Resources_Division_Boundary_and_Tract_Data_Service/FeatureServer/2"
+
+cany <- arcgislayers::arc_read(rest_url) |> 
+  janitor::clean_names() |> 
+  sf::st_make_valid() |>
+  dplyr::filter(unit_code == "CANY") |> 
+  sf::st_transform(crs = "EPSG:4326")
+
+ghcn_sf <- sf::st_as_sf(ghcn_stations, coords = c("lon", "lat"), 
+                        crs = "EPSG:4326") |> 
+  sf::st_make_valid()
+
+cany_ghcn <- sf::st_intersection(ghcn_sf, cany) |>
+  dplyr::select(-tidyselect::any_of(colnames(cany))) |> 
+  dplyr::bind_rows(
+    dplyr::filter(ghcn_sf, station_name == "Hans Flat RS")
+  )
+
+dplyr::glimpse(cany_ghcn)
+```
+
+```{r cany_table}
+kableExtra::kable(dplyr::select(sf::st_drop_geometry(cany_ghcn), 
+                                station_name, id, type, elev_m, years_segments))
+```
+
+```{r map, message=FALSE, warning=FALSE}
+aoa_tiles <- maptiles::get_tiles(cany, provider = "Esri.WorldTerrain",
+                                 zoom = 12)
+
+tmap::tm_shape(aoa_tiles, unit = "mi") + tmap::tm_rgb() + 
+  tmap::tm_shape(cany) + tmap::tm_polygons(fill = 'forestgreen', 
+                                           col = 'darkgreen',
+                                           fill_alpha = 0.7) + 
+  tmap::tm_shape(cany_ghcn) + tmap::tm_symbols(shape = 20, fill = 'blue') +
+  tmap::tm_add_legend(type = "polygons", labels = "Canyonlands NP",
+                      fill = "forestgreen", col = 'darkgreen', 
+                      title = "Legend")  +
+  tmap::tm_add_legend(type = "symbols", labels = "Co-op Stations", 
+                      fill = "blue") +
+  tmap::tm_layout(main.title.size = 1, legend.position = c("left","bottom"), 
+                  legend.text.size = 0.5, legend.title.size = 0.7,
+                  legend.frame = TRUE, legend.bg.color = 'white', 
+                  frame = TRUE, inner.margins = c(0, 0, 0, 0)) +
+  tmap::tm_title("Canyonlands NP GHCN Co-op Stations")
+```
+
+
+## Import annual temperature and precipitation data
+
+Unfortunately, there isn't a good way to read the `station_id` into R. Sorry about that. To get the `station_id`, go to [The Climate Analyzer](climateanalyzer.org) and select the station you want to download data for and get the station id name from the URL.
+
+TODO: insert figure
+
+For this vignette we are going to pull data from the GHCN Co-op station at the Island in the Sky Visitor Center in Canyonlands National Park. 
+This station is named Canyonlands The Neck" on The Climate Analyzer.
+
+```{r}
+isky_annual <- import_annual("canyonlands_theneck", 1965, 2025)
+
+dplyr::glimpse(isky_annual)
+```
+
+```{r}
+isky_normals <- normals(station_id = "canyonlands_theneck", 
+                        ref_period = "1981-2010")
+
+dplyr::glimpse(isky_normals)
+
+# PRCP
+isky_ann_prcp_normals <- dplyr::filter(isky_normals, 
+                                       element == "PRCP" & month == "Annual")
+my_title <- "Island in the Sky Visor Center Annual Precipitation (1965-2025)"
+annual_figure(x_var = isky_annual$year, y_var = isky_annual$prcp_cy,
+              my_year = 2019, normal = isky_ann_prcp_normals$value,
+              reference_period = "1981-2010", area_color = "palegreen1",
+              line_color = "palegreen3", my_title = my_title,
+              my_ylab = "PRCP (inches)")
+```
+
+```{r}
+# TMAX
+isky_ann_tmax_normals <- dplyr::filter(isky_normals, 
+                                       element == "TMAX" & month == "Annual")
+my_title <- "Island in the Sky VC Annual Maximum Temperature (1965-2025)"
+annual_figure(x_var = isky_annual$year, y_var = isky_annual$tmax_cy,
+              my_year = 2019, normal = isky_ann_tmax_normals$value,
+              reference_period = "1981-2010", area_color = "red",
+              line_color = "red4", my_title = my_title,
+              my_ylab = "Temperature (deg F)")
+```
+
+```{r}
+# TMXIN
+isky_ann_tmin_normals <- dplyr::filter(isky_normals, 
+                                       element == "TMIN" & month == "Annual")
+my_title <- "Island in the Sky VC Annual Minimum Temperature (1965-2025)"
+annual_figure(x_var = isky_annual$year, y_var = isky_annual$tmin_cy,
+              my_year = 2019, normal = isky_ann_tmin_normals$value,
+              reference_period = "1981-2010",
+              area_color = "lightskyblue1",
+              line_color = "lightskyblue", my_title = my_title,
+              my_ylab = "Temperature (deg F)")
+```
+
