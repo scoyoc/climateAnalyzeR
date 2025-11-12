@@ -24,6 +24,7 @@ Let's first install and load the packages used in this vignette, then we'll inst
 ```{r setup, message=FALSE, warning=FALSE}
 # List of packages used in this vignette
 pkgs <- c('arcgislayers', # reading feature layers from ArcGIS Online
+          'cowplot',      # arranging multiple ggplots
           'devtools',     # installing packages from GitHub
           'dplyr',        # data wrangling
           'ggplot2',      # creating figures
@@ -187,7 +188,7 @@ my_title <- "Annual Maximum Temperature (1965-2025)"
 annual_figure(x_var = isky_annual$year, y_var = isky_annual$tmax_cy,
               normal = ann_tmax_normals$value, reference_period = "1981-2010", 
               area_color = "coral", line_color = "coral4", 
-              my_title = my_title, my_ylab = "Temperature (deg F)")
+              my_title = my_title, my_ylab = "Temperature (°F)")
 ```
 
 ```{r ann_tmin, message=FALSE, warning=FALSE, fig.width=7, fig.height=5}
@@ -200,7 +201,7 @@ my_title <- "Annual Minimum Temperature (1965-2025)"
 annual_figure(x_var = isky_annual$year, y_var = isky_annual$tmin_cy,
               normal = ann_tmin_normals$value, reference_period = "1981-2010",
               area_color = "lightskyblue1", line_color = "lightskyblue", 
-              my_title = my_title, my_ylab = "Temperature (deg F)")
+              my_title = my_title, my_ylab = "Temperature (°F)")
 ```
 
 
@@ -220,46 +221,152 @@ annual_figure(x_var = isky_annual$year, y_var = isky_annual$prcp_cy,
 
 ## Import monthly temperature and precipitation data
 
-
+Next, we are going to use the `import_monthly()` function to import monthly temperature and precipitation data for the Island in the Sky Co-op station from 1965 to 2025.
+After importing the data, we are going to create a water year (Oct-Sep) variable and a factor variable for month names so we can plot the data by water year using the `append_water_yr_mth()` function.
 
 
 ```{r}
-isky_monthly <- import_monthly("canyonlands_theneck", 1965, 2025) |> 
-  dplyr::left_join(month_df, by = "month") |>
-  dplyr::mutate(
-    "water_yr" = ifelse(month >= 10, year +1, year),
-    "water_mth" = factor(month_name, 
-                         levels = c(month.abb[10:12], month.abb[1:9]))
-    )
+isky_monthly <- import_monthly("canyonlands_theneck", 1965, 2025) |>
+  append_water_yr_mth()
 
 dplyr::glimpse(isky_monthly)
 ```
 
-```{r monthly_figures, message=FALSE, warning=FALSE, fig.width=7, fig.height=15}
+We can plot monthly maximum temperature (TMAX), minimum temperature (TMIN), and precipitation (PRCP) data using the `monthly_figure()` function.
+We are going to use the `cowplot` package to plot the three figures in a single column in one figure.
+
+```{r monthly_figures, message=FALSE, warning=FALSE, fig.width=7, fig.height=13}
+plot_title <- cowplot::ggdraw() +
+  cowplot::draw_label("Water Year Monthly Climate Data (1965-2025)",
+                      fontface = 'bold', size = 16, x = 0.5, y = 0.5) 
+
 # Monthly TMAX figure
-mth_tmax <- monthly_figure(x_var = isky_monthly$water_mth, 
-                           y_var = isky_monthly$tmax,
-                           year_group = isky_monthly$water_yr, my_year = 2025,
-                           line_color = "red3",
-                           my_title = "Monthly Maximum Temperature (1965-2025)",
-                           my_ylab = "Temp (°F)")
+mth_tmax <- monthly_figure(
+  x_var = isky_monthly$water_mth, y_var = isky_monthly$tmax,
+  year_group = isky_monthly$water_yr, my_year = 2025, line_color = "red3",
+  my_title = "A. Monthly Maximum Temperature (1965-2025)", 
+  my_ylab = "Temperature (°F)"
+  )
 # Monthly TMIN figure
-mth_tmin <- monthly_figure(x_var = isky_monthly$water_mth, 
-                           y_var = isky_monthly$tmin,
-                           year_group = isky_monthly$water_yr, my_year = 2025,
-                           line_color = "blue",
-                           my_title = "Monthly Minimum Temperature (1965-2025)",
-                           my_ylab = "Temp (°F)")
+mth_tmin <- monthly_figure(
+  x_var = isky_monthly$water_mth, y_var = isky_monthly$tmin,
+  year_group = isky_monthly$water_yr, my_year = 2025, line_color = "blue",
+  my_title = "B. Monthly Minimum Temperature (1965-2025)",
+  my_ylab = "Temperature (°F)"
+  )
 
-# Monthly precipitation figure
-mth_prcp <- monthly_figure(x_var = isky_monthly$water_mth, 
-                           y_var = isky_monthly$prcp,
-                           year_group = isky_monthly$water_yr, my_year = 2025,
-                           line_color = "green4",
-                           my_title = "Monthly Precipitation (1965-2025)",
-                           my_ylab = "Precip (inches)")
+# Monthly PRCP figure
+mth_prcp <- monthly_figure(
+  x_var = isky_monthly$water_mth, y_var = isky_monthly$prcp,
+  year_group = isky_monthly$water_yr, my_year = 2025, line_color = "green4",
+  my_title = "C. Monthly Precipitation (1965-2025)", 
+  my_ylab = "Precipitation (inches)"
+  )
 
-cowplot::plot_grid(mth_tmax, mth_tmin, mth_prcp, labels = c(), 
-                   ncol = 1, align = "v", vjust = 1, scale = 1)
+# Combine figures
+cowplot::plot_grid(plot_title, mth_tmax, mth_tmin, mth_prcp, 
+                   labels = c(), ncol = 1, align = "v", vjust = 1, scale = 1, 
+                   rel_heights = c(0.1, 1, 1, 1))
 ```
+
+
+## Import daily temperature and precipitation data
+
+Next, we are going to use the `import_daily()` function to import daily temperature and precipitation data for the Island in the Sky Co-op station from 1964 to 2025.
+Again, we are going to to add the water year (Oct-Sep) and water month variables using the `append_water_yr_mth()` function.
+
+```{r}
+isky_daily <- import_daily("canyonlands_theneck", 1964, 2025) |> 
+  dplyr::mutate(date = as.Date(date, format = "%m/%d/%Y"),
+                year = lubridate::year(date), 
+                month = lubridate::month(date)) |>
+  append_water_yr_mth()
+
+dplyr::glimpse(isky_daily)
+```
+
+I haven't used the daily data much yet, so I don't have any plotting functions for daily data.
+However, you can use `ggplot2` to create your own plots.
+Here's a quick example of how to plot daily maximum temperature (TMAX) data for water year 2025.
+
+```{r daily_tmax, message=FALSE, warning=FALSE, fig.width=7, fig.height=5}
+# Filter data for water year 2025
+isky_daily_2025 <- dplyr::filter(isky_daily, water_yr == 2025)
+
+# Plot daily maximum temperature data
+ggplot2::ggplot(data = isky_daily_2025, aes(x = date, y = tmax_f)) +
+  ggplot2::geom_line(color = "red3") +
+  ggplot2::labs(title = "Daily Maximum Temperature, Water Year 2025",
+                x = "Date", y = "Temperature (°F)") +
+  ggplot2::theme_minimal()
+```
+
+
+## Import departure data
+
+The `import_departure()` function imports monthly temperature and precipitation departure data for a specified station and time period.
+In this example we are going to import monthly departure data for the Island in the Sky Co-op station from 1965 to 2025 and add the water year (Oct-Sep) and water month variables using the `append_water_yr_mth()` function..
+
+```{r}
+isky_depart <- import_departure("canyonlands_theneck", 1965, 2025) |> 
+  append_water_yr_mth()
+
+dplyr::glimpse(isky_depart)
+```
+
+Now we can plot monthly temperature (TMAX & TMIN) and precipitation (PRCP) departure data using the `departure_figure()` function.
+
+```{r departure_figures, message=FALSE, warning=FALSE, fig.width=7, fig.height=13}
+plot_title <- cowplot::ggdraw() +
+  cowplot::draw_label("Water Year Monthly Climate Departures (1965-2025)",
+                      fontface = 'bold', size = 16, x = 0.5, y = 0.5)
+
+# Departure TMAX figure
+depart_tmax <- departure_figure(
+  x_var = isky_depart$water_mth, y_var = isky_depart$tmax_depart,
+  year_group = isky_depart$water_yr, y_intercept = 0, my_year = 2025, 
+  line_color = "red3",
+  my_title = "A. Monthly Maximum Temperature Departure (1965-2025)", 
+  my_ylab = "Departure (°F)"
+  )
+
+# Departure TMIN figure
+depart_tmin <- departure_figure(
+  x_var = isky_depart$water_mth, y_var = isky_depart$tmin_depart,
+  year_group = isky_depart$water_yr, y_intercept = 0, my_year = 2025, 
+  line_color = "blue",
+  my_title = "B. Monthly Minimum Temperature Departure (1965-2025)", 
+  my_ylab = "Departure (°F)"
+  )
+
+# Departure PRCP figure
+depart_prcp <- departure_figure(
+  x_var = isky_depart$water_mth, y_var = isky_depart$prcp_pctavg,
+  year_group = isky_depart$water_yr, y_intercept = 100, my_year = 2025, 
+  line_color = "green4",
+  my_title = "C. Monthly Precipitation Departure (1965-2025)", 
+  my_ylab = "Departure (%)"
+  )
+
+# Combine figures
+cowplot::plot_grid(plot_title, depart_tmax, depart_tmin, depart_prcp, 
+                   labels = c(), ncol = 1, align = "v", vjust = 1, scale = 1, 
+                   rel_heights = c(0.1, 1, 1, 1))
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
