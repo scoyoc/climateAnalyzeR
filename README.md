@@ -1,8 +1,10 @@
 # climateAnalyzeR
 
-This R package imports data from [ClimateAnalyzer.org](http://climateanalyzer.org/) into R. Currently annual, monthly, and daily weather data from [Global Historical Climatology Network](https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily) Co-op stations are available. This R package can also produce brief climate reports using temperature and precipitation data from Co-op stations using RMarkdown. Currently water year (Oct-Sep) and calendar year (Jan-Dec) reports are available.
+This R package imports data from [ClimateAnalyzer.org](http://climateanalyzer.org/) into R. Currently annual, monthly, and daily weather data from [Global Historical Climatology Network](https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily) Co-op stations are available.
 
-**Version:** 0.9.2
+This R package can also produce brief climate reports using temperature and precipitation data from Co-op stations using RMarkdown. Currently water year (Oct-Sep) and calendar year (Jan-Dec) reports are available. However, this function is currently broken and I'm working on fixing it.
+
+**Version:** 0.9.5
 
 **Depends:** R (\>= 4.0)
 
@@ -24,7 +26,7 @@ This R package imports data from [ClimateAnalyzer.org](http://climateanalyzer.or
 
 **URL:** <https://github.com/scoyoc/climateAnalyzeR>
 
-**Documentation:** Just the man pages for now.
+**Documentation:** See the vignette.
 
 ## Installation
 
@@ -86,27 +88,29 @@ renderSummary(my_report = "calendar_year", station_id = "canyonlands_theneck",
 
 ## List of Functions
 
--   `annual_figure`: produces a standardized line graph for annual data.
+-   `append_water_yr_mth()`: append water year and water month to a data frame.
 
--   `import_annual`: imports annual temperature and precipitation data from ClimateAnalyzer.org into R.
+-   `annual_figure()`: produces a standardized line graph for annual data.
 
--   `import_below_above_temp`: imports the number of days per year that are below a user \#' defined minimum temperature and above a user defined maximum temperature.
+-   `import_annual()`: imports annual temperature and precipitation data from ClimateAnalyzer.org into R.
 
--   `import_daily`: imports daily temperature and precipitation data.
+-   `import_below_above_temp()`: imports the number of days per year that are below a user \#' defined minimum temperature and above a user defined maximum temperature.
 
--   `import_departure`: imports monthly departure data.
+-   `import_daily()`: imports daily temperature and precipitation data.
 
--   `import_extreme_temp`: imports the number of days per year that temperatures were below the 5th percentile and above the 95th percentile.
+-   `import_departure()`: imports monthly departure data.
 
--   `import_monthly`: imports monthly temperature and precipitation data.
+-   `import_extreme_temp()`: imports the number of days per year that temperatures were below the 5th percentile and above the 95th percentile.
 
--   `monthly_figure`: produces a standardized line graph for monthly data.
+-   `import_monthly()`: imports monthly temperature and precipitation data.
 
--   `normals`: imports 30-year normals calculated by NOAA.
+-   `monthly_figure()`: produces a standardized line graph for monthly data.
 
--   `renderSummary`: **Broken**. Render a PDF report.
+-   `normals()`: imports 30-year normals calculated by NOAA.
 
--   `stations`: imports weather station information.
+-   `renderSummary()`: **Broken**. Render a PDF report.
+
+-   `stations()`: imports weather station information.
 
 ## List of Data
 

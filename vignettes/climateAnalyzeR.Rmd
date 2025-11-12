@@ -13,7 +13,11 @@ knitr::opts_chunk$set(echo = TRUE, dpi = 300, out.width = "100%",
 ```
 
 This package imports annual, monthly, and daily weather data from The Climate Analyzer ([ClimateAnalyzer.org](http://climateanalyzer.org/)) into R.
-This package can also produce brief water year (Oct-Sep) and annual (Jan-Dec) climate reports using temperature and precipitation data from [Global Historical Climatology Network](https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily) (GHCN) Co-op stations using RMarkdown.
+This vignette demonstrates how to use the various functions in the `climateAnalyzeR` package to import and visualize temperature and precipitation data from [Global Historical Climatology Network](https://www.ncei.noaa.gov/products/land-based-station/global-historical-climatology-network-daily) (GHCN) Co-op weather stations.
+
+This package can also produce brief water year (Oct-Sep) and annual (Jan-Dec) climate reports using temperature and precipitation data from GHCN Co-op stations using RMarkdown.
+However, this function is currently broken and I'm working on fixing it.
+I will include an example here once it's fixed.
 
 # Download pacakge
 
@@ -113,23 +117,27 @@ dplyr::glimpse(cany_ghcn)
 
 Now let's make a quick map using the `maptiles` and `tmap` packages to visualize the GHCN Co-op stations in Canyonlands National Park.
 
-```{r map, out.width = "100%"}
+```{r map, fig.width=5, fig.height=6, message=FALSE, warning=FALSE}
 # Get base tiles
 aoa_tiles <- maptiles::get_tiles(cany, provider = "Esri.WorldTerrain",
                                  zoom = 12)
 # Map
-tmap::tm_shape(aoa_tiles, unit = "mi") + tmap::tm_rgb() + 
-  tmap::tm_shape(cany) + tmap::tm_polygons(fill = 'forestgreen', 
+tmap::tm_shape(aoa_tiles, unit = "mi") + tmap::tm_rgb() +
+  tmap::tm_shape(cany) + tmap::tm_polygons(fill = 'darkseagreen2', 
                                            col = 'darkgreen',
                                            fill_alpha = 0.7) + 
   tmap::tm_shape(cany_ghcn) + tmap::tm_symbols(shape = 20, fill = 'blue') +
+  tmap::tm_compass(type = "arrow", position = c("left", "top"), 
+                   text.size = 0.5, bg.color = 'white', bg.alpha = 0.5) +
+  tmap::tm_scalebar(breaks = c(0, 5, 10, 15, 20), position = c(0.3, 0.05),
+                    text.size = 0.4, bg.color = 'white', bg.alpha = 0.5)  +
   tmap::tm_add_legend(type = "polygons", labels = "Canyonlands NP",
-                      fill = "forestgreen", col = 'darkgreen', 
-                      title = "Legend")  +
+                      fill = "darkseagreen2", col = 'darkgreen', 
+                      title = "Legend") +
   tmap::tm_add_legend(type = "symbols", labels = "Co-op Stations", 
-                      fill = "blue") +
-  tmap::tm_layout(main.title.size = 1, legend.position = c("left", "bottom"),
-                  legend.text.size = 0.4, legend.title.size = 0.5, 
+                      fill = "blue", size = 0.7) +
+  tmap::tm_layout(main.title.size = 1, legend.position = c(0.01, 0.15),
+                  legend.text.size = 0.5, legend.title.size = 0.7, 
                   legend.frame = TRUE, legend.bg.color = 'white', 
                   frame = TRUE) +
   tmap::tm_title("Canyonlands NP GHCN Co-op Stations")
@@ -147,7 +155,7 @@ The `station_id` is the last section of the URL: `canyonlands_theneck`.
 
 ```{r url_screenshot, echo=FALSE, out.width = "70%"}
 knitr::include_graphics(
-  file.path(here::here(), '/inst/vignette/url_screenshot.png')
+  file.path(here::here(), '/vignettes/url_screenshot.png')
   )
 ```
 
@@ -178,7 +186,7 @@ dplyr::glimpse(isky_annual)
 Now let's use the `annual_figure()` function to plot annual maximum temperature (TMAX), minimum temperature (TMIN), and precipitation (PRCP) data along with the 1981-2010 normals.
 
 
-```{r ann_tmax, message=FALSE, warning=FALSE, fig.width=7, fig.height=5}
+```{r ann_tmax, message=FALSE, warning=FALSE, fig.width=7, fig.height=3.5}
 # Maximum Temperature (TMAX) ----
 # Get annual maximum temperature normals
 ann_tmax_normals <- dplyr::filter(isky_normals,
@@ -191,7 +199,7 @@ annual_figure(x_var = isky_annual$year, y_var = isky_annual$tmax_cy,
               my_title = my_title, my_ylab = "Temperature (°F)")
 ```
 
-```{r ann_tmin, message=FALSE, warning=FALSE, fig.width=7, fig.height=5}
+```{r ann_tmin, message=FALSE, warning=FALSE, fig.width=7, fig.height=3.5}
 # Minimum Temperature (TMIN) ----
 # Get annual minimum temperature normals
 ann_tmin_normals <- dplyr::filter(isky_normals,
@@ -200,12 +208,12 @@ ann_tmin_normals <- dplyr::filter(isky_normals,
 my_title <- "Annual Minimum Temperature (1965-2025)"
 annual_figure(x_var = isky_annual$year, y_var = isky_annual$tmin_cy,
               normal = ann_tmin_normals$value, reference_period = "1981-2010",
-              area_color = "lightskyblue1", line_color = "lightskyblue", 
+              area_color = "lightskyblue1", line_color = "dodgerblue2", 
               my_title = my_title, my_ylab = "Temperature (°F)")
 ```
 
 
-```{r ann_prcp, message=FALSE, warning=FALSE, fig.width=7, fig.height=5}
+```{r ann_prcp, message=FALSE, warning=FALSE, fig.width=7, fig.height=3.5}
 # Precipitation (PRCP) ----
 # Get annual precipitation normals
 ann_prcp_normals <- dplyr::filter(isky_normals,
@@ -214,7 +222,7 @@ ann_prcp_normals <- dplyr::filter(isky_normals,
 my_title <- "Annual Precipitation (1965-2025)"
 annual_figure(x_var = isky_annual$year, y_var = isky_annual$prcp_cy,
               normal = ann_prcp_normals$value, reference_period = "1981-2010", 
-              area_color = "palegreen1", line_color = "palegreen3", 
+              area_color = "palegreen1", line_color = "forestgreen", 
               my_title = my_title, my_ylab = "Precipitation (inches)")
 ```
 
@@ -235,7 +243,7 @@ dplyr::glimpse(isky_monthly)
 We can plot monthly maximum temperature (TMAX), minimum temperature (TMIN), and precipitation (PRCP) data using the `monthly_figure()` function.
 We are going to use the `cowplot` package to plot the three figures in a single column in one figure.
 
-```{r monthly_figures, message=FALSE, warning=FALSE, fig.width=7, fig.height=13}
+```{r monthly_figures, fig.width=7, fig.height=9, message=FALSE, warning=FALSE}
 plot_title <- cowplot::ggdraw() +
   cowplot::draw_label("Water Year Monthly Climate Data (1965-2025)",
                       fontface = 'bold', size = 16, x = 0.5, y = 0.5) 
@@ -243,23 +251,23 @@ plot_title <- cowplot::ggdraw() +
 # Monthly TMAX figure
 mth_tmax <- monthly_figure(
   x_var = isky_monthly$water_mth, y_var = isky_monthly$tmax,
-  year_group = isky_monthly$water_yr, my_year = 2025, line_color = "red3",
-  my_title = "A. Monthly Maximum Temperature (1965-2025)", 
+  year_group = isky_monthly$water_yr, my_year = 2025, line_color = "coral4",
+  my_title = "A. Monthly Maximum Temperature", 
   my_ylab = "Temperature (°F)"
   )
 # Monthly TMIN figure
 mth_tmin <- monthly_figure(
   x_var = isky_monthly$water_mth, y_var = isky_monthly$tmin,
-  year_group = isky_monthly$water_yr, my_year = 2025, line_color = "blue",
-  my_title = "B. Monthly Minimum Temperature (1965-2025)",
+  year_group = isky_monthly$water_yr, my_year = 2025, line_color = "dodgerblue2",
+  my_title = "B. Monthly Minimum Temperature",
   my_ylab = "Temperature (°F)"
   )
 
 # Monthly PRCP figure
 mth_prcp <- monthly_figure(
   x_var = isky_monthly$water_mth, y_var = isky_monthly$prcp,
-  year_group = isky_monthly$water_yr, my_year = 2025, line_color = "green4",
-  my_title = "C. Monthly Precipitation (1965-2025)", 
+  year_group = isky_monthly$water_yr, my_year = 2025, line_color = "forestgreen",
+  my_title = "C. Monthly Precipitation", 
   my_ylab = "Precipitation (inches)"
   )
 
@@ -289,13 +297,13 @@ I haven't used the daily data much yet, so I don't have any plotting functions f
 However, you can use `ggplot2` to create your own plots.
 Here's a quick example of how to plot daily maximum temperature (TMAX) data for water year 2025.
 
-```{r daily_tmax, message=FALSE, warning=FALSE, fig.width=7, fig.height=5}
+```{r daily_tmax, message=FALSE, warning=FALSE, fig.width=7, fig.height=3.5}
 # Filter data for water year 2025
 isky_daily_2025 <- dplyr::filter(isky_daily, water_yr == 2025)
 
 # Plot daily maximum temperature data
 ggplot2::ggplot(data = isky_daily_2025, aes(x = date, y = tmax_f)) +
-  ggplot2::geom_line(color = "red3") +
+  ggplot2::geom_line(color = "coral4") +
   ggplot2::labs(title = "Daily Maximum Temperature, Water Year 2025",
                 x = "Date", y = "Temperature (°F)") +
   ggplot2::theme_minimal()
@@ -316,7 +324,7 @@ dplyr::glimpse(isky_depart)
 
 Now we can plot monthly temperature (TMAX & TMIN) and precipitation (PRCP) departure data using the `departure_figure()` function.
 
-```{r departure_figures, message=FALSE, warning=FALSE, fig.width=7, fig.height=13}
+```{r departure_figures, fig.width=7, fig.height=9, message=FALSE, warning=FALSE}
 plot_title <- cowplot::ggdraw() +
   cowplot::draw_label("Water Year Monthly Climate Departures (1965-2025)",
                       fontface = 'bold', size = 16, x = 0.5, y = 0.5)
@@ -325,8 +333,8 @@ plot_title <- cowplot::ggdraw() +
 depart_tmax <- departure_figure(
   x_var = isky_depart$water_mth, y_var = isky_depart$tmax_depart,
   year_group = isky_depart$water_yr, y_intercept = 0, my_year = 2025, 
-  line_color = "red3",
-  my_title = "A. Monthly Maximum Temperature Departure (1965-2025)", 
+  line_color = "coral4",
+  my_title = "A. Monthly Maximum Temperature Departure", 
   my_ylab = "Departure (°F)"
   )
 
@@ -334,8 +342,8 @@ depart_tmax <- departure_figure(
 depart_tmin <- departure_figure(
   x_var = isky_depart$water_mth, y_var = isky_depart$tmin_depart,
   year_group = isky_depart$water_yr, y_intercept = 0, my_year = 2025, 
-  line_color = "blue",
-  my_title = "B. Monthly Minimum Temperature Departure (1965-2025)", 
+  line_color = "dodgerblue2",
+  my_title = "B. Monthly Minimum Temperature Departure", 
   my_ylab = "Departure (°F)"
   )
 
@@ -343,8 +351,8 @@ depart_tmin <- departure_figure(
 depart_prcp <- departure_figure(
   x_var = isky_depart$water_mth, y_var = isky_depart$prcp_pctavg,
   year_group = isky_depart$water_yr, y_intercept = 100, my_year = 2025, 
-  line_color = "green4",
-  my_title = "C. Monthly Precipitation Departure (1965-2025)", 
+  line_color = "forestgreen",
+  my_title = "C. Monthly Precipitation Departure", 
   my_ylab = "Departure (%)"
   )
 
@@ -354,19 +362,5 @@ cowplot::plot_grid(plot_title, depart_tmax, depart_tmin, depart_prcp,
                    rel_heights = c(0.1, 1, 1, 1))
 
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
