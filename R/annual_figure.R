@@ -49,9 +49,21 @@ annual_figure <- function(x_var, y_var, normal, reference_period,
   dat = tibble::tibble(x_var, y_var)
   names(dat) = c("x", "y")
 
-  data_type <- ifelse(grepl("temp", tolower(my_ylab)) |
-                        grepl("deg", tolower(my_ylab)),
-                      " degrees", " inches")
+  # Determine data type labeling
+  data_type <- if (grepl("F", my_ylab) |
+                   grepl("fahrenheit", tolower(my_ylab))){
+    "°F"
+    } else if (grepl("C", my_ylab) |
+               grepl("celsius", tolower(my_ylab)) |
+               grepl("centigrade", tolower(my_ylab))){
+      "°C"
+    } else if (grepl("inches", tolower(my_ylab)) |
+               grepl("inch", tolower(my_ylab))){
+      " inches"
+    } else if (grepl("mm", tolower(my_ylab)) |
+               grepl("millimeters", tolower(my_ylab))){
+        " mm"
+    } else {""}
 
   # Label data
   lab_dat <- tibble::tibble(normal = normal,

@@ -174,21 +174,8 @@ isky_annual <- import_annual("canyonlands_theneck", 1965, 2025)
 dplyr::glimpse(isky_annual)
 ```
 
-Now let's use the `annual_figure()` function to plot annual precipitation (PRCP), maximum temperature (TMAX), and minimum temperature (TMIN) data along with the 1981-2010 normals.
+Now let's use the `annual_figure()` function to plot annual maximum temperature (TMAX), minimum temperature (TMIN), and precipitation (PRCP) data along with the 1981-2010 normals.
 
-```{r ann_prcp, message=FALSE, warning=FALSE, fig.width=7, fig.height=5}
-# Precipitation (PRCP) ----
-# Get annual precipitation normals
-ann_prcp_normals <- dplyr::filter(isky_normals,
-                                  element == "PRCP" & month == "Annual")
-# Plot annual precipitation data
-my_title <- "Annual Precipitation (1965-2025)"
-annual
-annual_figure(x_var = isky_annual$year, y_var = isky_annual$prcp_cy,
-              normal = ann_prcp_normals$value, reference_period = "1981-2010", 
-              area_color = "palegreen1", line_color = "palegreen3", 
-              my_title = my_title, my_ylab = "Precipitation (inches)")
-```
 
 ```{r ann_tmax, message=FALSE, warning=FALSE, fig.width=7, fig.height=5}
 # Maximum Temperature (TMAX) ----
@@ -217,6 +204,20 @@ annual_figure(x_var = isky_annual$year, y_var = isky_annual$tmin_cy,
 ```
 
 
+```{r ann_prcp, message=FALSE, warning=FALSE, fig.width=7, fig.height=5}
+# Precipitation (PRCP) ----
+# Get annual precipitation normals
+ann_prcp_normals <- dplyr::filter(isky_normals,
+                                  element == "PRCP" & month == "Annual")
+# Plot annual precipitation data
+my_title <- "Annual Precipitation (1965-2025)"
+annual_figure(x_var = isky_annual$year, y_var = isky_annual$prcp_cy,
+              normal = ann_prcp_normals$value, reference_period = "1981-2010", 
+              area_color = "palegreen1", line_color = "palegreen3", 
+              my_title = my_title, my_ylab = "Precipitation (inches)")
+```
+
+
 ## Import monthly temperature and precipitation data
 
 
@@ -234,14 +235,31 @@ isky_monthly <- import_monthly("canyonlands_theneck", 1965, 2025) |>
 dplyr::glimpse(isky_monthly)
 ```
 
-```{r}
+```{r monthly_figures, message=FALSE, warning=FALSE, fig.width=7, fig.height=15}
+# Monthly TMAX figure
+mth_tmax <- monthly_figure(x_var = isky_monthly$water_mth, 
+                           y_var = isky_monthly$tmax,
+                           year_group = isky_monthly$water_yr, my_year = 2025,
+                           line_color = "red3",
+                           my_title = "Monthly Maximum Temperature (1965-2025)",
+                           my_ylab = "Temp (°F)")
+# Monthly TMIN figure
+mth_tmin <- monthly_figure(x_var = isky_monthly$water_mth, 
+                           y_var = isky_monthly$tmin,
+                           year_group = isky_monthly$water_yr, my_year = 2025,
+                           line_color = "blue",
+                           my_title = "Monthly Minimum Temperature (1965-2025)",
+                           my_ylab = "Temp (°F)")
 
+# Monthly precipitation figure
+mth_prcp <- monthly_figure(x_var = isky_monthly$water_mth, 
+                           y_var = isky_monthly$prcp,
+                           year_group = isky_monthly$water_yr, my_year = 2025,
+                           line_color = "green4",
+                           my_title = "Monthly Precipitation (1965-2025)",
+                           my_ylab = "Precip (inches)")
 
-monthly_figure(x_var = isky_monthly$water_mth, y_var = isky_monthly$prcp,
-                year_group = isky_monthly$water_yr, 
-                y_intercept = ann_prcp_normals$value, my_year = 2025,
-                line_color = "green4",
-                my_title = "Monthly Precipitation (1965-2025)",
-                my_ylab = "Precipitation (inches)")
+cowplot::plot_grid(mth_tmax, mth_tmin, mth_prcp, labels = c(), 
+                   ncol = 1, align = "v", vjust = 1, scale = 1)
 ```
 
