@@ -183,6 +183,7 @@ ann_prcp_normals <- dplyr::filter(isky_normals,
                                   element == "PRCP" & month == "Annual")
 # Plot annual precipitation data
 my_title <- "Annual Precipitation (1965-2025)"
+annual
 annual_figure(x_var = isky_annual$year, y_var = isky_annual$prcp_cy,
               normal = ann_prcp_normals$value, reference_period = "1981-2010", 
               area_color = "palegreen1", line_color = "palegreen3", 
