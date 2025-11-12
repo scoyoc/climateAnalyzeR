@@ -4,7 +4,7 @@
 \alias{normals}
 \title{Import NOAA calculated normals}
 \usage{
-normals(ref_period = "1991-2020", station_id = NULL, tidy = TRUE)
+normals(ref_period = "1981-2010", station_id = NULL, tidy = TRUE)
 }
 \arguments{
 \item{ref_period}{The string for 30-year reference period. The user can choose

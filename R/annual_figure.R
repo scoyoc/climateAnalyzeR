@@ -8,7 +8,6 @@
 #'     vector of years.
 #' @param y_var A character string of the y-variable. This is intended to be a
 #'     vector of measurements (e.g., PRCP or TEMP).
-#' @param my_year A number for the your of interest.
 #' @param normal A number for the annual normal temperature or precipitation.
 #'     Typically from \code{\link{normals}}.
 #' @param reference_period Character string for the reference period used for
@@ -43,17 +42,23 @@
 #'               my_title = "Annual Precipitation, Colorado National Monument",
 #'               my_ylab = "PRCP (inches)")
 #'
-annual_figure <- function(x_var, y_var, my_year, normal, reference_period,
+annual_figure <- function(x_var, y_var, normal, reference_period,
                           area_color, line_color, my_title, my_ylab){
 
   # Crate dataframe
   dat = tibble::tibble(x_var, y_var)
   names(dat) = c("x", "y")
+
+  data_type <- ifelse(grepl("temp", tolower(my_ylab)) |
+                        grepl("deg", tolower(my_ylab)),
+                      " degrees", " inches")
+
   # Label data
   lab_dat <- tibble::tibble(normal = normal,
                             label = paste0(reference_period, " Avg: ",
-                                           round(normal, 1), " deg F"))
+                                           round(normal, 1), data_type))
 
+  # Create figure
   gg <- ggplot2::ggplot(dat, ggplot2::aes(x = x, y = y)) +
     ggplot2::geom_area(ggplot2::aes(x = x, y = y), stat = "identity",
                        fill = area_color, alpha = 0.5, na.rm = TRUE) +
@@ -65,9 +70,11 @@ annual_figure <- function(x_var, y_var, my_year, normal, reference_period,
                         na.rm = TRUE) +
     ggplot2::geom_smooth(method = "lm", se = FALSE, color = "blue",
                          na.rm = TRUE) +
-    ggplot2::geom_point(data = dplyr::filter(dat, x == my_year),
-                        stat = "identity", shape = 21, color = "black",
-                        fill = line_color, size = 4) +
+    # if (!is.null(my_year)){
+    # ggplot2::geom_point(data = dplyr::filter(dat, x == my_year),
+    #                     stat = "identity", shape = 21, color = "black",
+    #                     fill = line_color, size = 4)
+    #   } +
     shadowtext::geom_shadowtext(lab_dat,
                                 mapping = ggplot2::aes(x = -Inf, y = normal,
                                                        label = label),

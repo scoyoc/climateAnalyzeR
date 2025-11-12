@@ -7,7 +7,6 @@
 annual_figure(
   x_var,
   y_var,
-  my_year,
   normal,
   reference_period,
   area_color,
@@ -22,8 +21,6 @@ vector of years.}
 
 \item{y_var}{A character string of the y-variable. This is intended to be a
 vector of measurements (e.g., PRCP or TEMP).}
-
-\item{my_year}{A number for the your of interest.}
 
 \item{normal}{A number for the annual normal temperature or precipitation.
 Typically from \code{\link{normals}}.}

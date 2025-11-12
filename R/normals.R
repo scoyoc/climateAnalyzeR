@@ -31,7 +31,7 @@
 #' normals(ref_period = "1971-2000",
 #'         station_id = c("dinosaur_nm", "dinosaur_quarry_area"))
 #'
-normals <- function(ref_period = "1991-2020", station_id = NULL, tidy = TRUE){
+normals <- function(ref_period = "1981-2010", station_id = NULL, tidy = TRUE){
 
   my_stations = station_id
 
@@ -41,7 +41,7 @@ normals <- function(ref_period = "1991-2020", station_id = NULL, tidy = TRUE){
     my_url = "http://climateanalyzer.science/monthly/1981_2010_averages.csv"
   } else if (ref_period == "1991-2020"){
     my_url = "http://climateanalyzer.science/monthly/1991_2020_averages.csv"
-  }else (message('Reference period not recogized.'))
+  } else (message('Reference period not recogized.'))
 
   dat = suppressMessages(
     suppressWarnings(
