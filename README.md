@@ -26,7 +26,7 @@ This R package can also produce brief climate reports using temperature and prec
 
 **URL:** <https://github.com/scoyoc/climateAnalyzeR>
 
-**Documentation:** See the vignette.
+**Documentation:** See the [vignette](https://github.com/scoyoc/climateAnalyzeR/blob/master/vignettes/climateAnalyzeR.pdf)
 
 ## Installation
 
@@ -72,7 +72,7 @@ import_extreme_temp(station_id = "tumacacori", start_year = 1991,
                     end_year = 2020, station_type = "GHCN", year = "year")
 ```
 
-Below are examples that produce PDF reports.
+Below are examples that produce PDF reports. **These functions are currently broken.**
 
 ``` r
 # Current water year summary for Arches National Park using the default station 
